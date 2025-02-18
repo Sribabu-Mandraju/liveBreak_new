@@ -25,9 +25,9 @@ const InfiniteScroll = () => {
   const handleMouseLeave = () => setToggle(true);
 
   return (
-    <div className="mt-5">
+    <div className="mt-1">
       <div className="flex justify-center items-center">
-        <div className="w-full md:max-w-7xl md:h-[80px] h-[60px] rounded-lg border border-gray-300 dark:border-gray-600 shadow-lg flex justify-center items-center bg-white dark:bg-gray-900 transition-colors duration-300">
+        <div className="w-[93%] mx-auto md:max-w-7xl md:h-[80px] h-[60px] rounded-lg border border-gray-300 dark:border-gray-600 shadow-lg flex justify-center items-center bg-white dark:bg-gray-900 transition-colors duration-300">
           <div
             className="w-[98%] h-[80%] flex justify-center items-center rounded-md relative overflow-hidden bg-gray-100 dark:bg-gray-800 transition-all duration-300"
             onMouseEnter={handleMouseEnter}
