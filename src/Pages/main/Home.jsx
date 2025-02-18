@@ -6,7 +6,7 @@ import NewsCard2 from "../../components/Shared/NewsCard2";
 
 const Home = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 w-full max-lg:w-96 gap-4 h-[100vh]  mx-auto container">
+    <div className="grid grid-cols-1 md:grid-cols-4 w-full md:max-w-7xl gap-4 h-[100vh]  mx-auto container">
       <div className="hidden border border-zinc-700 rounded-md md:block md:col-span-1 w-full h-full overflow-y-auto">
         <SideMenu />
       </div>

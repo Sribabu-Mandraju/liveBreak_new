@@ -122,7 +122,7 @@ useEffect(() => {
 
   return (
     <div className={`flex w-screen justify-center  items-center duration-300 ${showSticky ? 'sticky top-0  z-50 shadow-lg ' : ''}`}>
-    <header className={`  ${showSticky? "mt-0 w-full ":"md:mt-8 mt-4  w-[85%] rounded-full"}  py-1 md:py-0 px-6 md:px-8 bg-white dark:bg-gray-900  border border-black dark:border-gray-700 relative  `}>
+    <header className={`  ${showSticky? "mt-0 w-full ":"md:mt-8 mt-4  w-full md:max-w-7xl  rounded-full"}  py-1 md:py-0 px-6 md:px-8 bg-white dark:bg-gray-900  border border-black dark:border-gray-700 relative  `}>
       <div className="flex items-center justify-between">
         <div className="h-full flex justify-center items-center">
           <img src={logo || "/placeholder.svg"} alt="Logo" className="md:w-40 w-20" />
