@@ -9,7 +9,7 @@ const Trending = () => {
     {
       title: "Khloé in Wonder Land",
       category: "LIVE",
-      image: "https://via.placeholder.com/60",
+      image: "https://meebuddy.com/assets/img/meebuddy/slider/2.png",
     },
     { title: "#ArrestKhusbuPandey", category: "Trending in India", posts: "5,894" },
     { title: "Suhaag Raat", category: "Trending in India", posts: "3,003" },
@@ -21,17 +21,17 @@ const Trending = () => {
     {
       name: "John Doe",
       handle: "@johndoe",
-      avatar: "https://via.placeholder.com/40",
+      avatar: "https://meebuddy.com/assets/img/meebuddy/slider/2.png",
     },
     {
       name: "Jane Smith",
       handle: "@janesmith",
-      avatar: "https://via.placeholder.com/40",
+      avatar: "https://meebuddy.com/assets/img/meebuddy/slider/2.png",
     },
     {
       name: "Tech News",
       handle: "@technews",
-      avatar: "https://via.placeholder.com/40",
+      avatar: "https://meebuddy.com/assets/img/meebuddy/slider/2.png",
     },
   ]
 
