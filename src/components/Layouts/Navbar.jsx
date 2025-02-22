@@ -128,16 +128,11 @@ const Navbar = () => {
 
   return (
     <div
-      className={`flex w-screen justify-center  items-center duration-300 ${
-        showSticky ? "sticky top-0  z-50 shadow-lg " : ""
-      }`}
+      className={`flex w-screen justify-center sticky top-0 md:static  items-center duration-300 `}
     >
       <header
-        className={`  ${
-          showSticky
-            ? "mt-0 w-full "
-            : "md:mt-8 mt-1 w-[93%] md:w-full md:max-w-7xl  rounded-full"
-        }  py-1 md:py-0 px-6 md:px-8 bg-white dark:bg-gray-900  border border-black dark:border-gray-700 relative  `}
+        className={`md:mt-8 w-full md:w-full md:max-w-7xl  md:rounded-full  
+        py-1 md:py-0 px-6 md:px-8 bg-white dark:bg-gray-900  border border-black dark:border-gray-700 relative  `}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
@@ -216,40 +211,54 @@ const Navbar = () => {
         </div>
 
         {isMobileMenuOpen && (
-          <div className="absolute z-10 top-full left-0 w-full rounded-lg bg-white dark:bg-gray-800 p-4 lg:hidden mt-2">
-            <nav className="flex flex-col justify-start gap-2">
-              {navItems.map((item, index) => {
-                if (item.items) {
-                  return (
-                    <div key={index}>
-                      <Dropdown
-                        label={item.label}
-                        items={item.items}
-                        isMobile={true}
-                        toggleDropdown={toggleDropdown}
-                        openDropdown={openDropdown}
-                        index={index}
-                      />
-                      <hr className="border-gray-200 dark:border-gray-700" />
-                    </div>
-                  );
-                } else {
-                  return (
-                    <div key={index}>
-                      <Link
-                        to={item.href}
-                        className="block py-2 font-semibold text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-                      >
-                        {item.label}
-                      </Link>
-                      <hr className="border-gray-200 dark:border-gray-700" />
-                    </div>
-                  );
-                }
-              })}
-            </nav>
-          </div>
+          <div
+            className="fixed inset-0 z-[9990]  bg-black/50 lg:hidden"
+            onClick={toggleDropdown}
+          ></div> // Overlay for smooth UX
         )}
+
+        <div
+          className={`fixed left-0 top-0 h-full z-[9999] w-64 bg-white dark:bg-gray-800 shadow-lg p-4 transform transition-transform duration-300 ease-in-out  lg:hidden ${
+            isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
+          <button
+            className="absolute top-4 right-4 text-gray-700 dark:text-gray-300"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            ✖
+          </button>
+
+          <nav className="flex flex-col justify-start gap-4 mt-8">
+            {navItems.map((item, index) => (
+              <div key={index}>
+                {item.items ? (
+                  <>
+                    <Dropdown
+                      label={item.label}
+                      items={item.items}
+                      isMobile={true}
+                      toggleDropdown={toggleDropdown}
+                      openDropdown={openDropdown}
+                      index={index}
+                    />
+                    <hr className="border-gray-200 dark:border-gray-700" />
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to={item.href}
+                      className="block py-2 font-semibold text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+                    >
+                      {item.label}
+                    </Link>
+                    <hr className="border-gray-200 dark:border-gray-700" />
+                  </>
+                )}
+              </div>
+            ))}
+          </nav>
+        </div>
       </header>
     </div>
   );

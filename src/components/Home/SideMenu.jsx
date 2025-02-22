@@ -27,7 +27,7 @@ const SideMenu = () => {
 
 
   return (
-    <div className="h-[100vh] w-64 px-4 py-6   flex flex-col justify-between transition-all duration-300">
+    <div className="h-[(calc(100vh-70px))] w-64 px-4 py-6   flex flex-col justify-between transition-all duration-300">
       <div>
         <ul>
           {menuItems.map((item, index) => (
@@ -49,8 +49,8 @@ const SideMenu = () => {
       </div>
 
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <img src="https://via.placeholder.com/40" alt="User" className="rounded-full w-10 h-10" />
+        <div className="flex items-center gap-3 mt-5">
+          <img src="https://meebuddy.com/assets/img/meebuddy/slider/2.png" alt="User" className="rounded-full w-10 h-10" />
           <div>
             <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">Sribabu Mandraju</p>
             <p className="text-xs text-gray-600 dark:text-gray-400">@5R1B4BU</p>
