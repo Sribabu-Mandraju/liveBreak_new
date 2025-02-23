@@ -100,38 +100,26 @@ const Navbar = () => {
 
   const navItems = [
     { label: "Home", href: "/" },
+    { label: "Feed", href: "/feed" },
     {
-      label: "For",
+      label: "Mee News",
       items: [
         { label: "Men", href: "/men" },
         { label: "Women", href: "/women" },
       ],
     },
-    {
-      label: "Fashion",
-      items: [
-        { label: "Clothing", href: "/clothing" },
-        { label: "Accessories", href: "/accessories" },
-      ],
-    },
-    {
-      label: "Wellness",
-      items: [
-        { label: "Fitness", href: "/fitness" },
-        { label: "Health", href: "/health" },
-      ],
-    },
-    { label: "Chocolates", href: "/chocolates" },
-    { label: "Food", href: "/food" },
-    { label: "Shark Tank", href: "/shark-tank" },
+    { label: "Local", href: "/local" },
+    { label: "Groups", href: "/groups" },
+    { label: "V clips", href: "/vClips" },
+    { label: "Use App", href: "/useApp" },
   ];
 
   return (
     <div
-      className={`flex w-screen justify-center sticky top-0 md:static  items-center duration-300 `}
+      className={`flex w-screen justify-center sticky top-[-2px] md:static  items-center duration-300 `}
     >
       <header
-        className={`md:mt-8 w-full md:w-full md:max-w-7xl  md:rounded-full  
+        className={`md:mt-8 w-full md:w-full md:max-w-7xl   md:rounded-full  
         py-1 md:py-0 px-6 md:px-8 bg-white dark:bg-gray-900  border border-black dark:border-gray-700 relative  `}
       >
         <div className="flex items-center justify-between">
@@ -212,13 +200,16 @@ const Navbar = () => {
 
         {isMobileMenuOpen && (
           <div
-            className="fixed inset-0 z-[9990]  bg-black/50 lg:hidden"
-            onClick={toggleDropdown}
+            className="fixed inset-0 z-[9990]  bg-black/80 lg:hidden"
+            onClick={() => {
+              toggleDropdown()
+              setIsMobileMenuOpen(!isMobileMenuOpen)
+            }}
           ></div> // Overlay for smooth UX
         )}
 
         <div
-          className={`fixed left-0 top-0 h-full z-[9999] w-64 bg-white dark:bg-gray-800 shadow-lg p-4 transform transition-transform duration-300 ease-in-out  lg:hidden ${
+          className={`fixed left-0 top-[0px] h-full z-[9999] w-64 bg-white dark:bg-gray-800 shadow-lg p-4 transform transition-transform duration-300 ease-in-out  lg:hidden ${
             isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
