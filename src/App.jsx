@@ -17,10 +17,8 @@ const App = () => {
     <div className="min-h-screen dark:bg-gray-900 bg-white text-black dark:text-white transition-colors duration-300">
       <BrowserRouter>
         <Routes>
-          <Route path="/new" element={<Landing />} />
-          <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<Home />} />
-          <Route path="/newscard" element={<NewsCard />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/newscard2" element={<NewsCard2 />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
