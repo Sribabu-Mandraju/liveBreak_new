@@ -4,7 +4,7 @@ import { FaCircleCheck } from "react-icons/fa6";
 import { IoArrowBackCircle } from "react-icons/io5";
 import SideMenu from "../Home/SideMenu";
 import Trending from "../Home/Trending";
-
+import Layout from "../Layouts/Layout";
 const Profile = () => {
   const [profile, setProfile] = useState({
     name: "Nakshatra Yeluri",
@@ -36,16 +36,12 @@ const Profile = () => {
   const translateX = isScrolled ? 0 : Math.min(0, scrollY - 100);
 
   return (
-    <div className="w-full md:max-w-7xl mx-auto container min-h-screen flex gap-4">
-      {/* Sidebar - Left */}
-      <div className="hidden md:block  w-1/4 h-[calc(100vh-30px)] sticky top-[10px]">
-        <div className="border border-zinc-700 rounded-md h-full overflow-hidden">
-          <SideMenu />
-        </div>
-      </div>
+    <Layout>
+    <div className="relative w-full  md:max-w-7xl mx-auto container min-h-screen flex gap-4">
+     
 
       {/* Main Content */}
-      <div className="relative flex-1 bg-white dark:bg-gray-900 mt-3 rounded-lg shadow-lg w-full max-w-4xl mx-auto sm:border dark:border-gray-700">
+      <div className=" flex-1 bg-white dark:bg-gray-900 mt-3 rounded-lg shadow-lg w-full max-w-4xl mx-auto sm:border dark:border-gray-700">
         {/* Header */}
         <div className="flex flex-row bg-white px-4 items-center sticky top-0 dark:bg-gray-900 z-20 transition-transform duration-500">
           <div className="text-blue-500 text-4xl "><IoArrowBackCircle/></div>
@@ -139,14 +135,10 @@ const Profile = () => {
           </div>
         </div>
       </div>
-
-      {/* Sidebar - Right */}
-      <div className="hidden md:block w-1/4 h-[calc(100vh-30px)] sticky top-[10px]">
-        <div className="border border-zinc-700 rounded-md h-full overflow-hidden">
-          <Trending />
-        </div>
       </div>
-    </div>
+
+     
+    </Layout>
   );
 };
 
