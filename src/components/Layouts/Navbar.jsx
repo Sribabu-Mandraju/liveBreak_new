@@ -106,8 +106,13 @@ const Navbar = () => {
   };
 
   return (
-    <div className="flex w-full justify-center sticky top-0 z-50 md:static">
-      <header className="w-full max-w-7xl bg-white mt-[-1px] dark:bg-gray-900 border border-gray-200 dark:border-gray-700 md:rounded-full py-2 px-6 md:px-8 shadow-md">
+    <div
+      className={`flex w-screen justify-center z-10 fixed top-[-2px]  md:static  items-center duration-300 `}
+    >
+      <header
+        className={`md:mt-8 w-full md:w-full md:max-w-7xl   md:rounded-full  
+        py-1 md:py-0 px-6 md:px-8 bg-white dark:bg-gray-900 md:border  border-b border-gray-400 dark:border-gray-700 relative  `}
+      >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
@@ -167,7 +172,10 @@ const Navbar = () => {
               className="fixed inset-0 bg-black/50 z-40 lg:hidden"
               onClick={toggleMobileMenu}
             ></div>
-            <div className="fixed left-0 top-0 bottom-0 w-64 bg-white dark:bg-gray-800 shadow-lg p-4 transform transition-transform duration-300 ease-in-out z-50 lg:hidden overflow-y-auto">
+            <div className="fixed left-0 top-0 bottom-0 w-64 bg-white dark:bg-gray-800 shadow-lg p-4 transform transition-transform duration-300 ease-in-out z-50 lg:hidden overflow-y-auto"
+            style={{
+              zIndex:"300"
+            }}>
               <button
                 className="absolute top-4 right-4 text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 transition-colors duration-200"
                 onClick={toggleMobileMenu}

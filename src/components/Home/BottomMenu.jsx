@@ -17,7 +17,7 @@ const menuItems = [
 ];
 const BottomMenu = () => {
   return (
-    <div  className="fixed border-t border-gray-400 dark:border-gray-800 bottom-0 left-0 z-[9999] right-0  bg-white dark:bg-gray-900 flex justify-around items-center p-2 md:hidden shadow-md">
+    <div  className="fixed border-t border-gray-400 dark:border-gray-800 bottom-0 left-0 z-10 right-0  bg-white dark:bg-gray-900 flex justify-around items-center p-2 md:hidden shadow-md">
     {menuItems.slice(0, 5).map((item, index) => (
       <a key={index} href={item.path} className="text-gray-600 dark:text-gray-300 hover:text-blue-500">
         <div className="flex flex-col justify-center items-center">
