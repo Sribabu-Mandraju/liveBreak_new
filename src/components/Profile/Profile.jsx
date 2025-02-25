@@ -48,12 +48,10 @@ const Profile = () => {
       <div className="relative flex-1 bg-white dark:bg-gray-900 mt-3 rounded-lg shadow-lg w-full max-w-4xl mx-auto sm:border dark:border-gray-700">
         {/* Header */}
         <div className="flex flex-row bg-white px-4 items-center sticky top-0 dark:bg-gray-900 z-20 transition-transform duration-500">
-          <div className="text-blue-500 text-4xl ">
-            <IoArrowBackCircle />
-          </div>
+          <div className="text-blue-500 text-4xl "><IoArrowBackCircle/></div>
           <div
             className={`flex flex-col px-4 py-2 duration-300 ${
-              isScrolled ? "translate-x-16" : "translate-x-0"
+               isScrolled ? "translate-x-16" : "translate-x-0"
             }`}
           >
             <h1 className="text-xl sm:text-2xl font-bold ">{profile.name}</h1>
@@ -70,16 +68,12 @@ const Profile = () => {
             style={{
               width: avatarSize,
               height: avatarSize,
-              transform: `scale(${
-                isScrolled ? 0.75 : 1
-              }) translateY(-${translateY}px) translateX(${translateX}px) `,
-
+              transform: `scale(${isScrolled ? 0.75 : 1}) translateY(-${translateY}px) translateX(${translateX}px) `,
+              
               transition: "transform 0.5s ease, box-shadow 0.5s ease",
             }}
             className={`border-4 border-black z-30 m-1/2  rounded-full 
-              ${
-                isScrolled ? "fixed top-0 ml-14" : "absolute -bottom-16 mx-6"
-              } `}
+              ${isScrolled?"fixed top-0 ml-14":"absolute -bottom-16 mx-6"} `}
           />
         </div>
 
