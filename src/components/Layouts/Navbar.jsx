@@ -107,11 +107,12 @@ const Navbar = () => {
 
   return (
     <div
-      className={`flex w-full justify-center  ${
-        isSticky ? "fixed top-0 z-50" : ""
-      }`}
+      className={`flex w-screen justify-center z-10 fixed top-[-2px]  md:static  items-center duration-300 `}
     >
-      <header className="w-full max-w-7xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-full py-2 px-6 md:px-8 shadow-md">
+      <header
+        className={`md:mt-8 w-full md:w-full md:max-w-7xl   md:rounded-full  
+        py-1 md:py-0 px-6 md:px-8 bg-white dark:bg-gray-900 md:border  border-b border-gray-400 dark:border-gray-700 relative  `}
+      >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
