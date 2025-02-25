@@ -14,7 +14,7 @@ const Dropdown = ({
   index,
 }) => {
   return (
-    <div className="relative cursor-pointer group">
+    <div className="relative cursor-pointer group  ">
       <div
         className="flex items-center justify-between gap-2 font-semibold text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 py-1 lg:py-4"
         onClick={() => toggleDropdown(index)}

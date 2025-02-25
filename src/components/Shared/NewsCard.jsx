@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Flowers from "../../assets/Flowers.jpg";
 import { LuPin } from "react-icons/lu";
-
+import Layout from "../Layouts/Layout";
 const NewsCard = () => {
   const navigate = useNavigate();
 
@@ -66,6 +66,7 @@ const NewsCard = () => {
   console.log(cardData)
 
   return (
+    <Layout>
     <div className=" max-w-screen-xl  mx-auto">
       <div className="grid grid-cols-1 gap-1">
         {cardData.map((card, index) => (
@@ -125,6 +126,7 @@ const NewsCard = () => {
         ))}
       </div>
     </div>
+    </Layout>
   );
 };
 

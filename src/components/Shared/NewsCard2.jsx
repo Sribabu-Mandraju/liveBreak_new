@@ -1,7 +1,8 @@
 import { FaRegThumbsUp, FaRegComment, FaShare } from "react-icons/fa";
-
+import Layout from "../Layouts/Layout";
 const NewsCard2 = ({ title, description, imageUrl, time, location, reactions, comments }) => {
   return (
+    <Layout>
     <div className="bg-white dark:bg-gray-900 mt-3 rounded-lg shadow-lg p-4 w-[93%] md:w-full mx-auto border dark:border-gray-700">
       <div className="flex items-start space-x-4">
         <div className="flex-shrink-0">
@@ -60,6 +61,7 @@ const NewsCard2 = ({ title, description, imageUrl, time, location, reactions, co
         </div>
       </div>
     </div>
+    </Layout>
   );
 };
 
