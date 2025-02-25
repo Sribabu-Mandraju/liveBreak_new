@@ -48,7 +48,7 @@ const Breadcrumb = () => {
   const pathSegments = location.pathname.split("/").filter(Boolean);
 
   return (
-    <nav className="breadcrumb mt-4 mb-6">
+    <nav className="breadcrumb ">
       <ul className="flex items-center text-sm text-gray-500 space-x-2">
         {pathSegments.map((segment, index) => {
           const path = `/${pathSegments.slice(0, index + 1).join("/")}`;
@@ -84,9 +84,6 @@ const Layout = ({ children }) => {
 
   return (
     <div className="w-screen flex-col justify-center items-center flex gap-4">
-      <div className="w-screen">
-        <Navbar />
-      </div>
       <div>
         <BottomMenu />
       </div>
@@ -166,11 +163,9 @@ const Layout = ({ children }) => {
           </div>
         </div>
         {/* children */}
-        <div className="w-full md:w-2/4 flex flex-col">
-          <div className="container mx-auto ">
-            <Breadcrumb />
-            {children}
-          </div>
+        <div className="w-full md:w-2/4 flex flex-col  sticky top-[10px]">
+          {/* <Breadcrumb /> */}
+          {children}
         </div>
         <div className="hidden md:block w-1/4 h-[calc(100vh-30px)] sticky top-[10px]">
           <div className="border border-zinc-700 rounded-md h-full overflow-hidden">
