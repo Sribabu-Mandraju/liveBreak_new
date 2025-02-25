@@ -148,7 +148,9 @@ const Layout = ({ children }) => {
               </div>
 
               {/* Mobile Bottom Menu */}
-              <div className="fixed bottom-0 left-0  right-0  bg-white dark:bg-gray-900 flex justify-around items-center p-3 md:hidden shadow-md">
+              <div className="fixed bottom-0 left-0  right-0  bg-white dark:bg-gray-900 flex justify-around items-center p-3 md:hidden shadow-md" style={{
+                zIndex:"20"
+              }}> 
                 {menuItems.slice(0, 5).map((item, index) => (
                   <a
                     key={index}

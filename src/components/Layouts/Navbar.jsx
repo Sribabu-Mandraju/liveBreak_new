@@ -107,7 +107,7 @@ const Navbar = () => {
 
   return (
     <div className="flex w-full justify-center sticky top-0 z-50 md:static">
-      <header className="w-full max-w-7xl bg-white my-2 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-full py-2 px-6 md:px-8 shadow-md">
+      <header className="w-full max-w-7xl bg-white mt-[-1px] dark:bg-gray-900 border border-gray-200 dark:border-gray-700 md:rounded-full py-2 px-6 md:px-8 shadow-md">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
