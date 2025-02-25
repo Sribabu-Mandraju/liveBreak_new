@@ -1,255 +1,211 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaAngleDown, FaBars, FaTimes, FaMoon, FaSun } from "react-icons/fa";
-import { MdDarkMode } from "react-icons/md";
-import { MdLightMode } from "react-icons/md";
+import {
+  FaAngleDown,
+  FaBars,
+  FaTimes,
+  FaHome,
+  FaRss,
+  FaNewspaper,
+  FaMapMarkerAlt,
+  FaUsers,
+  FaVideo,
+  FaMobileAlt,
+} from "react-icons/fa";
+import { MdDarkMode, MdLightMode } from "react-icons/md";
 import logo from "../../assets/logo.png";
 
-const Dropdown = ({
-  label,
-  items,
-  isMobile,
-  toggleDropdown,
-  openDropdown,
-  index,
-}) => {
-  return (
-    <div className="relative cursor-pointer group  ">
-      <div
-        className="flex items-center justify-between gap-2 font-semibold text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 py-1 lg:py-4"
-        onClick={() => toggleDropdown(index)}
-      >
-        {label}
-        {items && (
-          <FaAngleDown
-            className={`ml-2 transition-transform duration-300 ${
-              isMobile
-                ? openDropdown === index
-                  ? "rotate-180"
-                  : ""
-                : "group-hover:rotate-180"
-            }`}
-          />
-        )}
-      </div>
-      {!isMobile && items && (
-        <div className="absolute z-[9999] hidden group-hover:block top-full w-[200px] rounded-md bg-white dark:bg-gray-800 shadow-md p-2">
-          {items.map((item, subIndex) => (
-            <Link
-              key={subIndex}
-              to={item.href}
-              className="block px-4 py-2 text-gray-700 dark:hover:text-black dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-400"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
-      )}
-      {isMobile && openDropdown === index && items && (
-        <div className="pl-4">
-          {items.map((item, subIndex) => (
-            <Link
-              key={subIndex}
-              to={item.href}
-              className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-100"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
+const Dropdown = ({ label, items, isMobile, isOpen, toggleDropdown, icon }) => (
+  <div className="relative cursor-pointer group">
+    <div
+      className="flex items-center justify-between gap-2 font-semibold text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 py-2 px-3 rounded-md transition-colors duration-200"
+      onClick={toggleDropdown}
+    >
+      {icon && <span className="mr-2">{icon}</span>}
+      {label}
+      {items && (
+        <FaAngleDown
+          className={`ml-2 transition-transform duration-300 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
       )}
     </div>
-  );
-};
+    {items && isOpen && (
+      <div
+        className={`${
+          isMobile ? "mt-2" : "absolute top-full left-0 mt-1"
+        } z-50 w-48 rounded-md bg-white dark:bg-gray-800 shadow-lg py-1`}
+      >
+        {items.map((item, subIndex) => (
+          <Link
+            key={subIndex}
+            to={item.href}
+            className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors duration-200"
+            onClick={isMobile ? toggleDropdown : undefined}
+          >
+            {item.label}
+          </Link>
+        ))}
+      </div>
+    )}
+  </div>
+);
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
-
-  const toggleDropdown = (index) => {
-    setOpenDropdown(openDropdown === index ? null : index);
-  };
-
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
-
-  useEffect(() => {
-    const element = document.documentElement;
-    if (theme === "dark") {
-      element.classList.add("dark");
-      element.classList.remove("light");
-    } else {
-      element.classList.remove("dark");
-      element.classList.add("light");
-    }
-    localStorage.setItem("theme", theme);
-  }, [theme]);
-
-  const [showSticky, setShowSticky] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 80) {
-        setShowSticky(true);
-      } else {
-        setShowSticky(false);
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const [isSticky, setIsSticky] = useState(false);
 
   const navItems = [
-    { label: "Home", href: "/" },
-    { label: "Feed", href: "/feed" },
+    { label: "Home", href: "/", icon: <FaHome /> },
+    { label: "Feed", href: "/feed", icon: <FaRss /> },
     {
       label: "Mee News",
+      icon: <FaNewspaper />,
       items: [
         { label: "Men", href: "/men" },
         { label: "Women", href: "/women" },
       ],
     },
-    { label: "Local", href: "/local" },
-    { label: "Groups", href: "/groups" },
-    { label: "V clips", href: "/vClips" },
-    { label: "Use App", href: "/useApp" },
+    { label: "Local", href: "/local", icon: <FaMapMarkerAlt /> },
+    { label: "Groups", href: "/groups", icon: <FaUsers /> },
+    { label: "V clips", href: "/vClips", icon: <FaVideo /> },
+    { label: "Use App", href: "/useApp", icon: <FaMobileAlt /> },
   ];
+
+  useEffect(() => {
+    const handleTheme = () => {
+      const element = document.documentElement;
+      element.classList.toggle("dark", theme === "dark");
+      localStorage.setItem("theme", theme);
+    };
+
+    const handleScroll = () => {
+      setIsSticky(window.scrollY > 80);
+    };
+
+    handleTheme();
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [theme]);
+
+  const toggleDropdown = (index) => {
+    setOpenDropdown(openDropdown === index ? null : index);
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+    setOpenDropdown(null);
+  };
+
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
 
   return (
     <div
-      className={`flex w-screen justify-center sticky top-[-2px] md:static  items-center duration-300 `}
+      className={`flex w-full justify-center ${
+        isSticky ? "sticky top-0 z-50" : ""
+      }`}
     >
-      <header
-        className={`md:mt-8 w-full md:w-full md:max-w-7xl   md:rounded-full  
-        py-1 md:py-0 px-6 md:px-8 bg-white dark:bg-gray-900  border border-black dark:border-gray-700 relative  `}
-      >
+      <header className="w-full max-w-7xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-full py-2 px-6 md:px-8 shadow-md">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <div className="lg:hidden flex items-center">
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="text-gray-700 me-3 dark:text-gray-300"
-                aria-label="Toggle mobile menu"
-              >
-                {isMobileMenuOpen ? (
-                  <FaTimes size={15} />
-                ) : (
-                  <FaBars size={15} />
-                )}
-              </button>
-            </div>
-            <div className="h-full flex justify-center items-center">
-              <img
-                src={logo || "/placeholder.svg"}
-                alt="Logo"
-                className="md:w-40 w-20"
-              />
-            </div>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={toggleMobileMenu}
+              className="lg:hidden text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 transition-colors duration-200"
+              aria-label="Toggle mobile menu"
+            >
+              {isMobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+            </button>
+            <Link to="/" className="flex justify-center items-center">
+              <img src={logo} alt="Logo" className="h-10 w-auto" />
+            </Link>
           </div>
 
-          <div className="flex flex-row gap-6 lg:gap-10 justify-center items-center">
-            <nav className="hidden lg:flex items-center text-md gap-10">
-              {navItems.map((item, index) => {
-                if (item.items) {
-                  return (
+          <div className="flex items-center gap-6">
+            <nav className="hidden lg:flex items-center text-md gap-2">
+              {navItems.map((item, index) => (
+                <React.Fragment key={index}>
+                  {item.items ? (
                     <Dropdown
-                      key={index}
                       label={item.label}
                       items={item.items}
-                      toggleDropdown={toggleDropdown}
-                      openDropdown={openDropdown}
-                      index={index}
+                      icon={item.icon}
+                      toggleDropdown={() => toggleDropdown(index)}
+                      isOpen={openDropdown === index}
                     />
-                  );
-                } else {
-                  return (
+                  ) : (
                     <Link
-                      key={index}
                       to={item.href}
-                      className="font-semibold text-gray-700 dark:text-gray-300 hover:text-blue-700 duration-300 dark:hover:text-blue-400"
+                      className="flex items-center gap-2 font-semibold text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 py-2 px-3 rounded-md transition-colors duration-200"
                     >
+                      {item.icon}
                       {item.label}
-                      <span
-                        className={`absolute left-0 bottom-0 w-full h-1 bg-blue-600 transition-all duration-300 scale-x-0 group-hover:scale-x-100`}
-                      ></span>
                     </Link>
-                  );
-                }
-              })}
+                  )}
+                </React.Fragment>
+              ))}
             </nav>
 
-            <div className="p-3">
-              <button>
-                <MdLightMode
-                  className={`text-gray-400 text-xl ${
-                    theme === "light" ? "hidden" : ""
-                  } cursor-pointer transition-all duration-300 `}
-                  onClick={() => setTheme("light")}
-                />
-              </button>
-              <button>
-                <MdDarkMode
-                  className={`text-gray-600 text-xl ${
-                    theme === "dark" ? "hidden" : ""
-                  } cursor-pointer transition-all duration-300`}
-                  onClick={() => setTheme("dark")}
-                />
-              </button>
-            </div>
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+              aria-label="Toggle theme"
+            >
+              {theme === "light" ? (
+                <MdDarkMode className="text-gray-600 dark:text-gray-400 text-xl" />
+              ) : (
+                <MdLightMode className="text-gray-400 dark:text-gray-300 text-xl" />
+              )}
+            </button>
           </div>
         </div>
 
         {isMobileMenuOpen && (
-          <div
-            className="fixed inset-0 z-[9990]  bg-black/80 lg:hidden"
-            onClick={() => {
-              toggleDropdown()
-              setIsMobileMenuOpen(!isMobileMenuOpen)
-            }}
-          ></div> // Overlay for smooth UX
+          <>
+            <div
+              className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+              onClick={toggleMobileMenu}
+            ></div>
+            <div className="fixed left-0 top-0 bottom-0 w-64 bg-white dark:bg-gray-800 shadow-lg p-4 transform transition-transform duration-300 ease-in-out z-50 lg:hidden overflow-y-auto">
+              <button
+                className="absolute top-4 right-4 text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 transition-colors duration-200"
+                onClick={toggleMobileMenu}
+              >
+                <FaTimes size={24} />
+              </button>
+              <nav className="flex flex-col justify-start gap-2 mt-12">
+                {navItems.map((item, index) => (
+                  <React.Fragment key={index}>
+                    {item.items ? (
+                      <Dropdown
+                        label={item.label}
+                        items={item.items}
+                        icon={item.icon}
+                        isMobile={true}
+                        toggleDropdown={() => toggleDropdown(index)}
+                        isOpen={openDropdown === index}
+                      />
+                    ) : (
+                      <Link
+                        to={item.href}
+                        className="flex items-center gap-2 py-2 px-3 font-semibold text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors duration-200"
+                        onClick={toggleMobileMenu}
+                      >
+                        {item.icon}
+                        {item.label}
+                      </Link>
+                    )}
+                  </React.Fragment>
+                ))}
+              </nav>
+            </div>
+          </>
         )}
-
-        <div
-          className={`fixed left-0 top-[0px] h-full z-[9999] w-64 bg-white dark:bg-gray-800 shadow-lg p-4 transform transition-transform duration-300 ease-in-out  lg:hidden ${
-            isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
-        >
-          <button
-            className="absolute top-4 right-4 text-gray-700 dark:text-gray-300"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            ✖
-          </button>
-
-          <nav className="flex flex-col justify-start gap-4 mt-8">
-            {navItems.map((item, index) => (
-              <div key={index}>
-                {item.items ? (
-                  <>
-                    <Dropdown
-                      label={item.label}
-                      items={item.items}
-                      isMobile={true}
-                      toggleDropdown={toggleDropdown}
-                      openDropdown={openDropdown}
-                      index={index}
-                    />
-                    <hr className="border-gray-200 dark:border-gray-700" />
-                  </>
-                ) : (
-                  <>
-                    <Link
-                      to={item.href}
-                      className="block py-2 font-semibold text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-                    >
-                      {item.label}
-                    </Link>
-                    <hr className="border-gray-200 dark:border-gray-700" />
-                  </>
-                )}
-              </div>
-            ))}
-          </nav>
-        </div>
       </header>
     </div>
   );

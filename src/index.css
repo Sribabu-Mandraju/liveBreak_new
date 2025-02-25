@@ -16,3 +16,7 @@ body{
     height: 8px; /* Height for horizontal scrollbar */
   }
   
+
+  video{
+    z-index: 1;
+  }

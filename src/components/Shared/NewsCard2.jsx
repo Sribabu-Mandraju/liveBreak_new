@@ -50,16 +50,14 @@ const MediaContent = ({ news }) => {
         }`}</div>
       ),
       appendDots: (dots) => (
-        <div style={{ bottom: "-30px" }}>
-          <ul className="flex justify-center space-x-2">{dots}</ul>
-        </div>
+        <div className="mt-2 flex justify-center space-x-2">{dots}</div>
       ),
     };
 
     return (
       <div className="relative mt-3">
         {/* Slide Indicator at Top Right */}
-        <div className="absolute top-2 right-2 bg-gray-800 z-10 text-white text-xs px-2 py-1 rounded-md opacity-80">
+        <div className="absolute top-2 right-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded-md">
           {currentSlide + 1}/{news.image_urls.length}
         </div>
 
@@ -70,7 +68,7 @@ const MediaContent = ({ news }) => {
               <img
                 src={url}
                 alt={`News ${index + 1}`}
-                className="w-full z-1 rounded-lg "
+                className="w-full rounded-lg"
               />
             </div>
           ))}
