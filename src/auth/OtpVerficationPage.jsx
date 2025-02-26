@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { useSearchParams,useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
+import useAuthStore from "../store/authStore";
 
 function OTPVerification() {
   const [otp, setOtp] = useState(new Array(6).fill(""));
@@ -59,6 +60,14 @@ function OTPVerification() {
         "https://api.meebuddy.com/app/v4/common/verify",
         payload
       );
+      const token = response.data.token;
+
+      if (token) {
+        console.log("Setting token:", token);
+        useAuthStore.setState({ token }); // ✅ Update Zustand store
+      } else {
+        console.log("No token received");
+      }
 
       if (response.data.status === "success") {
         toast.success("OTP verified successfully! 🎉");

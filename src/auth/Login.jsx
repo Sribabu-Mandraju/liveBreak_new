@@ -1,12 +1,19 @@
 import { useState } from "react";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import useAuthStore from "../store/authStore";
+import useUserStore from "../store/useUserStore";
 
 function Signin() {
+  const fetchUser = useUserStore.getState().fetchUser;
   const [formData, setFormData] = useState({
     phone: "",
     password: "",
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,17 +24,18 @@ function Signin() {
     setFormData({ ...formData, phone: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
 
     const payload = {
       country_code: "",
       device_uuid: null,
-      email: "",
+      email: "sribabumandraju@gmail.com", // Hardcoded email for now
       fcm_meenews_token: "",
-      guest_mobile_num: "",
       hash_code: "",
-      mobile_num: formData.phone.slice(-10),
+      mobile_num: formData.phone.slice(-10), // Extract last 10 digits
       onesignal_id: "",
       password: formData.password,
       referral_code: "",
@@ -36,8 +44,39 @@ function Signin() {
       version: "new",
     };
 
-    console.log("Payload:", payload);
-    // Make API call here
+    try {
+      const response = await axios.post(
+        "https://api.meebuddy.com/app/v4/common/login",
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const token = response.data.token;
+      if (token) {
+        console.log("Setting token:", token);
+        useAuthStore.setState({ token }); // ✅ Update Zustand store
+      } else {
+        console.log("No token received");
+      }
+
+      if (response.data && response.status == 201) {
+        await fetchUser();
+        toast.success("Login successful!");
+        console.log("Response:", response.data);
+      } else {
+        toast.error(response.data.message || "Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Login Error:", error);
+      toast.error(
+        error.response?.data?.message || "Something went wrong. Try again!"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -90,9 +129,10 @@ function Signin() {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition duration-200 transform hover:scale-105"
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition duration-200 transform hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            disabled={loading}
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
