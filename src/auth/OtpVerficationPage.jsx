@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
-import useAuthStore from "../store/authStore";
+import { setToken } from "../store/authSlice";
+import { useDispatch } from "react-redux";
 
 function OTPVerification() {
+  const dispatch = useDispatch();
   const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   const [otp, setOtp] = useState(new Array(6).fill(""));
@@ -58,15 +60,12 @@ function OTPVerification() {
     };
 
     try {
-      const response = await axios.post(
-        `${BASE_URL}/common/verify`,
-        payload
-      );
+      const response = await axios.post(`${BASE_URL}/common/verify`, payload);
       const token = response.data.token;
 
       if (token) {
         console.log("Setting token:", token);
-        useAuthStore.setState({ token }); // ✅ Update Zustand store
+        dispatch(setToken(token));
       } else {
         console.log("No token received");
       }

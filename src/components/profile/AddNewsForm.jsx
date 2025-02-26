@@ -113,7 +113,7 @@ const AddNewsForm = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 rounded-xl shadow-lg dark:bg-black bg-white transition-all duration-300">
+    <div className="w-full mx-auto p-6 rounded-xl shadow-lg dark:bg-black bg-white transition-all duration-300">
       <h2 className="text-lg font-semibold mb-4 dark:text-white text-gray-900">
         ADD News
       </h2>
