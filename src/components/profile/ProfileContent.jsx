@@ -3,17 +3,34 @@ import { FaCheckCircle, FaEdit } from "react-icons/fa";
 import { FaCircleCheck } from "react-icons/fa6";
 import { IoArrowBackCircle } from "react-icons/io5";
 import AddNewsForm from "./AddNewsForm";
+import useUserStore from '../../store/useUserStore'
 
 const ProfileContent = () => {
+  const { user, status, fetchUser } = useUserStore();
+
   const [profile, setProfile] = useState({
-    name: "Nakshatra Yeluri",
-    username: "NakshatraYeluri",
-    joined: "February 2025",
-    following: 1,
+    name: "",
+    username: "",
+    joined: "",
+    following: 0,
     followers: 0,
     posts: 0,
     avatar: "https://via.placeholder.com/150",
   });
+
+  useEffect(() => {
+    if (user) {
+      setProfile({
+        name: user.data.name || "User Name",
+        email: user.data.email || "username",
+        joined: user.data.joined || "February 2025",
+        following: user.data.following || 0,
+        followers: user.data.followers || 0,
+        posts: user.data.posts || 0,
+        avatar: user.data.avatar || "https://via.placeholder.com/150",
+      });
+    }
+  }, [user]);
 
   const [activeTab, setActiveTab] = useState("Home");
   const [isScrolled, setIsScrolled] = useState(false);
@@ -47,7 +64,7 @@ const ProfileContent = () => {
               isScrolled ? "translate-x-16" : "translate-x-0"
             }`}
           >
-            <h1 className="text-xl sm:text-2xl font-bold">{profile.name}</h1>
+            <h1 className="text-xl sm:text-2xl font-bold">{profile.email}</h1>
             <h1 className="text-sm text-gray-500">Posts {profile.posts}</h1>
           </div>
         </div>
@@ -88,7 +105,7 @@ const ProfileContent = () => {
                   <span>Get Verified</span>
                 </button>
               </div>
-              <p className="text-gray-500">@{profile.username}</p>
+              <p className="text-gray-500">{profile.username}</p>
               <p className="mt-2 text-gray-500">📅 Joined {profile.joined}</p>
               <p className="mt-2">
                 <span>{profile.following} Following</span> ·{" "}

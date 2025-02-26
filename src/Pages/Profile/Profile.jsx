@@ -1,6 +1,6 @@
 import Layout from "../../components/Layouts/Layout";
 import Navbar from "../../components/Layouts/Navbar";
-import ProfileContent from "../../components/profile/ProfileContent";
+import ProfileContent from '../../components/Profile/ProfileContent'
 
 const Profile = () => {
   return (
