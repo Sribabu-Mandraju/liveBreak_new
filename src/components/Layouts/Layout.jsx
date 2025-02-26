@@ -165,7 +165,7 @@ const Layout = ({ children }) => {
           </div>
         </div>
         {/* children */}
-        <div className="w-full md:w-2/4 flex flex-col  sticky top-[10px]">
+        <div className="w-full md:w-2/4 flex flex-col p-2 mt-2 mb-10 sticky top-[10px]">
           {/* <Breadcrumb /> */}
           {children}
         </div>

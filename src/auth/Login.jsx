@@ -1,0 +1,113 @@
+import { useState } from "react";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+
+function Signin() {
+  const [formData, setFormData] = useState({
+    phone: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handlePhoneChange = (value) => {
+    setFormData({ ...formData, phone: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const payload = {
+      country_code: "",
+      device_uuid: null,
+      email: "",
+      fcm_meenews_token: "",
+      guest_mobile_num: "",
+      hash_code: "",
+      mobile_num: formData.phone.slice(-10),
+      onesignal_id: "",
+      password: formData.password,
+      referral_code: "",
+      skip: false,
+      type: "meenews",
+      version: "new",
+    };
+
+    console.log("Payload:", payload);
+    // Make API call here
+  };
+
+  return (
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-black text-gray-900 dark:text-white">
+      <div className="w-full max-w-md p-8 bg-white dark:bg-gray-900 rounded-2xl shadow-xl">
+        <h2 className="text-3xl font-bold mb-2">Welcome Back</h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+          Sign in to continue
+        </p>
+
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <div>
+            <label className="block text-sm font-medium mb-1" htmlFor="phone">
+              Mobile Number
+            </label>
+            <PhoneInput
+              country={"us"}
+              value={formData.phone}
+              onChange={handlePhoneChange}
+              inputProps={{
+                id: "phone",
+                name: "phone",
+                required: true,
+              }}
+              containerClass="!w-full"
+              inputClass="!w-full !bg-gray-100 dark:!bg-gray-800 !text-gray-900 dark:!text-white !border !border-gray-300 dark:!border-gray-600 !rounded-lg !py-2 !px-4 focus:!ring-2 focus:!ring-blue-500 focus:!border-transparent !transition !duration-200"
+              buttonClass="!bg-gray-100 dark:!bg-gray-800 !border !border-gray-300 dark:!border-gray-600 !rounded-l-lg !transition !duration-200 hover:!bg-gray-200 dark:hover:!bg-gray-700"
+              dropdownClass="!bg-gray-100 dark:!bg-gray-800 !text-gray-900 dark:!text-white"
+            />
+          </div>
+
+          <div>
+            <label
+              className="block text-sm font-medium mb-1"
+              htmlFor="password"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Enter your password"
+              className="w-full px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition duration-200 transform hover:scale-105"
+          >
+            Login
+          </button>
+        </form>
+
+        <p className="text-sm text-center text-gray-500 dark:text-gray-400 mt-6">
+          Don't have an account?{" "}
+          <a
+            href="#"
+            className="text-blue-500 dark:text-blue-400 hover:underline"
+          >
+            Sign Up
+          </a>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export default Signin;
