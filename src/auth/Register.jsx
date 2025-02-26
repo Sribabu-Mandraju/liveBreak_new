@@ -5,6 +5,7 @@ import "react-phone-input-2/lib/style.css";
 import toast from "react-hot-toast";
 
 function Signup() {
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -45,7 +46,7 @@ function Signup() {
     };
 
     try {
-      const response = await fetch("https://api.meebuddy.com/app/v4/common/signup", {
+      const response = await fetch(`${BASE_URL}/common/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

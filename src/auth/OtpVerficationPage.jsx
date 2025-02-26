@@ -5,6 +5,8 @@ import axios from "axios";
 import useAuthStore from "../store/authStore";
 
 function OTPVerification() {
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [searchParams] = useSearchParams();
 
@@ -57,7 +59,7 @@ function OTPVerification() {
 
     try {
       const response = await axios.post(
-        "https://api.meebuddy.com/app/v4/common/verify",
+        `${BASE_URL}/common/verify`,
         payload
       );
       const token = response.data.token;

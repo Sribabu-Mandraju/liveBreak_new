@@ -1,18 +1,19 @@
 import { create } from "zustand";
 import axios from "axios";
+import useAuthStore from "./authStore";
 
-const API_URL = "https://api.meebuddy.com/app/v4/news/categories";
-const NEWS_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdzX3VzZXJfZGF0YSI6eyJpZCI6IjY1NmMyNDM3M2NiNWE1MjMyYTRhMjFhNyJ9LCJpYXQiOjE3NDA1NTIyMDEsImV4cCI6MTc3MjA4ODIwMX0.8BVFq0DmbyRAWgVvtSb921evVDZ3CvTkiGU4ar7FWTE";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const API_URL = `${BASE_URL}/news/categories`;
 
 const useCategoryStore = create((set) => ({
   categories: [],
   loading: true,
   error: null,
   fetchCategories: async () => {
+    const token = useAuthStore.getState().token;
     try {
       const response = await axios.get(API_URL, {
-        headers: { "X-News-Token": NEWS_TOKEN },
+        headers: { "X-News-Token": token },
       });
       set({ categories: response.data.data, loading: false, error: null });
     } catch (error) {

@@ -7,6 +7,7 @@ import useAuthStore from "../store/authStore";
 import useUserStore from "../store/useUserStore";
 
 function Signin() {
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
   const fetchUser = useUserStore.getState().fetchUser;
   const [formData, setFormData] = useState({
     phone: "",
@@ -46,7 +47,7 @@ function Signin() {
 
     try {
       const response = await axios.post(
-        "https://api.meebuddy.com/app/v4/common/login",
+        `${BASE_URL}/common/login`,
         payload,
         {
           headers: {
