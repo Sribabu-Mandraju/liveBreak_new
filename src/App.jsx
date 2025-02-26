@@ -8,6 +8,7 @@ import Signin from "./auth/Login";
 import OTPVerification from "./auth/OtpVerficationPage";
 import useUserStore from "./store/useUserStore";
 import { useLocation } from "react-router-dom";
+import AddNewsForm from "./components/profile/AddNewsForm";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -42,7 +43,7 @@ const App = () => {
       <BrowserRouter>
         <ScrollToTop />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<AddNewsForm />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/OTPVerification" element={<OTPVerification />} />

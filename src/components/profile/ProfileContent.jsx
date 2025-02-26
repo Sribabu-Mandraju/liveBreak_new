@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FaCheckCircle, FaEdit } from "react-icons/fa";
 import { FaCircleCheck } from "react-icons/fa6";
 import { IoArrowBackCircle } from "react-icons/io5";
+import AddNewsForm from "./AddNewsForm";
 
 const ProfileContent = () => {
   const [profile, setProfile] = useState({
@@ -36,6 +37,7 @@ const ProfileContent = () => {
   return (
     <div className="relative w-full md:max-w-7xl mx-auto container min-h-screen flex gap-4">
       <div className="flex-1 bg-white dark:bg-gray-900 rounded-lg shadow-lg w-full max-w-4xl mx-auto sm:border dark:border-gray-700">
+        {/* Header Section */}
         <div className="flex flex-row bg-white px-4 items-center sticky top-0 dark:bg-gray-900 z-20 transition-transform duration-500">
           <div className="text-blue-500 text-4xl">
             <IoArrowBackCircle />
@@ -50,6 +52,7 @@ const ProfileContent = () => {
           </div>
         </div>
 
+        {/* Cover and Avatar */}
         <div className="relative bg-gray-100 dark:bg-gray-800">
           <img
             src="https://images.meebuddy.com/news-images/thumbnail/d45bc194-cbdf-4044-853d-9e1a8e058441.webp"
@@ -72,6 +75,7 @@ const ProfileContent = () => {
           />
         </div>
 
+        {/* Profile Info */}
         <div className="p-4 sm:p-8 mt-20">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -97,24 +101,20 @@ const ProfileContent = () => {
             </button>
           </div>
 
-          <div className="mt-6 border-gray-300 dark:border-gray-700 flex overflow-x-auto no-scrollbar">
-            {[
-              "Home",
-              "Add News",
-              "Posted News",
-              "Top 10",
-            ].map((tab) => (
+          {/* Tabs Section */}
+          <div className="mt-6  border-gray-300 dark:border-gray-700 flex overflow-x-auto ">
+            {["Home", "Add News", "Posted News", "Top 10"].map((tab) => (
               <button
                 key={tab}
                 className={`relative flex-1 px-4 py-2 text-center font-medium whitespace-nowrap duration-300 ${
-                  activeTab === tab.toLowerCase()
+                  activeTab === tab
                     ? "text-blue-600"
                     : "text-gray-500 hover:text-gray-700"
                 }`}
-                onClick={() => setActiveTab(tab.toLowerCase())}
+                onClick={() => setActiveTab(tab)}
               >
                 {tab}
-                {activeTab === tab.toLowerCase() && (
+                {activeTab === tab && (
                   <span className="absolute bottom-0 left-0 w-full h-[3px] bg-blue-500 z-1"></span>
                 )}
                 <span className="absolute bottom-0 left-0 w-full h-[1px] dark:bg-zinc-700 bg-zinc-400 z-0"></span>
@@ -122,12 +122,12 @@ const ProfileContent = () => {
             ))}
           </div>
 
-          <div className="mt-6 h-[60vh]">
+          {/* Tab Content */}
+          <div className="mt-6 h-auto">
             {activeTab === "Home" && <div>Posts</div>}
-            {activeTab === "Add News" && <div>Replies</div>}
+            {activeTab === "Add News" && <AddNewsForm />}
             {activeTab === "Posted News" && <div>Highlights</div>}
             {activeTab === "Top 10" && <div>Articles</div>}
-           
           </div>
         </div>
       </div>
