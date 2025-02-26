@@ -14,6 +14,7 @@ import {
 } from "react-icons/fa";
 import { MdDarkMode, MdLightMode } from "react-icons/md";
 import logo from "../../assets/logo.png";
+import useUserStore from "../../store/useUserStore";
 
 const Dropdown = ({ label, items, isMobile, isOpen, toggleDropdown, icon }) => (
   <div className="relative cursor-pointer group">
@@ -22,8 +23,9 @@ const Dropdown = ({ label, items, isMobile, isOpen, toggleDropdown, icon }) => (
       onClick={toggleDropdown}
     >
       <div className="flex flex-row  items-center">
-      {icon && <span className="mr-2">{icon}</span>}
-      {label}</div>
+        {icon && <span className="mr-2">{icon}</span>}
+        {label}
+      </div>
       {items && (
         <FaAngleDown
           className={`ml-2 transition-transform duration-300 ${
@@ -58,6 +60,7 @@ const Navbar = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [isSticky, setIsSticky] = useState(false);
+  const { user, status, fetchUser } = useUserStore();
 
   const navItems = [
     { label: "Home", href: "/", icon: <FaHome /> },
@@ -128,7 +131,7 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2 lg:gap-6">
             <nav className="hidden lg:flex items-center text-md gap-2">
               {navItems.map((item, index) => (
                 <React.Fragment key={index}>
@@ -164,8 +167,15 @@ const Navbar = () => {
                 <MdLightMode className="text-gray-400 dark:text-gray-300 text-xl" />
               )}
             </button>
+            {user && (
+          <div className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600 text-white">
+            <div>{user.data.email.charAt(0).toUpperCase()}</div>
           </div>
+        )}
+          </div>
+          
         </div>
+        
 
         {isMobileMenuOpen && (
           <>
@@ -173,10 +183,12 @@ const Navbar = () => {
               className="fixed inset-0 bg-black/50 z-50 lg:hidden"
               onClick={toggleMobileMenu}
             ></div>
-            <div className="fixed left-0 top-0 bottom-0 w-64 bg-white dark:bg-gray-800 shadow-lg p-4 transform transition-transform duration-300 ease-in-out z-50 lg:hidden overflow-y-auto"
-            style={{
-              zIndex:"300"
-            }}>
+            <div
+              className="fixed left-0 top-0 bottom-0 w-64 bg-white dark:bg-gray-800 shadow-lg p-4 transform transition-transform duration-300 ease-in-out z-50 lg:hidden overflow-y-auto"
+              style={{
+                zIndex: "300",
+              }}
+            >
               <button
                 className="absolute top-4 right-4 text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 transition-colors duration-200"
                 onClick={toggleMobileMenu}

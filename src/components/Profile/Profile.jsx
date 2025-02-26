@@ -1,24 +1,39 @@
 import { useState, useEffect } from "react";
-import { FaCheckCircle, FaEdit } from "react-icons/fa";
+import {  FaEdit } from "react-icons/fa";
 import { FaCircleCheck } from "react-icons/fa6";
 import { IoArrowBackCircle } from "react-icons/io5";
-import SideMenu from "../Home/SideMenu";
-import Trending from "../Home/Trending";
 import Layout from "../Layouts/Layout";
 import Navbar from "../Layouts/Navbar";
-
+import useUserStore from '../../store/useUserStore';
 const Profile = () => {
+  const {user,status,fetchUser}=useUserStore();
+ 
   const [profile, setProfile] = useState({
-    name: "Nakshatra Yeluri",
-    username: "NakshatraYeluri",
-    joined: "February 2025",
-    following: 1,
+    name: "",
+    email: "",
+    joined: "",
+    following: 0,
     followers: 0,
     posts: 0,
     avatar: "https://via.placeholder.com/150",
   });
 
-  const [activeTab, setActiveTab] = useState("posts");
+  useEffect(() => {
+    if (user) {
+      console.log("exists")
+      setProfile({
+        name: user.data.name || "User Name",
+        email: user.data.email|| "username",
+        joined: user.data.joined || "February 2025",
+        following: user.data.following || 0,
+        followers: user.data.followers || 0,
+        posts: user.posts || 0,
+        avatar: user.avatar || "https://via.placeholder.com/150",
+      });
+    }
+  }, [user]);
+ 
+  const [activeTab, setActiveTab] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollY, setScrollY] = useState(0);
 
@@ -57,7 +72,7 @@ const Profile = () => {
                 }`}
               >
                 <h1 className="text-xl sm:text-2xl font-bold ">
-                  {profile.name}
+                  {profile.email}
                 </h1>
                 <h1 className="text-sm text-gray-500">Posts {profile.posts}</h1>
               </div>
@@ -103,7 +118,7 @@ const Profile = () => {
                       <span>Get Verified</span>
                     </button>
                   </div>
-                  <p className="text-gray-500">@{profile.username}</p>
+                  <p className="text-gray-500">{profile.email}</p>
                   <p className="mt-2 text-gray-500">
                     📅 Joined {profile.joined}
                   </p>
@@ -122,12 +137,10 @@ const Profile = () => {
               {/* Tabs */}
               <div className="mt-6   border-gray-300 dark:border-gray-700  flex overflow-x-auto no-scrollbar">
                 {[
-                  "Posts",
-                  "Replies",
-                  "Highlights",
-                  "Articles",
-                  "Media",
-                  "Likes",
+                  "Home",
+                  "Add News",
+                  "My News / ADs",
+                  "Top 10"
                 ].map((tab) => (
                   <button
                     key={tab}
@@ -149,12 +162,11 @@ const Profile = () => {
 
               {/* Content */}
               <div className="mt-6 h-[60vh]">
-                {activeTab === "posts" && <div>Posts</div>}
-                {activeTab === "replies" && <div>Replies</div>}
-                {activeTab === "highlights" && <div>Highlights</div>}
-                {activeTab === "articles" && <div>Articles</div>}
-                {activeTab === "media" && <div>Media</div>}
-                {activeTab === "likes" && <div>Likes</div>}
+                {activeTab === "home" && <div>Home</div>}
+                {activeTab === "addnews" && <div>Add News</div>}
+                {activeTab === "mynews/ads" && <div>My News / ADs</div>}
+                {activeTab === "top10" && <div>Top 10</div>}
+                
               </div>
             </div>
           </div>
