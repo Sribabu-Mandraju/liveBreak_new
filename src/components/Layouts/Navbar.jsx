@@ -21,8 +21,9 @@ const Dropdown = ({ label, items, isMobile, isOpen, toggleDropdown, icon }) => (
       className="flex items-center justify-between gap-2 font-semibold text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 py-2 px-3 rounded-md transition-colors duration-200"
       onClick={toggleDropdown}
     >
+      <div className="flex flex-row  items-center">
       {icon && <span className="mr-2">{icon}</span>}
-      {label}
+      {label}</div>
       {items && (
         <FaAngleDown
           className={`ml-2 transition-transform duration-300 ${
@@ -169,7 +170,7 @@ const Navbar = () => {
         {isMobileMenuOpen && (
           <>
             <div
-              className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+              className="fixed inset-0 bg-black/50 z-50 lg:hidden"
               onClick={toggleMobileMenu}
             ></div>
             <div className="fixed left-0 top-0 bottom-0 w-64 bg-white dark:bg-gray-800 shadow-lg p-4 transform transition-transform duration-300 ease-in-out z-50 lg:hidden overflow-y-auto"
