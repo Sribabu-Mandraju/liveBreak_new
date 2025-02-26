@@ -5,7 +5,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { IoEyeOutline } from "react-icons/io5";
 import { IoLocationOutline } from "react-icons/io5";
-
+import Drawer from '../shadcnui/Drawer'
 const ReporterInfo = ({ posted_by }) => (
   <div className="flex items-start space-x-4">
     <img
@@ -104,39 +104,56 @@ const LocationAndTime = ({ states, district, mandal, createdAt }) => (
   </div>
 );
 
-const InteractionButtons = ({ likes, views, comments }) => (
-  <div className="mt-3 flex flex-wrap items-center justify-between text-gray-600 dark:text-gray-300 text-sm gap-2">
-    {/* Likes & Views Section */}
-    <div className="flex items-center space-x-2 w-full sm:w-auto justify-between sm:justify-start">
-      <div className="flex items-center space-x-1 text-blue-500">
-        <FaRegThumbsUp className="text-lg" />
-        <span className="font-semibold">{likes}</span>
-        <FaRegComment className="text-lg text-pink-500" />
-        <span className="font-semibold text-pink-500">{comments?.length}</span>
-      </div>
-      <span className="text-xs sm:text-sm">
-        <div className="flex gap-1 items-center text-green-600 font-bold">
-          <FaEye className="text-[13px]" />
-          <div className="">{views}</div>
-        </div>
-      </span>
-    </div>
+const InteractionButtons = ({ likes, views, comments }) => {
+  const [showComments, setShowComments] = useState(false);
 
-    {/* Action Buttons */}
-    <div className="flex w-full sm:w-auto justify-between sm:justify-end space-x-3 sm:space-x-4">
-      <button className="flex items-center space-x-1 cursor-pointer hover:text-blue-500 transition duration-200 text-xs sm:text-sm">
-        <FaRegThumbsUp className="text-base sm:text-lg" /> <span>Like</span>
-      </button>
-      <button className="flex items-center space-x-1 cursor-pointer hover:text-green-500 transition duration-200 text-xs sm:text-sm">
-        <FaRegComment className="text-base sm:text-lg" />
-        <span>{comments.length} Comments</span>
-      </button>
-      <button className="flex items-center space-x-1 cursor-pointer hover:text-purple-500 transition duration-200 text-xs sm:text-sm">
-        <FaShare className="text-base sm:text-lg" /> <span>Share</span>
-      </button>
+  return (
+    <div className="mt-3 flex flex-wrap items-center justify-between text-gray-600 dark:text-gray-300 text-sm gap-2">
+      <div className="flex items-center space-x-2 w-full sm:w-auto justify-between sm:justify-start">
+        <div className="flex items-center space-x-1 text-blue-500">
+          <FaRegThumbsUp className="text-lg" />
+          <span className="font-semibold">{likes}</span>
+          <FaRegComment className="text-lg text-pink-500" />
+          <span className="font-semibold text-pink-500">{comments?.length}</span>
+        </div>
+        <span className="text-xs sm:text-sm">
+          <div className="flex gap-1 items-center text-green-600 font-bold">
+            <FaEye className="text-[13px]" />
+            <div className="">{views}</div>
+          </div>
+        </span>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex w-full sm:w-auto justify-between sm:justify-end space-x-3 sm:space-x-4">
+        <button className="flex items-center space-x-1 cursor-pointer hover:text-blue-500 transition duration-200 text-xs sm:text-sm">
+          <FaRegThumbsUp className="text-base sm:text-lg" /> <span>Like</span>
+        </button>
+
+        {/* Open Comment Section */}
+        <button
+          onClick={() => setShowComments(true)}
+          className="flex items-center space-x-1 cursor-pointer hover:text-green-500 transition duration-200 text-xs sm:text-sm"
+        >
+          <FaRegComment className="text-base sm:text-lg" />
+          <span>{comments.length} Comments</span>
+        </button>
+
+        <button className="flex items-center space-x-1 cursor-pointer hover:text-purple-500 transition duration-200 text-xs sm:text-sm">
+          <FaShare className="text-base sm:text-lg" /> <span>Share</span>
+        </button>
+      </div>
+
+      {/* Render Comment Section */}
+      {showComments && 
+      <div className="w-full h-full relative">
+      <Drawer open={showComments} onOpenChange={setShowComments} title="comments" content="no comments yet"/>
+      </div>
+      }
+
     </div>
-  </div>
-);
+  );
+};
 
 const NewsCard = ({ data }) => {
   return (
