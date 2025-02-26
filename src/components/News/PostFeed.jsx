@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import useFeedStore from "../../store/useFeedStore"; // Adjust path if needed
-import NewsCard2 from "./Shared/NewsCard2";
 import { FaSpinner } from "react-icons/fa";
-
+import NewsCard from "./NewsCard";
 const PostFeed = () => {
   const { posts, fetchPosts, loading, hasMore } = useFeedStore();
   const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.5 });
@@ -24,7 +23,7 @@ const PostFeed = () => {
     <div className="flex flex-col items-center w-full">
       {posts.length > 0 ? (
         posts.map((post, index) => (
-          <NewsCard2 key={post._id || index} data={post} />
+          <NewsCard key={post._id || index} data={post} />
         ))
       ) : (
         <p className="text-gray-600 dark:text-gray-300">No posts available.</p>
