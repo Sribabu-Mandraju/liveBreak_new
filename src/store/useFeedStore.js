@@ -2,6 +2,9 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import axios from "axios";
 
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+
 const useFeedStore = create(
   persist(
     (set, get) => ({
@@ -16,7 +19,7 @@ const useFeedStore = create(
         set({ loading: true });
 
         try {
-          const response = await axios.post("https://api.meebuddy.com/app/v4/common/feed", {
+          const response = await axios.post(`${BASE_URL}/common/feed`, {
             post_id: "",
             last_id: get().lastId, // Use the last ID from previous data
             type: "",
