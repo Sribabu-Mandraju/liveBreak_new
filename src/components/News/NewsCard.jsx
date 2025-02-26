@@ -138,7 +138,7 @@ const InteractionButtons = ({ likes, views, comments }) => (
   </div>
 );
 
-const NewsCard2 = ({ data }) => {
+const NewsCard = ({ data }) => {
   return (
     <div className="bg-white dark:bg-gray-900 mt-3 rounded-lg shadow-lg p-4 w-[93%] md:w-full mx-auto border dark:border-gray-700">
       <ReporterInfo posted_by={data.posted_by} />
@@ -159,4 +159,4 @@ const NewsCard2 = ({ data }) => {
   );
 };
 
-export default NewsCard2;
+export default NewsCard;

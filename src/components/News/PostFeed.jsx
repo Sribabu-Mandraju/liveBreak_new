@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
-import useFeedStore from "../store/useFeedStore"; // Adjust path if needed
+import useFeedStore from "../../store/useFeedStore"; // Adjust path if needed
 import NewsCard2 from "./Shared/NewsCard2";
 import { FaSpinner } from "react-icons/fa";
 

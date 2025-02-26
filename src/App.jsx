@@ -1,16 +1,9 @@
 import React from "react";
-import Navbar from "./components/Layouts/Navbar";
-import InfiniteScroll from "./components/Home/InfiniteScroll";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import BelowHeader from "./components/Home/BelowHeader";
-import NewsCard from "./components/Shared/NewsCard";
 import NewsCard2 from "./components/Shared/NewsCard2";
 import Home from "./Pages/main/Home";
-import Landing from "./Pages/Landing/Landing";
-import PostFeed from "./components/Testing";
 import Signup from "./auth/Register";
 import Profile from "./components/Profile/Profile";
-import Layout from "./components/Layouts/Layout";
 
 const App = () => {
   return (
