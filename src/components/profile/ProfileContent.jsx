@@ -72,7 +72,7 @@ const ProfileContent = () => {
               isScrolled ? "translate-x-16" : "translate-x-0"
             }`}
           >
-            <h1 className="text-xl sm:text-xl font-bold">{profile.email}</h1>
+            <h1 className="text-lg sm:text-xl font-bold">{profile.email.slice(0,12)}...</h1>
             <h1 className="text-sm text-gray-500">Posts {profile.posts}</h1>
           </div>
         </div>
@@ -108,7 +108,7 @@ const ProfileContent = () => {
                 <h1 className="text-xl sm:text-2xl font-bold truncate">
                   {profile.email}
                 </h1>
-                <button className="flex items-center px-3 sm:px-4 py-1 border-2 border-gray-600 text-xs sm:text-sm font-medium text-black bg-white rounded-full">
+                <button className="flex items-center px-3 sm:px-4 py-1  border-2 border-gray-600 text-[11px] sm:text-sm font-medium text-black bg-white rounded-full">
                   <FaCircleCheck className="text-blue-600 text-lg" />
                   <span>Get Verified</span>
                 </button>
