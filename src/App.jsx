@@ -10,7 +10,10 @@ import Profile from "./Pages/Profile/Profile";
 import MagazinePage from "./Pages/Magazine/MagazinePage";
 import Signin from "./auth/Login";
 import OTPVerification from "./auth/OtpVerficationPage";
-import LocationSelector from "./auth/LocationSelector";
+// import AddNewsForm from "./components/profile/AddNewsForm";
+import Group from "./Pages/Groups/Group";
+
+import Location from './Pages/Location/Location';
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -47,7 +50,8 @@ const App = () => {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/location" element={<LocationSelector />} />
+          <Route path="/group" element={<Group />} />
+          <Route path="/location" element={<Location />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/OTPVerification" element={<OTPVerification />} />
