@@ -35,7 +35,7 @@ function Signin() {
     const payload = {
       country_code: "",
       device_uuid: null,
-      email: "sribabumandraju@gmail.com", // Hardcoded email for now
+      email: formData.email, // Hardcoded email for now
       fcm_meenews_token: "",
       hash_code: "",
       mobile_num: formData.phone.slice(-10), // Extract last 10 digits

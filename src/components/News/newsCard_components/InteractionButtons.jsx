@@ -52,7 +52,7 @@ const InteractionButtons = ({ likes, views, comments, post_id }) => {
         },
         {
           headers: {
-            "X-Meebuddy-Token": token, // Pass token in header
+            "X-News-Token": token, // Pass token in header
           },
         }
       );
