@@ -167,7 +167,7 @@ const Navbar = () => {
             </button>
             {
               user && (
-                <div className="flex justify-center text-white rounded-full w-8 h-8 items-center bg-blue-500 dark:bg-gray-800 dark:text-blue-600">
+                <div className="flex justify-center text-white rounded-full w-8 h-8 items-center bg-blue-500 dark:bg-gray-700 dark:text-blue-600">
                   {user?.user?.data?.email.charAt(0).toUpperCase()}
 
                 </div>

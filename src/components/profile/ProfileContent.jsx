@@ -3,6 +3,8 @@ import { FaCheckCircle, FaEdit } from "react-icons/fa";
 import { FaCircleCheck } from "react-icons/fa6";
 import { IoArrowBackCircle } from "react-icons/io5";
 import AddNewsForm from "./AddNewsForm";
+import Home from './Home'
+import Posted from "./Posted";
 import { useSelector } from "react-redux";
 
 const ProfileContent = () => {
@@ -147,9 +149,9 @@ const ProfileContent = () => {
 
           {/* Tab Content */}
           <div className="mt-6 h-auto">
-            {activeTab === "Home" && <div>Posts</div>}
+            {activeTab === "Home" && <Home/>}
             {activeTab === "Add News" && <AddNewsForm />}
-            {activeTab === "Posted News" && <div>Highlights</div>}
+            {activeTab === "Posted News" && <Posted/>}
             {activeTab === "Top 10" && <div>Articles</div>}
           </div>
         </div>
