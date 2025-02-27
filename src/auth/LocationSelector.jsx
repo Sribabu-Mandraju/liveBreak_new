@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectLocation } from "../store/locationSlice";
 import SearchInput from "./location/SearchInput";
 import SearchResults from "./location/SearchResults";
@@ -10,7 +10,7 @@ import FavoriteLocations from "./location/FavoriteLocations";
 function LocationSelector() {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const dispatch = useDispatch();
-  const token = localStorage.getItem("token");
+  const token = useSelector((state) => state.auth.token);
 
   const [location, setLocation] = useState("");
   const [results, setResults] = useState([]);
