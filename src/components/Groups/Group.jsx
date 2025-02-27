@@ -8,14 +8,14 @@ const Group = () => {
           <button className="py-1 px-4 font-semibold text-lg ">Create your own Group</button>
         </div>
         <div className="flex flex-col mt-6 w-full">
-            <div className="text-xl font-semibold   text-blue-900">Suggested for you</div>
+            <div className="text-lg font-semibold   text-blue-800">Suggested for you</div>
             <div className="border-b border-2 border-blue-500 w-10 mt-2 mb-6"></div>
             <Slider/>
 
         </div>
         <div className="flex flex-col mt-6 w-full">
-            <div className="text-xl font-semibold   text-blue-900">Your Feed</div>
-            <div className="border-b border-2 border-blue-500 w-10 mt-2 mb-6"></div>
+            <div className="text-lg font-semibold   text-blue-800">Your Feed</div>
+            <div className="border-b border-2 border-blue-500 w-10 mt-1 mb-6"></div>
             
 
         </div>

@@ -72,7 +72,10 @@ const ProfileContent = () => {
               isScrolled ? "translate-x-16" : "translate-x-0"
             }`}
           >
-            <h1 className="text-lg sm:text-xl font-bold">{profile.email.slice(0,12)}...</h1>
+            <h1 className="text-lg sm:text-lg font-semibold">
+  <span className="sm:hidden">{profile.email.slice(0, 12)}...</span>
+  <span className="hidden sm:inline">{profile.email}</span>
+</h1>
             <h1 className="text-sm text-gray-500">Posts {profile.posts}</h1>
           </div>
         </div>
@@ -105,22 +108,22 @@ const ProfileContent = () => {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-bold truncate">
+                <h1 className="text-xl sm:text-xl font-semibold truncate">
                   {profile.email}
                 </h1>
-                <button className="flex items-center px-3 sm:px-4 py-1  border-2 border-gray-600 text-[11px] sm:text-sm font-medium text-black bg-white rounded-full">
+                <button className="flex  gap-1 items-center px-3 sm:px-4 py-1  border-2 border-gray-600 text-[11px] sm:text-sm font-medium text-black bg-white rounded-full">
                   <FaCircleCheck className="text-blue-600 text-lg" />
                   <span>Get Verified</span>
                 </button>
               </div>
               <p className="text-gray-500">{profile.phone}</p>
               <p className="mt-2 text-gray-500">📅 Joined {profile.joined}</p>
-              <p className="mt-2">
-                <span>{profile.following} Following</span> ·{" "}
+              <p className="mt-2 flex flex-row gap-4">
+                <span>{profile.following} Following</span> 
                 <span>{profile.followers} Followers</span>
               </p>
             </div>
-            <button className="mt-4 sm:mt-0 flex w-fit items-center px-4 py-1 md:py-2 border-2 border-gray-600 text-sm font-medium text-black bg-white rounded-full">
+            <button className="mt-4 sm:mt-0 flex w-fit items-center gap-1 px-4 py-1 md:py-2 border-2 border-gray-600 text-sm font-medium text-black bg-white rounded-full">
               <FaEdit />
               <span>Edit Profile</span>
             </button>

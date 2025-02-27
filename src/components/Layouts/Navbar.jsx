@@ -187,54 +187,56 @@ const Navbar = () => {
                 <div className="flex justify-center cursor-pointer text-white rounded-full w-8 h-8 items-center bg-blue-500 dark:bg-gray-700 dark:text-blue-600">
                   {user?.user?.data?.email.charAt(0).toUpperCase()}
                 </div>
-                <div className="hidden group-hover:flex absolute  pt-2 right-[-30px] z-50 p-4    top-full">
-                  <div className=" bg-white dark:bg-gray-800 dark:border-gray-700 w-[280px] p-2 shadow-md rounded-lg border border-gray-300  flex-col gap-4">
-                    <div className="flex flex-col  w-full gap-6 items-center mt-6">
-                      <div className="flex flex-row gap-4 items-center">
-                      <div className="flex justify-center cursor-pointer text-2xl  text-white rounded-full w-12 h-12 items-center bg-blue-500 dark:bg-gray-700 dark:text-blue-600">
-                        {user?.user?.data?.email.charAt(0).toUpperCase()}
-                      </div>
-                      <div className="flex flex-col text-sm ">
-                        <div className="font-semibold text-lg">
-                          {user?.user?.data?.email}
-                        </div>
-                        <div className="text-blue-500">
-                          {user?.user?.data?.mobile_num}
-                        </div>
+                <div className="hidden group-hover:flex absolute pt-2 right-[-30px] z-50 p-4 top-full">
+  <div className="bg-white dark:bg-gray-800 dark:border-gray-700 w-[270px] p-4 shadow-lg rounded-xl border border-gray-300 flex-col gap-4">
+    <div className="flex flex-col w-full gap-6 items-center mt-4">
+      <div className="flex flex-row w-full gap-4 items-center">
+        <div className="flex justify-center cursor-pointer text-3xl text-white rounded-full w-14 h-14 items-center bg-blue-500 dark:bg-gray-700 dark:text-blue-600">
+          {user?.user?.data?.email.charAt(0).toUpperCase()}
+        </div>
+        <div className="flex flex-col gap-1 text-sm">
+          <div className="font-semibold text-[16px] break-all">
+            {user?.user?.data?.email}
+          </div>
+          <div className="text-blue-500">
+            {user?.user?.data?.mobile_num}
+          </div>
+        </div>
+      </div>
 
-                      </div>
+      <button className="w-[80%] py-2 rounded-lg border border-blue-600 hover:bg-blue-600 text-blue-600 hover:text-white transition-all">
+        View Profile
+      </button>
+    </div>
 
-                      </div>
-                      <div className="w-[80%]"> 
-                        <button className="w-full py-1 rounded-lg border border-blue-600 hover:bg-blue-600 text-blue-600 hover:text-white">View Profile</button>
-                      </div>
-                      
-                    </div>
-                    <hr className=" text-gray-300 my-4"/>
-                    <div className="flex flex-col gap-2 pb-4 px-4">
-                    <div className="text-blue-600 rounded-lg px-2 py-1 cursor-pointer">
-                      Manage
-                    </div>
-                    <Link to="/profile">
-                      <div className="hover:bg-blue-100 dark:hover:bg-blue-500 rounded-lg px-2 py-1 cursor-pointer">
-                        My Profile
-                      </div>
-                    </Link>
-                    <div className="hover:bg-blue-100 dark:hover:bg-blue-500 rounded-lg px-2 py-1 cursor-pointer">
-                      My Posts
-                    </div>
-                    <div className="hover:bg-blue-100 dark:hover:bg-blue-500 rounded-lg px-2 py-1 cursor-pointer">
-                      My Dashboard
-                    </div>
-                    <div className="hover:bg-blue-100 dark:hover:bg-blue-500 rounded-lg px-2 py-1 cursor-pointer">
-                      Logout
-                    </div>
+    <hr className="border-gray-300 my-4" />
 
-                    </div>
+    <div className="flex flex-col gap-3 pb-4 px-4 text-sm">
+      <div className="text-blue-600 rounded-lg px-2 py-2 cursor-pointer  transition-all">
+        Manage
+      </div>
 
-                    
-                  </div>
-                </div>
+      <Link to="/profile">
+        <div className="rounded-lg px-2 py-2 cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-500 transition-all">
+          My Profile
+        </div>
+      </Link>
+
+      <div className="rounded-lg px-2 py-2 cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-500 transition-all">
+        My Posts
+      </div>
+
+      <div className="rounded-lg px-2 py-2 cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-500 transition-all">
+        My Dashboard
+      </div>
+
+      <div className="rounded-lg px-2 py-2 dark:hover:text-white cursor-pointer hover:bg-red-100 dark:hover:bg-red-500 text-red-600 dark:text-red-400 transition-all">
+        Logout
+      </div>
+    </div>
+  </div>
+</div>
+
               </div>
             ) : (
               <div>
