@@ -11,6 +11,7 @@ import MagazinePage from "./Pages/Magazine/MagazinePage";
 import Signin from "./auth/Login";
 import OTPVerification from "./auth/OtpVerficationPage";
 // import AddNewsForm from "./components/profile/AddNewsForm";
+import Group from "./Pages/Groups/Group";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -48,6 +49,7 @@ const App = () => {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/group" element={<Group />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/OTPVerification" element={<OTPVerification />} />
