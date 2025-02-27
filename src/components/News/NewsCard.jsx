@@ -20,6 +20,7 @@ const NewsCard = ({ data }) => {
         likes={data.likes}
         views={data.views}
         comments={data.comments}
+        post_id={data._id}
       />
     </div>
   );
