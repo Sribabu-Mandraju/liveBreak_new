@@ -3,16 +3,18 @@ import { FaCheckCircle, FaEdit } from "react-icons/fa";
 import { FaCircleCheck } from "react-icons/fa6";
 import { IoArrowBackCircle } from "react-icons/io5";
 import AddNewsForm from "./AddNewsForm";
-import useUserStore from '../../store/useUserStore'
+import { useSelector } from "react-redux";
 
 const ProfileContent = () => {
-  const { user, status, fetchUser } = useUserStore();
 
+  const user = useSelector((state) => state.user);
+  console.log(user)
   const [profile, setProfile] = useState({
-    name: "",
-    username: "",
-    joined: "",
-    following: 0,
+    name: "Sribabu Mandraju",
+    email: "sribabumandraju@gmail.com",
+    phone:'',
+    joined: "February 2025",
+    following: 1,
     followers: 0,
     posts: 0,
     avatar: "https://via.placeholder.com/150",
@@ -20,21 +22,25 @@ const ProfileContent = () => {
 
   useEffect(() => {
     if (user) {
-      setProfile({
-        name: user.data.name || "User Name",
-        email: user.data.email || "username",
-        joined: user.data.joined || "February 2025",
-        following: user.data.following || 0,
-        followers: user.data.followers || 0,
-        posts: user.data.posts || 0,
-        avatar: user.data.avatar || "https://via.placeholder.com/150",
-      });
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        name: user?.user?.data?.name || prevProfile.name,
+        email: user?.user?.data?.email || prevProfile.email,
+        phone: user?.user?.data?.mobile_num || prevProfile.phone,
+        joined: user.joined || prevProfile.joined,
+        following: user.following || prevProfile.following,
+        followers: user.followers || prevProfile.followers,
+        posts: user.posts || prevProfile.posts,
+        avatar: user.avatar || prevProfile.avatar,
+      }));
     }
   }, [user]);
 
   const [activeTab, setActiveTab] = useState("Home");
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+ 
+ 
 
   useEffect(() => {
     const handleScroll = () => {
@@ -64,7 +70,7 @@ const ProfileContent = () => {
               isScrolled ? "translate-x-16" : "translate-x-0"
             }`}
           >
-            <h1 className="text-xl sm:text-2xl font-bold">{profile.email}</h1>
+            <h1 className="text-xl sm:text-xl font-bold">{profile.email}</h1>
             <h1 className="text-sm text-gray-500">Posts {profile.posts}</h1>
           </div>
         </div>
@@ -98,14 +104,14 @@ const ProfileContent = () => {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-xl sm:text-2xl font-bold truncate">
-                  {profile.name}
+                  {profile.email}
                 </h1>
                 <button className="flex items-center px-3 sm:px-4 py-1 border-2 border-gray-600 text-xs sm:text-sm font-medium text-black bg-white rounded-full">
                   <FaCircleCheck className="text-blue-600 text-lg" />
                   <span>Get Verified</span>
                 </button>
               </div>
-              <p className="text-gray-500">{profile.username}</p>
+              <p className="text-gray-500">{profile.phone}</p>
               <p className="mt-2 text-gray-500">📅 Joined {profile.joined}</p>
               <p className="mt-2">
                 <span>{profile.following} Following</span> ·{" "}

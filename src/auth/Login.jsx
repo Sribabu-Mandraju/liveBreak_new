@@ -3,12 +3,13 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import useAuthStore from "../store/authStore";
-import useUserStore from "../store/useUserStore";
+import { useDispatch } from "react-redux";
+import { setToken } from "../store/authSlice";
+import { fetchUser } from "../store/userSlice";
 
 function Signin() {
+  const dispatch = useDispatch();
   const BASE_URL = import.meta.env.VITE_BASE_URL;
-  const fetchUser = useUserStore.getState().fetchUser;
   const [formData, setFormData] = useState({
     phone: "",
     password: "",
@@ -58,13 +59,13 @@ function Signin() {
       const token = response.data.token;
       if (token) {
         console.log("Setting token:", token);
-        useAuthStore.setState({ token }); // ✅ Update Zustand store
+        dispatch(setToken(token));
       } else {
         console.log("No token received");
       }
 
       if (response.data && response.status == 201) {
-        await fetchUser();
+        await dispatch(fetchUser())
         toast.success("Login successful!");
         console.log("Response:", response.data);
       } else {

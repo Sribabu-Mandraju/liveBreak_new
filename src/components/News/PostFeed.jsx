@@ -1,23 +1,26 @@
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useInView } from "react-intersection-observer";
-import useFeedStore from "../../store/useFeedStore"; // Adjust path if needed
 import { FaSpinner } from "react-icons/fa";
 import NewsCard from "./NewsCard";
+import { fetchPosts } from "../../store/feedSlice";
+
 const PostFeed = () => {
-  const { posts, fetchPosts, loading, hasMore } = useFeedStore();
+  const dispatch = useDispatch();
+  const { posts, loading, hasMore } = useSelector((state) => state.feed);
   const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.5 });
 
-  // Always fetch new posts on mount (ensures fresh data)
+  // Fetch posts on component mount
   useEffect(() => {
-    fetchPosts(); // This ensures fresh data on every reload
-  }, []); // No dependency means it runs once per mount
+    dispatch(fetchPosts());
+  }, [dispatch]);
 
-  // Fetch more posts when scrolled to bottom
+  // Fetch more posts when user scrolls down
   useEffect(() => {
     if (inView && hasMore) {
-      fetchPosts();
+      dispatch(fetchPosts());
     }
-  }, [inView, hasMore]);
+  }, [inView, hasMore, dispatch]);
 
   return (
     <div className="flex flex-col items-center w-full">

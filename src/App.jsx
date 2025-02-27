@@ -1,14 +1,16 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUser } from "./store/userSlice";
+import { useLocation } from "react-router-dom";
+import { ClipLoader } from "react-spinners"; // Import Spinner
 import Home from "./Pages/main/Home";
 import Signup from "./auth/Register";
 import Profile from "./Pages/Profile/Profile";
 import MagazinePage from "./Pages/Magazine/MagazinePage";
 import Signin from "./auth/Login";
 import OTPVerification from "./auth/OtpVerficationPage";
-import useUserStore from "./store/useUserStore";
-import { useLocation } from "react-router-dom";
-import AddNewsForm from "./components/profile/AddNewsForm";
+// import AddNewsForm from "./components/profile/AddNewsForm";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -21,19 +23,21 @@ const ScrollToTop = () => {
 };
 
 const App = () => {
-  const fetchUser = useUserStore.getState().fetchUser;
-  const status = useUserStore((state) => state.status);
+  const dispatch = useDispatch();
+  const { user, status, error } = useSelector((state) => state.user);
+  const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
-    if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
-      fetchUser();
+    if (token) {
+      dispatch(fetchUser()); // Fetch user on reload if token exists
     }
-  }, []);
+  }, [dispatch, token]); // Runs when token changes
 
+  // Show loading spinner while fetching user data
   if (status === "loading") {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
+      <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900">
+        <ClipLoader size={50} color="#4A90E2" />
       </div>
     );
   }
@@ -43,7 +47,7 @@ const App = () => {
       <BrowserRouter>
         <ScrollToTop />
         <Routes>
-          <Route path="/" element={<AddNewsForm />} />
+          <Route path="/" element={<Home />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/OTPVerification" element={<OTPVerification />} />
