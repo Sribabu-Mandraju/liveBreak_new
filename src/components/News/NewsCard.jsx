@@ -11,7 +11,7 @@ const NewsCard = ({ data }) => {
       <NewsDetails news={data.news} />
       <MediaContent news={data.news} />
       <LocationAndTime states={data.states} district={data.district} mandal={data.mandal} createdAt={data.createdAt} />
-      <InteractionButtons likes={data.likes} views={data.views} comments={data.comments} />
+      <InteractionButtons likes={data.likes} views={data.views} comments={data.comments} post_id={data._id} />
     </div>
   )
 }

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import {
   FaRegThumbsUp,
   FaRegComment,
@@ -12,22 +14,59 @@ import { IoSend } from "react-icons/io5";
 import toast from "react-hot-toast";
 import Drawer from "../../shadcnui/Drawer";
 
-const InteractionButtons = ({ likes, views, comments }) => {
+const InteractionButtons = ({ likes, views, comments, post_id }) => {
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
-  const [commentList, setCommentList] = useState(comments || []);
+  // const [commentList, setCommentList] = useState(comments || []);
   const [share, setShare] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [results, setResults] = useState(comments || []);
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdzX3VzZXJfZGF0YSI6eyJpZCI6IjY3YzAzNjI0YmUwZTdkZjYzNGI5OTY3MyJ9LCJpYXQiOjE3NDA2NTMyOTYsImV4cCI6MTc3MjE4OTI5Nn0.41cCSbwDPcEEovcYO81hQZ-4uM1S56eWtibwwybx9dw";
 
   const handleAddComment = () => {
     if (newComment.trim()) {
-      setCommentList([...commentList, { text: newComment.trim() }]);
+      setResults([...results, { text: newComment.trim() }]);
       setNewComment("");
     }
   };
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
-    toast.success("Link copied successfully! ");
+    const shareUrl = `${window.location.origin}/post/${post_id}`;
+    navigator.clipboard.writeText(shareUrl);
+    toast.success("Link copied successfully!");
+  };
+  const fetchComments = async () => {
+    setShowComments(true);
+    setShare(false);
+    setLoading(true);
+    try{
+      console.log("hi its working")
+      console.log(token)
+      const response = await axios.post(
+        `${BASE_URL}/news/comments`,
+        {
+          text: "newComment",
+          post_id: post_id,
+          version: "new",
+        },
+        {
+          headers: {
+            "X-Meebuddy-Token": token, // Pass token in header
+          },
+        }
+      );
+      
+      // console.log(response.data.data)
+      setResults(response.data.data || []);
+    }
+    catch(error){
+      console.log("Error in fetching comments:",error)
+      setResults([])
+
+    }
+    setLoading(false);
+    
   };
 
   return (
@@ -62,14 +101,11 @@ const InteractionButtons = ({ likes, views, comments }) => {
 
         {/* Open Comment Section */}
         <button
-          onClick={() => {
-            setShowComments(true);
-            setShare(false);
-          }}
+          onClick={fetchComments}
           className="flex items-center space-x-1 cursor-pointer hover:text-green-500 transition duration-200 text-xs sm:text-sm"
         >
           <FaRegComment className="text-base sm:text-lg" />
-          <span>{comments.length} Comments</span>
+          <span>{results.length} Comments</span>
         </button>
 
         <button
@@ -94,8 +130,8 @@ const InteractionButtons = ({ likes, views, comments }) => {
             <div className="flex flex-col min-h-[70px] p-4">
               {/* Comment List */}
               <div className="space-y-4 overflow-y-auto max-h-[50vh] p-2">
-                {commentList.length > 0 ? (
-                  commentList.map((comment) => (
+                {results.length > 0 ? (
+                  results.map((comment) => (
                     <div
                       key={comment._id}
                       className="flex space-x-3 p-3 bg-white dark:bg-gray-900 rounded-lg shadow-md"
@@ -108,7 +144,7 @@ const InteractionButtons = ({ likes, views, comments }) => {
                         {/* User & Time */}
                         <div className="flex items-center space-x-2">
                           <p className="text-sm font-semibold dark:text-gray-300">
-                            {comment.commented_by.name}
+                            comment.commented_by.name
                           </p>
                           <span className="text-xs text-gray-500 dark:text-gray-400">
                             • Just now
@@ -117,7 +153,7 @@ const InteractionButtons = ({ likes, views, comments }) => {
 
                         {/* Comment Text */}
                         <p className="text-gray-800 dark:text-gray-300">
-                          {comment.text}
+                          comment.text
                         </p>
 
                         {/* Replies */}
@@ -150,7 +186,7 @@ const InteractionButtons = ({ likes, views, comments }) => {
                   </p>
                 )}
               </div>
-{/* dd */}
+              {/* dd */}
               {/* Comment Input */}
               <div className="flex items-center mt-4 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-md p-2">
                 <input
