@@ -3,10 +3,13 @@ import { FaCheckCircle, FaEdit } from "react-icons/fa";
 import { FaCircleCheck } from "react-icons/fa6";
 import { IoArrowBackCircle } from "react-icons/io5";
 import AddNewsForm from "./AddNewsForm";
-import useUserStore from '../../store/useUserStore'
+// import useUserStore from '../../store/useUserStore'
+import { useSelector } from "react-redux";
 
 const ProfileContent = () => {
-  const { user, status, fetchUser } = useUserStore();
+  // const { user, status, fetchUser } = useUserStore();
+  const user = useSelector((state)=> state.user)
+  console.log(user)
 
   const [profile, setProfile] = useState({
     name: "",
