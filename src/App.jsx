@@ -10,10 +10,10 @@ import Profile from "./Pages/Profile/Profile";
 import MagazinePage from "./Pages/Magazine/MagazinePage";
 import Signin from "./auth/Login";
 import OTPVerification from "./auth/OtpVerficationPage";
-// import AddNewsForm from "./components/profile/AddNewsForm";
 import Group from "./Pages/Groups/Group";
+import NotFound from "./Pages/404/NotFound";
+import Location from "./Pages/Location/Location";
 
-import Location from './Pages/Location/Location';
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -36,13 +36,13 @@ const App = () => {
   }, [dispatch, token]); // Runs when token changes
 
   // Show loading spinner while fetching user data
-  if (status === "loading") {
-    return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900">
-        <ClipLoader size={50} color="#4A90E2" />
-      </div>
-    );
-  }
+  // if (status === "loading") {
+  //   return (
+  //     <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900">
+  //       <ClipLoader size={50} color="#4A90E2" />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="min-h-screen dark:bg-gray-900 bg-white text-black dark:text-white transition-colors duration-300">
@@ -57,6 +57,7 @@ const App = () => {
           <Route path="/OTPVerification" element={<OTPVerification />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/magazine" element={<MagazinePage />} />
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>
