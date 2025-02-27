@@ -10,7 +10,7 @@ import Profile from "./Pages/Profile/Profile";
 import MagazinePage from "./Pages/Magazine/MagazinePage";
 import Signin from "./auth/Login";
 import OTPVerification from "./auth/OtpVerficationPage";
-import AddNewsForm from "./components/profile/AddNewsForm";
+// import AddNewsForm from "./components/profile/AddNewsForm";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
