@@ -13,6 +13,7 @@ import OTPVerification from "./auth/OtpVerficationPage";
 // import AddNewsForm from "./components/profile/AddNewsForm";
 import Group from "./Pages/Groups/Group";
 
+import Location from './Pages/Location/Location';
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -50,6 +51,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/group" element={<Group />} />
+          <Route path="/location" element={<Location />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/OTPVerification" element={<OTPVerification />} />
