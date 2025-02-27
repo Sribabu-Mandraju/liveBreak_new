@@ -12,7 +12,7 @@ body{
 }
 /* Webkit-based browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-    width: 1px; /* Width of the scrollbar */
+    width: 0px; /* Width of the scrollbar */
     height: 8px; /* Height for horizontal scrollbar */
   }
   

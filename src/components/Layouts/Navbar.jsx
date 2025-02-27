@@ -10,7 +10,11 @@ import {
   FaMapMarkerAlt,
   FaUsers,
   FaVideo,
+  FaUser,
   FaMobileAlt,
+  FaFileAlt,
+  FaThLarge,
+  FaSignOutAlt,
 } from "react-icons/fa";
 import { MdDarkMode, MdLightMode } from "react-icons/md";
 import logo from "../../assets/logo.png";
@@ -187,56 +191,69 @@ const Navbar = () => {
                 <div className="flex justify-center cursor-pointer text-white rounded-full w-8 h-8 items-center bg-blue-500 dark:bg-gray-700 dark:text-blue-600">
                   {user?.user?.data?.email.charAt(0).toUpperCase()}
                 </div>
-                <div className="hidden group-hover:flex absolute pt-2 right-[-30px] z-50 p-4 top-full">
-  <div className="bg-white dark:bg-gray-800 dark:border-gray-700 w-[270px] p-4 shadow-lg rounded-xl border border-gray-300 flex-col gap-4">
-    <div className="flex flex-col w-full gap-6 items-center mt-4">
-      <div className="flex flex-row w-full gap-4 items-center">
-        <div className="flex justify-center cursor-pointer text-3xl text-white rounded-full w-14 h-14 items-center bg-blue-500 dark:bg-gray-700 dark:text-blue-600">
-          {user?.user?.data?.email.charAt(0).toUpperCase()}
-        </div>
-        <div className="flex flex-col gap-1 text-sm">
-          <div className="font-semibold text-[16px] break-all">
-            {user?.user?.data?.email}
-          </div>
-          <div className="text-blue-500">
-            {user?.user?.data?.mobile_num}
-          </div>
-        </div>
-      </div>
+                <div className="hidden group-hover:flex absolute pt-2 right-[-40px] z-50 p-4 top-full">
+                  <div className="bg-white dark:bg-gray-800 w-[300px] p-5 shadow-xl rounded-xl border border-gray-300 dark:border-gray-700 flex flex-col gap-5">
+                    {/* Profile Section */}
+                    <div className="flex items-center gap-4">
+                      <div className="flex justify-center items-center cursor-pointer text-2xl font-bold text-white min-w-[50px] max-w-[50px] max-h-[50px] min-h-[50px] rounded-full bg-blue-600 dark:bg-gray-700 dark:text-blue-500 shadow-md">
+                        <FaUser />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[16px] font-semibold break-all">
+                          {user?.user?.data?.email.length > 15
+                            ? `${user?.user?.data?.email.slice(0, 12)}...`
+                            : `${user?.user?.data?.email}`}
+                        </span>
+                        <span className="text-sm text-gray-500 dark:text-blue-400">
+                          {user?.user?.data?.mobile_num}
+                        </span>
+                      </div>
+                    </div>
 
-      <button className="w-[80%] py-2 rounded-lg border border-blue-600 hover:bg-blue-600 text-blue-600 hover:text-white transition-all">
-        View Profile
-      </button>
-    </div>
+                    {/* View Profile Button */}
+                    <button className="w-full py-2 rounded-lg border border-blue-600 hover:bg-blue-600 text-blue-600 hover:text-white transition-all font-medium">
+                      View Profile
+                    </button>
 
-    <hr className="border-gray-300 my-4" />
+                    <hr className="border-gray-300 dark:border-gray-700" />
 
-    <div className="flex flex-col gap-3 pb-4 px-4 text-sm">
-      <div className="text-blue-600 rounded-lg px-2 py-2 cursor-pointer  transition-all">
-        Manage
-      </div>
+                    {/* Navigation Links */}
+                    <div className="flex flex-col  text-sm">
+                      <span className="text-blue-600 font-semibold px-3 py-2">
+                        Manage
+                      </span>
 
-      <Link to="/profile">
-        <div className="rounded-lg px-2 py-2 cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-500 transition-all">
-          My Profile
-        </div>
-      </Link>
+                      <Link to="/profile">
+                        <div
+                          className="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-500/20 dark:text-white transition-all rounded-lg"
+                        >
+                          <FaUser className="text-blue-500 dark:text-white" />
+                          My Profile
+                        </div>
+                      </Link>
 
-      <div className="rounded-lg px-2 py-2 cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-500 transition-all">
-        My Posts
-      </div>
+                      <div
+                        className="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-500/20 dark:text-white transition-all rounded-lg"
+                      >
+                        <FaFileAlt className="text-blue-500 dark:text-white" />
+                        My Posts
+                      </div>
 
-      <div className="rounded-lg px-2 py-2 cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-500 transition-all">
-        My Dashboard
-      </div>
+                      <div
+                        className="flex items-center gap-3 mb-2 px-3 py-2 cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-500/20 dark:text-white transition-all rounded-lg"
+                      >
+                        <FaThLarge className="text-blue-500 dark:text-white" />
+                        My Dashboard
+                      </div>
+                      <hr />
 
-      <div className="rounded-lg px-2 py-2 dark:hover:text-white cursor-pointer hover:bg-red-100 dark:hover:bg-red-500 text-red-600 dark:text-red-400 transition-all">
-        Logout
-      </div>
-    </div>
-  </div>
-</div>
-
+                      <div className="flex items-center gap-3 px-3 py-2 mt-1 cursor-pointer hover:bg-red-100 dark:hover:bg-red-500 text-red-600 dark:text-red-400 dark:hover:text-white transition-all rounded-lg">
+                        <FaSignOutAlt />
+                        Logout
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             ) : (
               <div>
