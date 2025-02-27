@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   FaAngleDown,
   FaBars,
@@ -57,9 +57,20 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
-  const [isSticky, setIsSticky] = useState(false);
+  const [active, setActive] = useState("");
   const user = useSelector((state) => state.user);
   console.log(user);
+  const location = useLocation();
+
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const activeItem = navItems.find(
+      (item) =>
+        item.href === currentPath ||
+        item.items?.some((subItem) => subItem.href === currentPath)
+    );
+    if (activeItem) setActive(activeItem.label);
+  }, [location]);
 
   const navItems = [
     { label: "Home", href: "/", icon: <FaHome /> },
@@ -72,8 +83,8 @@ const Navbar = () => {
         { label: "Women", href: "/women" },
       ],
     },
-    { label: "Local", href: "/local", icon: <FaMapMarkerAlt /> },
-    { label: "Groups", href: "/groups", icon: <FaUsers /> },
+    { label: "Local", href: "/location", icon: <FaMapMarkerAlt /> },
+    { label: "Groups", href: "/group", icon: <FaUsers /> },
     { label: "V clips", href: "/vClips", icon: <FaVideo /> },
     { label: "Use App", href: "/useApp", icon: <FaMobileAlt /> },
   ];
@@ -145,7 +156,12 @@ const Navbar = () => {
                   ) : (
                     <Link
                       to={item.href}
-                      className="flex items-center gap-2 font-semibold text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 py-2 px-3 rounded-md transition-colors duration-200"
+                      onClick={() => setActive(item.label)}
+                      className={`flex items-center gap-2 font-semibold  ${
+                        active === item.label
+                          ? "text-blue-700"
+                          : "text-gray-700 dark:text-gray-300"
+                      } hover:text-blue-700 dark:hover:text-blue-400 py-2 px-3 rounded-md transition-colors duration-200`}
                     >
                       {item.icon}
                       {item.label}
@@ -172,15 +188,51 @@ const Navbar = () => {
                   {user?.user?.data?.email.charAt(0).toUpperCase()}
                 </div>
                 <div className="hidden group-hover:flex absolute  pt-2 right-[-30px] z-50 p-4    top-full">
-                  <div className=" bg-white dark:bg-gray-800 dark:border-gray-700 w-[140px] p-2  rounded-lg border border-gray-300  flex-col gap-4">
+                  <div className=" bg-white dark:bg-gray-800 dark:border-gray-700 w-[280px] p-2 shadow-md rounded-lg border border-gray-300  flex-col gap-4">
+                    <div className="flex flex-col  w-full gap-6 items-center mt-6">
+                      <div className="flex flex-row gap-4 items-center">
+                      <div className="flex justify-center cursor-pointer text-2xl  text-white rounded-full w-12 h-12 items-center bg-blue-500 dark:bg-gray-700 dark:text-blue-600">
+                        {user?.user?.data?.email.charAt(0).toUpperCase()}
+                      </div>
+                      <div className="flex flex-col text-sm ">
+                        <div className="font-semibold text-lg">
+                          {user?.user?.data?.email}
+                        </div>
+                        <div className="text-blue-500">
+                          {user?.user?.data?.mobile_num}
+                        </div>
+
+                      </div>
+
+                      </div>
+                      <div className="w-[80%]"> 
+                        <button className="w-full py-1 rounded-lg border border-blue-600 hover:bg-blue-600 text-blue-600 hover:text-white">View Profile</button>
+                      </div>
+                      
+                    </div>
+                    <hr className=" text-gray-300 my-4"/>
+                    <div className="flex flex-col gap-2 pb-4 px-4">
+                    <div className="text-blue-600 rounded-lg px-2 py-1 cursor-pointer">
+                      Manage
+                    </div>
                     <Link to="/profile">
                       <div className="hover:bg-blue-100 dark:hover:bg-blue-500 rounded-lg px-2 py-1 cursor-pointer">
-                        Profile
+                        My Profile
                       </div>
                     </Link>
                     <div className="hover:bg-blue-100 dark:hover:bg-blue-500 rounded-lg px-2 py-1 cursor-pointer">
+                      My Posts
+                    </div>
+                    <div className="hover:bg-blue-100 dark:hover:bg-blue-500 rounded-lg px-2 py-1 cursor-pointer">
+                      My Dashboard
+                    </div>
+                    <div className="hover:bg-blue-100 dark:hover:bg-blue-500 rounded-lg px-2 py-1 cursor-pointer">
                       Logout
                     </div>
+
+                    </div>
+
+                    
                   </div>
                 </div>
               </div>

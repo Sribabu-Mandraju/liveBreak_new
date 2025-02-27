@@ -6,7 +6,8 @@ import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { setToken } from "../store/authSlice";
 import { fetchUser } from "../store/userSlice";
-
+import { Link} from "react-router-dom";
+import { IoMdSkipForward } from "react-icons/io";
 function Signin() {
   const dispatch = useDispatch();
   const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -140,13 +141,17 @@ function Signin() {
 
         <p className="text-sm text-center text-gray-500 dark:text-gray-400 mt-6">
           Don't have an account?{" "}
-          <a
-            href="#"
+          <Link
+            to='/signup'
             className="text-blue-500 dark:text-blue-400 hover:underline"
           >
             Sign Up
-          </a>
+          </Link>
         </p>
+        <div className="flex justify-end px-4">
+         <Link to='/location'><div className="flex flex-row items-center gap-1 text-blue-500 dark:text-blue-400 hover:underline"> Skip <IoMdSkipForward/></div></Link>
+
+        </div>
       </div>
     </div>
   );

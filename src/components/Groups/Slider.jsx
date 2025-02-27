@@ -60,8 +60,8 @@ export default () => {
                         </div>
                         <div className='flex flex-row justify-between p-1 px-4'>
                             <div className='flex flex-col '>
-                                <div className='text-lg font-semibold flex flex-row'>
-                                    <span>{data.title} <RiCheckboxCircleFill className='text-green-500'/></span>
+                                <div className='text-lg font-semibold flex flex-row items-center gap-2'>
+                                    <span>{data.title} </span><RiCheckboxCircleFill className='text-green-500'/>
                                 </div>
                                 <div className='text-sm text-gray-500'>
                                     <span>{data.posts} posted</span>
