@@ -1,26 +1,34 @@
-import { useState } from "react"
-import { FaRegThumbsUp, FaRegComment, FaShare, FaEye, FaCopy, FaRegThumbsDown } from "react-icons/fa"
-import { IoSend } from "react-icons/io5"
-import toast from "react-hot-toast"
-import Drawer from "../../shadcnui/Drawer"
+import { useState } from "react";
+import {
+  FaRegThumbsUp,
+  FaRegComment,
+  FaShare,
+  FaEye,
+  FaCopy,
+  FaUserCircle,
+  FaRegThumbsDown,
+} from "react-icons/fa";
+import { IoSend } from "react-icons/io5";
+import toast from "react-hot-toast";
+import Drawer from "../../shadcnui/Drawer";
 
 const InteractionButtons = ({ likes, views, comments }) => {
-  const [showComments, setShowComments] = useState(false)
-  const [newComment, setNewComment] = useState("")
-  const [commentList, setCommentList] = useState(comments || [])
-  const [share, setShare] = useState(false)
+  const [showComments, setShowComments] = useState(false);
+  const [newComment, setNewComment] = useState("");
+  const [commentList, setCommentList] = useState(comments || []);
+  const [share, setShare] = useState(false);
 
   const handleAddComment = () => {
     if (newComment.trim()) {
-      setCommentList([...commentList, { text: newComment.trim() }])
-      setNewComment("")
+      setCommentList([...commentList, { text: newComment.trim() }]);
+      setNewComment("");
     }
-  }
+  };
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href)
-    toast.success("Link copied successfully! ")
-  }
+    navigator.clipboard.writeText(window.location.href);
+    toast.success("Link copied successfully! ");
+  };
 
   return (
     <div className="mt-3 flex flex-wrap items-center justify-between text-gray-600 dark:text-gray-300 text-sm gap-2">
@@ -29,7 +37,9 @@ const InteractionButtons = ({ likes, views, comments }) => {
           <FaRegThumbsUp className="text-lg" />
           <span className="font-semibold">{likes}</span>
           <FaRegComment className="text-lg text-pink-500" />
-          <span className="font-semibold text-pink-500">{comments?.length}</span>
+          <span className="font-semibold text-pink-500">
+            {comments?.length}
+          </span>
         </div>
         <span className="text-xs sm:text-sm">
           <div className="flex gap-1 items-center text-green-600 font-bold">
@@ -53,8 +63,8 @@ const InteractionButtons = ({ likes, views, comments }) => {
         {/* Open Comment Section */}
         <button
           onClick={() => {
-            setShowComments(true)
-            setShare(false)
+            setShowComments(true);
+            setShare(false);
           }}
           className="flex items-center space-x-1 cursor-pointer hover:text-green-500 transition duration-200 text-xs sm:text-sm"
         >
@@ -64,8 +74,8 @@ const InteractionButtons = ({ likes, views, comments }) => {
 
         <button
           onClick={() => {
-            setShare(true)
-            setShowComments(false)
+            setShare(true);
+            setShowComments(false);
           }}
           className="flex items-center space-x-1 cursor-pointer hover:text-purple-500 transition duration-200 text-xs sm:text-sm"
         >
@@ -76,30 +86,85 @@ const InteractionButtons = ({ likes, views, comments }) => {
       {/* Render Comment Section */}
       <div className="w-full h-full relative">
         {showComments && (
-          <Drawer open={showComments} onOpenChange={setShowComments} title="Comments">
-            <div className="flex flex-col space-y-4 min-h-[70px]">
+          <Drawer
+            open={showComments}
+            onOpenChange={setShowComments}
+            title="Comments"
+          >
+            <div className="flex flex-col min-h-[70px] p-4">
               {/* Comment List */}
-              <div className="space-y-2 overflow-y-auto max-h-[50vh]">
-                {commentList.map((comment, index) => (
-                  <div key={index} className="p-2 border-b dark:border-gray-600">
-                    {comment.text}
-                  </div>
-                ))}
+              <div className="space-y-4 overflow-y-auto max-h-[50vh] p-2">
+                {commentList.length > 0 ? (
+                  commentList.map((comment) => (
+                    <div
+                      key={comment._id}
+                      className="flex space-x-3 p-3 bg-white dark:bg-gray-900 rounded-lg shadow-md"
+                    >
+                      {/* Profile Icon */}
+                      <FaUserCircle className="text-3xl text-gray-500 dark:text-gray-400" />
+
+                      {/* Comment Content */}
+                      <div className="flex flex-col w-full">
+                        {/* User & Time */}
+                        <div className="flex items-center space-x-2">
+                          <p className="text-sm font-semibold dark:text-gray-300">
+                            {comment.commented_by.name}
+                          </p>
+                          <span className="text-xs text-gray-500 dark:text-gray-400">
+                            • Just now
+                          </span>
+                        </div>
+
+                        {/* Comment Text */}
+                        <p className="text-gray-800 dark:text-gray-300">
+                          {comment.text}
+                        </p>
+
+                        {/* Replies */}
+                        {comment.sub_comments.length > 0 && (
+                          <div className="mt-2 ml-8 space-y-2">
+                            {comment.sub_comments.map((reply) => (
+                              <div
+                                key={reply._id}
+                                className="flex space-x-3 p-2 bg-gray-100 dark:bg-gray-800 rounded-md"
+                              >
+                                <FaUserCircle className="text-2xl text-gray-400 dark:text-gray-500" />
+                                <div>
+                                  <p className="text-sm font-semibold dark:text-gray-300">
+                                    {reply.commented_by.name}
+                                  </p>
+                                  <p className="text-sm text-gray-700 dark:text-gray-400">
+                                    {reply.text}
+                                  </p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-500 dark:text-gray-400 text-center">
+                    No comments yet. Be the first to comment!
+                  </p>
+                )}
               </div>
+
               {/* Comment Input */}
-              <div className="flex flex-row items-center justify-center w-[100%] mb-2">
+              <div className="flex items-center mt-4 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-md p-2">
                 <input
                   type="text"
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
                   placeholder="Add a comment..."
-                  className="flex-1 m-4 p-2 border rounded-md dark:bg-gray-700 dark:text-white"
+                  className="flex-1 px-3 py-2 bg-transparent focus:outline-none dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                 />
                 <button
                   onClick={handleAddComment}
-                  className="px-4 py-2 text-xl absolute right-8 text-blue-600 rounded-[40%]"
+                  className="p-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-md"
                 >
-                  <IoSend />
+                  <IoSend className="text-xl" />
                 </button>
               </div>
             </div>
@@ -128,13 +193,22 @@ const InteractionButtons = ({ likes, views, comments }) => {
 
               {/* Social Media Buttons */}
               <div className="flex flex-wrap gap-4 ">
-                <a href="#" className="px-4 py-2 bg-green-500 text-white rounded-md text-center">
+                <a
+                  href="#"
+                  className="px-4 py-2 bg-green-500 text-white rounded-md text-center"
+                >
                   WhatsApp
                 </a>
-                <a href="#" className="px-4 py-2 bg-blue-600 text-white rounded-md text-center">
+                <a
+                  href="#"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md text-center"
+                >
                   Facebook
                 </a>
-                <a href="#" className="px-4 py-2 bg-blue-400 text-white rounded-md text-center">
+                <a
+                  href="#"
+                  className="px-4 py-2 bg-blue-400 text-white rounded-md text-center"
+                >
                   Twitter
                 </a>
               </div>
@@ -143,8 +217,7 @@ const InteractionButtons = ({ likes, views, comments }) => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default InteractionButtons
-
+export default InteractionButtons;

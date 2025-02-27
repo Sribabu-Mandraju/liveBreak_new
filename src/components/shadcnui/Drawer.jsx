@@ -1,6 +1,5 @@
-'use client';
-
 import { Drawer } from 'vaul';
+import {MdClose} from "react-icons/md";
 
 export default function VaulDrawer({ title, open, onOpenChange, children }) {
   return (
@@ -16,7 +15,7 @@ export default function VaulDrawer({ title, open, onOpenChange, children }) {
                 onClick={() => onOpenChange(false)}
                 className="px-4 py-2 rounded-md"
               >
-                X
+                <MdClose />
               </button>
             </div>
 
