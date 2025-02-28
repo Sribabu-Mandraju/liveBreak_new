@@ -20,9 +20,10 @@ const InteractionButtons = ({ likes, views, comments, post_id }) => {
   // const [commentList, setCommentList] = useState(comments || []);
   const [share, setShare] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [likesCount,setLikesCount]=useState(likes || 0)
   const [results, setResults] = useState(comments || []);
   const BASE_URL = import.meta.env.VITE_BASE_URL;
-  const token = useSelector((state) => state.auth.token);
+  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdzX3VzZXJfZGF0YSI6eyJpZCI6IjY3YzAzNjI0YmUwZTdkZjYzNGI5OTY3MyJ9LCJpYXQiOjE3NDA2NTMyOTYsImV4cCI6MTc3MjE4OTI5Nn0.41cCSbwDPcEEovcYO81hQZ-4uM1S56eWtibwwybx9dw'
 
   const handleAddComment = () => {
     if (newComment.trim()) {
@@ -69,12 +70,43 @@ const InteractionButtons = ({ likes, views, comments, post_id }) => {
     
   };
 
+  const fetchlikes = async()=> {
+    setLoading(true);
+    try{
+  
+      const response = await axios.post(
+        `${BASE_URL}/news/post/like`,
+        {
+          
+          post_id: post_id,
+          version: "new",
+        },
+        {
+          headers: {
+            
+            "X-News-Token": token, // Pass token in header
+          },
+        }
+      );
+      
+      console.log(response.data.data)
+      setLikesCount(response.data.data || 0);
+    }
+    catch(error){
+      console.log("Error in fetching  likes:",error)
+      
+
+    }
+    setLoading(false);
+      
+  }
+
   return (
     <div className="mt-3 flex flex-wrap items-center justify-between text-gray-600 dark:text-gray-300 text-sm gap-2">
       <div className="flex items-center space-x-2 w-full sm:w-auto justify-between sm:justify-start">
         <div className="flex items-center space-x-1 text-blue-500">
           <FaRegThumbsUp className="text-lg" />
-          <span className="font-semibold">{likes}</span>
+          <span className="font-semibold">{likesCount}</span>
           <FaRegComment className="text-lg text-pink-500" />
           <span className="font-semibold text-pink-500">
             {comments?.length}
@@ -92,7 +124,7 @@ const InteractionButtons = ({ likes, views, comments, post_id }) => {
       <div className="flex w-full sm:w-auto justify-between sm:justify-end space-x-3 sm:space-x-4">
         <div className="flex items-center gap-2">
           <button className="flex items-center space-x-1 cursor-pointer hover:text-blue-500 transition duration-200 text-xs sm:text-sm">
-            <FaRegThumbsUp className="text-base sm:text-lg" />{" "}
+            <FaRegThumbsUp onClick={fetchlikes}  className="text-base sm:text-lg" />{" "}
           </button>
           <button className="flex items-center space-x-1 cursor-pointer hover:text-blue-500 transition duration-200 text-xs sm:text-sm">
             <FaRegThumbsDown className="text-base sm:text-lg" />{" "}
