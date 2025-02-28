@@ -16,6 +16,7 @@ import Drawer from "../../shadcnui/Drawer";
 
 const InteractionButtons = ({
   likes = 0,
+  dislikes=0,
   views = 0,
   comments = [],
   post_id,
@@ -25,7 +26,8 @@ const InteractionButtons = ({
   // const [commentList, setCommentList] = useState(comments || []);
   const [share, setShare] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [likesCount,setLikesCount]=useState(null)
+  const [likesCount,setLikesCount]=useState(likes || 0);
+  const [dislikesCount,setDislikesCount]=useState(dislikes || 0);
   const [results, setResults] = useState(comments || []);
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdzX3VzZXJfZGF0YSI6eyJpZCI6IjY3YzAzNjI0YmUwZTdkZjYzNGI5OTY3MyJ9LCJpYXQiOjE3NDA2NTMyOTYsImV4cCI6MTc3MjE4OTI5Nn0.41cCSbwDPcEEovcYO81hQZ-4uM1S56eWtibwwybx9dw'
@@ -51,7 +53,6 @@ const InteractionButtons = ({
       const response = await axios.post(
         `${BASE_URL}/news/comments`,
         {
-          text: "newComment",
           post_id: post_id,
           version: "new",
         },
@@ -64,7 +65,7 @@ const InteractionButtons = ({
       );
       
       console.log(response.data.data)
-      setResults(response.data.data || []);
+      setResults(response.data.data);
     }
     catch(error){
       console.log("Error in fetching comments:",error)
@@ -74,7 +75,7 @@ const InteractionButtons = ({
     setLoading(false);
   };
 
-  const fetchlikes = async()=> {
+  const sendLike = async()=> {
     setLoading(true);
     try{
   
@@ -94,7 +95,7 @@ const InteractionButtons = ({
       );
       
       console.log(response.data.data)
-      setLikesCount(response.data.data || 0);
+      setLikesCount(response.data.post.likes+1);
     }
     catch(error){
       console.log("Error in fetching  likes:",error)
@@ -104,6 +105,39 @@ const InteractionButtons = ({
     setLoading(false);
       
   }
+
+  const sendDislike = async()=> {
+    setLoading(true);
+    try{
+  
+      const response = await axios.post(
+        `${BASE_URL}/news/post/dislike`,
+        {
+          
+          post_id: post_id,
+          version: "new",
+        },
+        {
+          headers: {
+            
+            "X-News-Token": token, // Pass token in header
+          },
+        }
+      );
+      
+      console.log(response.data.data)
+      setLikesCount(response.data.post.dislikes+1);
+    }
+    catch(error){
+      console.log("Error in fetching  likes:",error)
+      
+
+    }
+    setLoading(false);
+      
+  }
+
+  console.log(comments)
 
   return (
     <div className="mt-3 flex flex-wrap items-center justify-between text-gray-600 dark:text-gray-300 text-sm gap-2">
@@ -128,10 +162,10 @@ const InteractionButtons = ({
       <div className="flex w-full sm:w-auto justify-between sm:justify-end space-x-3 sm:space-x-4">
         <div className="flex items-center gap-2">
           <button className="flex items-center space-x-1 cursor-pointer hover:text-blue-500 transition duration-200 text-xs sm:text-sm">
-            <FaRegThumbsUp onClick={fetchlikes}  className="text-base sm:text-lg" />{" "}
+            <FaRegThumbsUp onClick={sendLike}  className="text-base sm:text-lg" />{" "}
           </button>
           <button className="flex items-center space-x-1 cursor-pointer hover:text-blue-500 transition duration-200 text-xs sm:text-sm">
-            <FaRegThumbsDown className="text-base sm:text-lg" />{" "}
+            <FaRegThumbsDown onClick={sendDislike} className="text-base sm:text-lg" />{" "}
           </button>
         </div>
 

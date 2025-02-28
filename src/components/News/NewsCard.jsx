@@ -18,6 +18,7 @@ const NewsCard = ({ data }) => {
       />
       <InteractionButtons
         likes={data.likes}
+        dislikes={data.dislikes}
         views={data.views}
         comments={data.comments}
         post_id={data._id}
