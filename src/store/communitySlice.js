@@ -18,7 +18,7 @@ export const fetchSuggestedCommunities = createAsyncThunk(
       console.log("Making API request with token:", token);
 
       const response = await axios.post(
-        `${BASE_URL}/community/suggested_communities`,
+        `${BASE_URL}/common/suggested_communities`,
         {
           version: "new",
         },

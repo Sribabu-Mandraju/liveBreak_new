@@ -14,13 +14,18 @@ import { IoSend } from "react-icons/io5";
 import toast from "react-hot-toast";
 import Drawer from "../../shadcnui/Drawer";
 
-const InteractionButtons = ({ likes, views, comments, post_id }) => {
+const InteractionButtons = ({
+  likes = 0,
+  views = 0,
+  comments = [],
+  post_id,
+}) => {
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
   // const [commentList, setCommentList] = useState(comments || []);
   const [share, setShare] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [likesCount,setLikesCount]=useState(likes || 0)
+  const [likesCount,setLikesCount]=useState(null)
   const [results, setResults] = useState(comments || []);
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdzX3VzZXJfZGF0YSI6eyJpZCI6IjY3YzAzNjI0YmUwZTdkZjYzNGI5OTY3MyJ9LCJpYXQiOjE3NDA2NTMyOTYsImV4cCI6MTc3MjE4OTI5Nn0.41cCSbwDPcEEovcYO81hQZ-4uM1S56eWtibwwybx9dw'
@@ -67,7 +72,6 @@ const InteractionButtons = ({ likes, views, comments, post_id }) => {
 
     }
     setLoading(false);
-    
   };
 
   const fetchlikes = async()=> {
@@ -109,13 +113,13 @@ const InteractionButtons = ({ likes, views, comments, post_id }) => {
           <span className="font-semibold">{likesCount}</span>
           <FaRegComment className="text-lg text-pink-500" />
           <span className="font-semibold text-pink-500">
-            {comments?.length}
+            {comments?.length || 0}
           </span>
         </div>
         <span className="text-xs sm:text-sm">
           <div className="flex gap-1 items-center text-green-600 font-bold">
             <FaEye className="text-[13px]" />
-            <div className="">{views}</div>
+            <div className="">{views || 0}</div>
           </div>
         </span>
       </div>
@@ -137,7 +141,7 @@ const InteractionButtons = ({ likes, views, comments, post_id }) => {
           className="flex items-center space-x-1 cursor-pointer hover:text-green-500 transition duration-200 text-xs sm:text-sm"
         >
           <FaRegComment className="text-base sm:text-lg" />
-          <span>{results.length} Comments</span>
+          <span>{results?.length} Comments</span>
         </button>
 
         <button
@@ -157,15 +161,15 @@ const InteractionButtons = ({ likes, views, comments, post_id }) => {
           <Drawer
             open={showComments}
             onOpenChange={setShowComments}
-            title="Comments"
+            title="Comments"  
           >
             <div className="flex flex-col min-h-[70px] p-4">
               {/* Comment List */}
               <div className="space-y-4 overflow-y-auto max-h-[50vh] p-2">
-                {results.length > 0 ? (
+                {results?.length > 0 ? (
                   results.map((comment) => (
                     <div
-                      key={comment._id}
+                      key={comment?._id || Math.random()}
                       className="flex space-x-3 p-3 bg-white dark:bg-gray-900 rounded-lg shadow-md"
                     >
                       {/* Profile Icon */}
@@ -173,36 +177,34 @@ const InteractionButtons = ({ likes, views, comments, post_id }) => {
 
                       {/* Comment Content */}
                       <div className="flex flex-col w-full">
-                        {/* User & Time */}
                         <div className="flex items-center space-x-2">
                           <p className="text-sm font-semibold dark:text-gray-300">
-                            comment.commented_by.name
+                            {comment?.commented_by?.name || "Anonymous"}
                           </p>
                           <span className="text-xs text-gray-500 dark:text-gray-400">
                             • Just now
                           </span>
                         </div>
 
-                        {/* Comment Text */}
                         <p className="text-gray-800 dark:text-gray-300">
-                          comment.text
+                          {comment?.text || "No content"}
                         </p>
 
                         {/* Replies */}
-                        {comment.sub_comments.length > 0 && (
+                        {comment?.sub_comments?.length > 0 && (
                           <div className="mt-2 ml-8 space-y-2">
                             {comment.sub_comments.map((reply) => (
                               <div
-                                key={reply._id}
+                                key={reply?._id || Math.random()}
                                 className="flex space-x-3 p-2 bg-gray-100 dark:bg-gray-800 rounded-md"
                               >
                                 <FaUserCircle className="text-2xl text-gray-400 dark:text-gray-500" />
                                 <div>
                                   <p className="text-sm font-semibold dark:text-gray-300">
-                                    {reply.commented_by.name}
+                                    {reply?.commented_by?.name || "Anonymous"}
                                   </p>
                                   <p className="text-sm text-gray-700 dark:text-gray-400">
-                                    {reply.text}
+                                    {reply?.text || "No content"}
                                   </p>
                                 </div>
                               </div>

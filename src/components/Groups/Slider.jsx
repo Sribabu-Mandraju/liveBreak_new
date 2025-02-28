@@ -40,8 +40,9 @@ const GroupSkeleton = () => (
 
 export default () => {
   const dispatch = useDispatch();
-  const { suggestedCommunities, status, error } = useSelector(
-    (state) => state.community
+  const { status, error } = useSelector((state) => state.community);
+  const suggestedCommunities = useSelector(
+    (state) => state.community.suggestedCommunities?.data ?? []
   );
   const token = useSelector((state) => state.auth.token);
 
@@ -111,7 +112,7 @@ export default () => {
           <div className="w-full flex flex-col items- gap-2 h-[25vh] md:h-[35vh] border-gray-400 border rounded-lg">
             <div className="w-full h-[55%] bg-gray-200 dark:bg-gray-800 rounded-lg">
               <img
-                src={community.image || logo}
+                src={community.cover_icon || logo}
                 className="w-full h-full rounded-lg object-cover"
                 alt={community.name}
               />
@@ -125,10 +126,10 @@ export default () => {
                   )}
                 </div>
                 <div className="text-sm text-gray-500">
-                  <span>{community.posts_count || 0} posted</span>
+                  <span>{community.posts.length || 0} posted</span>
                 </div>
                 <div className="text-sm text-gray-500">
-                  <span>{community.followers_count || 0} are following</span>
+                  <span>{community.members.length || 0} are following</span>
                 </div>
               </div>
               <div>
