@@ -41,8 +41,7 @@ const InteractionButtons = ({ likes, views, comments, post_id }) => {
     setShare(false);
     setLoading(true);
     try{
-      console.log("hi its working")
-      console.log(token)
+  
       const response = await axios.post(
         `${BASE_URL}/news/comments`,
         {
@@ -52,6 +51,7 @@ const InteractionButtons = ({ likes, views, comments, post_id }) => {
         },
         {
           headers: {
+            
             "X-News-Token": token, // Pass token in header
           },
         }
@@ -62,7 +62,7 @@ const InteractionButtons = ({ likes, views, comments, post_id }) => {
     }
     catch(error){
       console.log("Error in fetching comments:",error)
-      setResults([])
+      
 
     }
     setLoading(false);
