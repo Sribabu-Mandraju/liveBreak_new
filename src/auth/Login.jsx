@@ -7,9 +7,11 @@ import { useDispatch } from "react-redux";
 import { setToken } from "../store/authSlice";
 import { fetchUser } from "../store/userSlice";
 import { Link} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { IoMdSkipForward } from "react-icons/io";
 function Signin() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const [formData, setFormData] = useState({
     phone: "",
@@ -69,6 +71,7 @@ function Signin() {
         await dispatch(fetchUser())
         toast.success("Login successful!");
         console.log("Response:", response.data);
+        navigate("/");
       } else {
         toast.error(response.data.message || "Login failed. Please try again.");
       }
