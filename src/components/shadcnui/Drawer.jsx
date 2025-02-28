@@ -6,7 +6,7 @@ export default function VaulDrawer({ title, open, onOpenChange, children }) {
     <Drawer.Root open={open} onOpenChange={onOpenChange}>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 bg-black/40 " />
-        <Drawer.Content className="bg-gray-100 dark:bg-gray-800 z-50 min-h-[50vh] max-h-[70vh] fixed bottom-0 left-0 right-0 outline-none">
+        <Drawer.Content className="bg-gray-100 dark:bg-gray-800 z-50 min-h-[50vh] max-h-[70vh] md:h-[100vh] md:w-[45vw] md:top-0 fixed bottom-0 left-0 md:right-none right-0 outline-none">
           <div className="flex flex-col">
             {/* Header */}
             <div className="flex p-2 flex-row dark:bg-gray-900 dark:text-white bg-white justify-between items-center">
