@@ -40,10 +40,10 @@ const GroupSkeleton = () => (
 
 export default () => {
   const dispatch = useDispatch();
-  const { status, error } = useSelector(
-    (state) => state.community
+  const { status, error } = useSelector((state) => state.community);
+  const suggestedCommunities = useSelector(
+    (state) => state.community.suggestedCommunities?.data ?? []
   );
-  const suggestedCommunities = useSelector((state) => state.community.suggestedCommunities.data);
   const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
@@ -129,7 +129,7 @@ export default () => {
                   <span>{community.posts.length || 0} posted</span>
                 </div>
                 <div className="text-sm text-gray-500">
-                  <span>{community.followers_count || 0} are following</span>
+                  <span>{community.members.length || 0} are following</span>
                 </div>
               </div>
               <div>

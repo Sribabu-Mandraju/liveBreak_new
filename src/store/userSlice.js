@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+
 // Fetch user async thunk
 export const fetchUser = createAsyncThunk(
   "user/fetchUser",
@@ -10,7 +12,7 @@ export const fetchUser = createAsyncThunk(
 
     try {
       const response = await axios.post(
-        "https://api.meebuddy.com/app/v4/user",
+        `${BASE_URL}/user`,
         {
           device_uuid: null,
           fcm_meenews_token: "",

@@ -27,8 +27,7 @@ const InteractionButtons = ({
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState(comments || []);
   const BASE_URL = import.meta.env.VITE_BASE_URL;
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdzX3VzZXJfZGF0YSI6eyJpZCI6IjY3YzAzNjI0YmUwZTdkZjYzNGI5OTY3MyJ9LCJpYXQiOjE3NDA2NTMyOTYsImV4cCI6MTc3MjE4OTI5Nn0.41cCSbwDPcEEovcYO81hQZ-4uM1S56eWtibwwybx9dw";
+  const token = useSelector((state) => state.auth.token);
 
   const handleAddComment = () => {
     if (newComment.trim()) {
