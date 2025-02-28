@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { updatePostLike } from "../../../store/feedSlice";
 import {
   FaRegThumbsUp,
   FaRegComment,
@@ -19,16 +20,22 @@ const InteractionButtons = ({
   views = 0,
   comments = [],
   post_id,
+  liked_users = [],
+  disliked_users = [],
 }) => {
+  const dispatch = useDispatch();
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
-  // const [commentList, setCommentList] = useState(comments || []);
   const [share, setShare] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [likesCount,setLikesCount]=useState(null)
+  const [likeLoading, setLikeLoading] = useState(false);
   const [results, setResults] = useState(comments || []);
   const BASE_URL = import.meta.env.VITE_BASE_URL;
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdzX3VzZXJfZGF0YSI6eyJpZCI6IjY3YzAzNjI0YmUwZTdkZjYzNGI5OTY3MyJ9LCJpYXQiOjE3NDA2NTMyOTYsImV4cCI6MTc3MjE4OTI5Nn0.41cCSbwDPcEEovcYO81hQZ-4uM1S56eWtibwwybx9dw'
+  const token = useSelector((state) => state.auth.token);
+  const userId = useSelector((state) => state.auth.user?.id);
+
+  const isLiked = userId && liked_users.includes(userId);
+  const isDisliked = userId && disliked_users.includes(userId);
 
   const handleAddComment = () => {
     if (newComment.trim()) {
@@ -42,12 +49,12 @@ const InteractionButtons = ({
     navigator.clipboard.writeText(shareUrl);
     toast.success("Link copied successfully!");
   };
+
   const fetchComments = async () => {
     setShowComments(true);
     setShare(false);
     setLoading(true);
-    try{
-  
+    try {
       const response = await axios.post(
         `${BASE_URL}/news/comments`,
         {
@@ -57,60 +64,49 @@ const InteractionButtons = ({
         },
         {
           headers: {
-            
-            "X-News-Token": token, // Pass token in header
+            "X-News-Token": token,
           },
         }
       );
-      
-      console.log(response.data.data)
-      setResults(response.data.data || []);
-    }
-    catch(error){
-      console.log("Error in fetching comments:",error)
-      
 
+      console.log(response.data.data);
+      setResults(response.data.data || []);
+    } catch (error) {
+      console.log("Error in fetching comments:", error);
     }
     setLoading(false);
   };
 
-  const fetchlikes = async()=> {
-    setLoading(true);
-    try{
-  
-      const response = await axios.post(
-        `${BASE_URL}/news/post/like`,
-        {
-          
-          post_id: post_id,
-          version: "new",
-        },
-        {
-          headers: {
-            
-            "X-News-Token": token, // Pass token in header
-          },
-        }
-      );
-      
-      console.log(response.data.data)
-      setLikesCount(response.data.data || 0);
+  const handleLike = async () => {
+    if (!token) {
+      toast.error("Please login to like posts");
+      return;
     }
-    catch(error){
-      console.log("Error in fetching  likes:",error)
-      
 
+    try {
+      setLikeLoading(true);
+      const result = await dispatch(updatePostLike({ post_id })).unwrap();
+      if (result.likes !== undefined) {
+        toast.success(isLiked ? "Like removed" : "Post liked successfully!");
+      }
+    } catch (error) {
+      console.error("Like error:", error);
+      toast.error(error || "Failed to update like");
+    } finally {
+      setLikeLoading(false);
     }
-    setLoading(false);
-      
-  }
+  };
 
   return (
     <div className="mt-3 flex flex-wrap items-center justify-between text-gray-600 dark:text-gray-300 text-sm gap-2">
       <div className="flex items-center space-x-2 w-full sm:w-auto justify-between sm:justify-start">
         <div className="flex items-center space-x-1 text-blue-500">
-          <FaRegThumbsUp className="text-lg" />
-          <span className="font-semibold">{likesCount}</span>
+          <FaRegThumbsUp
+            className={`text-lg ${likeLoading ? "opacity-50" : ""} ${
+              isLiked ? "text-blue-600" : ""
+            }`}
+          />
+          <span className="font-semibold">{likes}</span>
           <FaRegComment className="text-lg text-pink-500" />
           <span className="font-semibold text-pink-500">
             {comments?.length || 0}
@@ -127,11 +123,14 @@ const InteractionButtons = ({
       {/* Action Buttons */}
       <div className="flex w-full sm:w-auto justify-between sm:justify-end space-x-3 sm:space-x-4">
         <div className="flex items-center gap-2">
-          <button className="flex items-center space-x-1 cursor-pointer hover:text-blue-500 transition duration-200 text-xs sm:text-sm">
-            <FaRegThumbsUp onClick={fetchlikes}  className="text-base sm:text-lg" />{" "}
+          <button
+            className="flex items-center space-x-1 cursor-pointer hover:text-blue-500 transition duration-200 text-xs sm:text-sm"
+            onClick={handleLike}
+          >
+            <FaRegThumbsUp className="text-base sm:text-lg" />
           </button>
           <button className="flex items-center space-x-1 cursor-pointer hover:text-blue-500 transition duration-200 text-xs sm:text-sm">
-            <FaRegThumbsDown className="text-base sm:text-lg" />{" "}
+            <FaRegThumbsDown className="text-base sm:text-lg" />
           </button>
         </div>
 
@@ -161,7 +160,7 @@ const InteractionButtons = ({
           <Drawer
             open={showComments}
             onOpenChange={setShowComments}
-            title="Comments"  
+            title="Comments"
           >
             <div className="flex flex-col min-h-[70px] p-4">
               {/* Comment List */}
