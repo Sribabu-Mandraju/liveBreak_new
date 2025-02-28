@@ -18,13 +18,13 @@ export const fetchSuggestedCommunities = createAsyncThunk(
       console.log("Making API request with token:", token);
 
       const response = await axios.post(
-        `${BASE_URL}/news/community/suggested_communities`,
+        `${BASE_URL}/common/suggested_communities`,
         {
           version: "new",
         },
         {
           headers: {
-            "X-News-Token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdzX3VzZXJfZGF0YSI6eyJpZCI6IjY3YzAzNjI0YmUwZTdkZjYzNGI5OTY3MyJ9LCJpYXQiOjE3NDA2NTMyOTYsImV4cCI6MTc3MjE4OTI5Nn0.41cCSbwDPcEEovcYO81hQZ-4uM1S56eWtibwwybx9dw",
+            "X-Meebuddy-Token":token,
             "Content-Type": "application/json",
           },
         }
