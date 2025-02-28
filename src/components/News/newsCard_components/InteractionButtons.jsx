@@ -45,9 +45,8 @@ const InteractionButtons = ({
     setShowComments(true);
     setShare(false);
     setLoading(true);
-    try {
-      console.log("hi its working");
-      console.log(token);
+    try{
+  
       const response = await axios.post(
         `${BASE_URL}/news/comments`,
         {
@@ -57,16 +56,19 @@ const InteractionButtons = ({
         },
         {
           headers: {
+            
             "X-News-Token": token, // Pass token in header
           },
         }
       );
-
-      // console.log(response.data.data)
+      
+      console.log(response.data.data)
       setResults(response.data.data || []);
-    } catch (error) {
-      console.log("Error in fetching comments:", error);
-      setResults([]);
+    }
+    catch(error){
+      console.log("Error in fetching comments:",error)
+      
+
     }
     setLoading(false);
   };

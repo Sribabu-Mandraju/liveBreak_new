@@ -5,8 +5,10 @@ import axios from "axios";
 import { setToken } from "../store/authSlice";
 import { useDispatch } from "react-redux";
 
+
 function OTPVerification() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   const [otp, setOtp] = useState(new Array(6).fill(""));
@@ -72,6 +74,7 @@ function OTPVerification() {
 
       if (response.data.status === "success") {
         toast.success("OTP verified successfully! 🎉");
+        navigate("/");
       } else {
         toast.error(response.data.message || "OTP verification failed!");
       }
