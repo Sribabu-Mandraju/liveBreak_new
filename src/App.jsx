@@ -14,6 +14,7 @@ import Group from "./Pages/Groups/Group";
 import NotFound from "./Pages/404/NotFound";
 import Location from "./Pages/Location/Location";
 import Model from './components/shadcnui/Model'
+import Task from "./TaskComponent/Task";
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -59,6 +60,7 @@ const App = () => {
           <Route path="/magazine" element={<MagazinePage />} />
           <Route path="/*" element={<NotFound />} />
           <Route path="/model" element={<Model/>} />
+          <Route path="/task" element={<Task />} />
         </Routes>
       </BrowserRouter>
     </div>
