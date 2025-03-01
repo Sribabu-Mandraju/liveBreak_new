@@ -62,7 +62,7 @@ const Navbar = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [active, setActive] = useState("");
-  const [isSticky,setIsSticky] = useState(false)
+  // const [isSticky,setIsSticky] = useState(false)
   const user = useSelector((state) => state.user);
   console.log(user);
   const location = useLocation();
