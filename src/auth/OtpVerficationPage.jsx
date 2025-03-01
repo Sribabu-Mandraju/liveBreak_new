@@ -10,7 +10,7 @@ function OTPVerification() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const BASE_URL = import.meta.env.VITE_BASE_URL;
-
+// s
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [searchParams] = useSearchParams();
 
