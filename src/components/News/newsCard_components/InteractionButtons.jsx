@@ -17,6 +17,7 @@ import Drawer from "../../shadcnui/Drawer";
 
 const InteractionButtons = ({
   likes = 0,
+  dislikes=0,
   views = 0,
   comments = [],
   post_id,
@@ -58,7 +59,6 @@ const InteractionButtons = ({
       const response = await axios.post(
         `${BASE_URL}/news/comments`,
         {
-          text: "newComment",
           post_id: post_id,
           version: "new",
         },
@@ -96,6 +96,39 @@ const InteractionButtons = ({
       setLikeLoading(false);
     }
   };
+
+  const sendDislike = async()=> {
+    setLoading(true);
+    try{
+  
+      const response = await axios.post(
+        `${BASE_URL}/news/post/dislike`,
+        {
+          
+          post_id: post_id,
+          version: "new",
+        },
+        {
+          headers: {
+            
+            "X-News-Token": token, // Pass token in header
+          },
+        }
+      );
+      
+      console.log(response.data.data)
+      setLikesCount(response.data.post.dislikes+1);
+    }
+    catch(error){
+      console.log("Error in fetching  likes:",error)
+      
+
+    }
+    setLoading(false);
+      
+  }
+
+  console.log(comments)
 
   return (
     <div className="mt-3 flex flex-wrap items-center justify-between text-gray-600 dark:text-gray-300 text-sm gap-2">

@@ -10,12 +10,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.6",
+    "@radix-ui/react-slot": "^1.1.2",
     "@reduxjs/toolkit": "^2.6.0",
+    "@shadcn/ui": "^0.0.4",
     "@tailwindcss/vite": "^4.0.6",
     "axios": "^1.7.9",
+    "class-variance-authority": "^0.7.1",
     "classnames": "^2.5.1",
+    "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
     "framer-motion": "^12.4.7",
+    "lucide-react": "^0.476.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.2",
@@ -30,6 +36,8 @@
     "redux": "^5.0.1",
     "slick-carousel": "^1.8.1",
     "swiper": "^11.2.4",
+    "tailwind-merge": "^3.0.2",
+    "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.2",
     "zustand": "^5.0.3"
   },

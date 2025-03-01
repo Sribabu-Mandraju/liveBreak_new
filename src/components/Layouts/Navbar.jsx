@@ -130,7 +130,7 @@ const Navbar = () => {
     >
       <header
         className={`md:mt-8 w-full md:w-full md:max-w-7xl   md:rounded-full  
-        py-1 md:py-0 px-6 md:px-8 bg-white dark:bg-gray-900 md:border  border-b border-gray-400 dark:border-gray-700 relative  `}
+        py-1 md:py-1 px-6 md:px-8 bg-white dark:bg-gray-900 md:border  border-b border-gray-400 dark:border-gray-700 relative  `}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -146,8 +146,11 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <div className="flex items-center gap-2">
-            <nav className="hidden lg:flex items-center text-md gap-2">
+          <div className="flex items-center  gap-2">
+            <div>
+              Search
+            </div>
+            <nav className="hidden lg:flex items-center text-[15px] gap-1">
               {navItems.map((item, index) => (
                 <React.Fragment key={index}>
                   {item.items ? (
