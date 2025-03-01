@@ -15,6 +15,15 @@ body{
     width: 0px; /* Width of the scrollbar */
     height: 8px; /* Height for horizontal scrollbar */
   }
+
+  @layer components{
+    .search-bar{
+        @apply w-0 group-hover:w-[200px] transition-all duration-300
+        rounded-full group-hover:border group-hover:border-gray-500
+        group-hover:px-3 group-hover:py-1 focus:outline-none dark:border-gray-800
+        dark:bg-gray-900 group-hover:dark:bg-gray-800;
+    }
+}
   
 
 

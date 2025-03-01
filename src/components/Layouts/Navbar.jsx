@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { IoMdSearch } from "react-icons/io";
+import Model from "../shadcnui/Model";
+import axios from "axios";
 import {
   FaAngleDown,
   FaBars,
@@ -19,15 +22,16 @@ import {
 import { MdDarkMode, MdLightMode } from "react-icons/md";
 import logo from "../../assets/logo.png";
 import { useSelector } from "react-redux";
-
+import Mode from "../shadcnui/Mode";
 const Dropdown = ({ label, items, isMobile, isOpen, toggleDropdown, icon }) => (
   <div className="relative cursor-pointer group">
     <div
-      className="flex items-center justify-between gap-2 font-semibold text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 py-2 px-3 rounded-md transition-colors duration-200"
+      className="flex items-center justify-between  font-semibold text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 py-2 px-3 rounded-md transition-colors duration-200"
       onClick={toggleDropdown}
-    >
+    > <div className="flex flex-row items-center gap-1 ">
       {icon && <span className="mr-2">{icon}</span>}
       {label}
+      </div>
       {items && (
         <FaAngleDown
           className={`ml-2 transition-transform duration-300 ${
@@ -62,6 +66,11 @@ const Navbar = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [active, setActive] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+  const [fields,setFields]=useState([]);
+  const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
   // const [isSticky,setIsSticky] = useState(false)
   const user = useSelector((state) => state.user);
   console.log(user);
@@ -93,6 +102,29 @@ const Navbar = () => {
     { label: "V clips", href: "/vClips", icon: <FaVideo /> },
     { label: "Use App", href: "/useApp", icon: <FaMobileAlt /> },
   ];
+
+  const fetchfields = async (e) => {
+    setSearchQuery(e.target.value)
+    
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/common/tags`,
+        {
+          key:searchQuery,
+          type:"new",
+          version: "new",
+        },
+        
+      );
+
+      console.log(response.data.data);
+      setFields(response.data.data || []);
+    } catch (error) {
+      console.log("Error in fetching comments:", error);
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
     const handleTheme = () => {
@@ -147,8 +179,15 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center  gap-2">
-            <div>
-              Search
+            <div className="relative  group hidden sm:block">
+              <input
+                type="text"
+                placeholder="Search"
+                className="search-bar"
+                onFocus={() => setIsFocused(true)}
+                
+              />
+              <IoMdSearch className="text-xl top-[20%]  text-gray-600 group-hover:text-blue-500 dark:text-gray-400 absolute  right-3 duration-200" />
             </div>
             <nav className="hidden lg:flex items-center text-[15px] gap-1">
               {navItems.map((item, index) => (
@@ -228,24 +267,18 @@ const Navbar = () => {
                       </span>
 
                       <Link to="/profile">
-                        <div
-                          className="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-500/20 dark:text-white transition-all rounded-lg"
-                        >
+                        <div className="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-500/20 dark:text-white transition-all rounded-lg">
                           <FaUser className="text-blue-500 dark:text-white" />
                           My Profile
                         </div>
                       </Link>
 
-                      <div
-                        className="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-500/20 dark:text-white transition-all rounded-lg"
-                      >
+                      <div className="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-500/20 dark:text-white transition-all rounded-lg">
                         <FaFileAlt className="text-blue-500 dark:text-white" />
                         My Posts
                       </div>
 
-                      <div
-                        className="flex items-center gap-3 mb-2 px-3 py-2 cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-500/20 dark:text-white transition-all rounded-lg"
-                      >
+                      <div className="flex items-center gap-3 mb-2 px-3 py-2 cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-500/20 dark:text-white transition-all rounded-lg">
                         <FaThLarge className="text-blue-500 dark:text-white" />
                         My Dashboard
                       </div>
@@ -270,8 +303,39 @@ const Navbar = () => {
                 </Link>
               </div>
             )}
+
+            
           </div>
         </div>
+        {isFocused && (
+              <div>
+                <Model isOpen={isFocused} onClose={() => setIsFocused(false)} title="Search">
+                  <div className="flex flex-col gap-4">
+                    <div className="relative my-4">
+                      <input type="text" placeholder="Search" value={searchQuery}
+          onChange={fetchfields} className="w-full bg-blue-50 dark:bg-gray-900 px-4 py-2 outline-none border dark:border-gray-700 border-gray-400 rounded-lg"/>
+                      <IoMdSearch className="text-xl top-[20%]  text-gray-600  dark:text-gray-400 absolute  right-3 duration-200" />
+                    </div>
+                    <hr className="dark:text-gray-600"/>
+                    <div className="flex flex-col">
+                      <div className="text-xl text-blue-500">Trending</div>
+                      
+                      <div className="flex flex-wrap gap-4 mt-4 max-h-[30vh] overflow-y-scroll">
+                        {fields.map((data)=>(
+                          <div className="bg-gray-200 dark:bg-gray-900 cursor-pointer px-2 py-1 rounded-xl" onClick={()=>{setSearchQuery(data.name)}}>
+                            {data.name}
+                          </div>
+                        ))
+                        }
+
+
+                      </div>
+
+                    </div>
+                  </div>
+                </Model>
+              </div>
+            )}
 
         {isMobileMenuOpen && (
           <>
@@ -291,7 +355,19 @@ const Navbar = () => {
               >
                 <FaTimes size={24} />
               </button>
-              <nav className="flex flex-col justify-start gap-2 mt-12">
+              <div className="flex justify-end mt-12">
+                <Mode/>
+              </div>
+              <div>
+              <div className="relative mt-6">
+                      <input type="text" placeholder="Search" onFocus={() => setIsFocused(true)}
+           className="w-full bg-blue-50 dark:bg-gray-900 px-4 py-2 outline-none border dark:border-gray-700 border-gray-400 rounded-lg"/>
+                      <IoMdSearch className="text-xl top-[20%]  text-gray-600  dark:text-gray-400 absolute  right-3 duration-200" />
+                    </div>
+              </div>
+
+
+              <nav className="flex flex-col justify-start gap-2 mt-6">
                 {navItems.map((item, index) => (
                   <React.Fragment key={index}>
                     {item.items ? (

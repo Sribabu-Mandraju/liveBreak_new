@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-
-const Modal = ({ isOpen, onClose, title, children }) => {
+import {MdClose} from "react-icons/md";
+const Model = ({ isOpen, onClose, title, children }) => {
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === "Escape") onClose();
@@ -12,19 +12,19 @@ const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-2xl shadow-xl max-w-lg w-full relative">
+    <div className="fixed inset-0 z-[1000]  flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white dark:bg-gray-800 dark:border dark:border-gray-600  p-6 rounded-2xl  shadow-xl max-w-lg w-[95%] relative">
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 text-xl font-bold"
+          className="absolute top-6 right-6 text-2xl font-semibold"
         >
-          &times;
+          <MdClose/>
         </button>
         {title && <h2 className="text-2xl mb-4 font-semibold">{title}</h2>}
-        <div>{children}</div>
+        <div className="">{children}</div>
       </div>
     </div>
   );
 };
 
-export default Modal;
+export default Model;
