@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-
+import { useSelector } from "react-redux";
 import BottomMenu from "../Home/BottomMenu";
 import Navbar from "./Navbar";
-
+import axios from "axios";
 import Trending from "../Home/Trending";
 import { FaLocationDot } from "react-icons/fa6";
 
@@ -81,7 +81,7 @@ const Layout = ({ children }) => {
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const isActive = (path) => location.pathname.includes(path);
-
+  const user = useSelector((state) => state.user);
   return (
     <div className="w-screen flex-col justify-center items-center flex gap-4">
       <div>
@@ -131,10 +131,10 @@ const Layout = ({ children }) => {
                     />
                     <div>
                       <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                        Sribabu Mandraju
+                        {user?.user?.data?.email}
                       </p>
                       <p className="text-xs text-gray-600 dark:text-gray-400">
-                        @5R1B4BU
+                      {user?.user?.data?.mobile_num}
                       </p>
                     </div>
                   </div>

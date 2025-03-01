@@ -3,6 +3,20 @@ import { Link, useLocation } from "react-router-dom";
 import { IoMdSearch } from "react-icons/io";
 import Model from "../shadcnui/Model";
 import axios from "axios";
+import { FaLocationDot } from "react-icons/fa6";
+
+import { LiaLanguageSolid } from "react-icons/lia";
+import { IoDocumentLockOutline } from "react-icons/io5";
+import { GrGallery } from "react-icons/gr";
+import { RiFileEditLine } from "react-icons/ri";
+import { SiGoogleads } from "react-icons/si";
+import { LuNewspaper } from "react-icons/lu";
+import { BiSolidCategoryAlt } from "react-icons/bi";
+import { ImFilesEmpty } from "react-icons/im";
+import { FaRegBookmark } from "react-icons/fa6";
+import { GiBookPile } from "react-icons/gi";
+import { LuFileClock } from "react-icons/lu";
+import { MdOutlineContactSupport } from "react-icons/md";
 import {
   FaAngleDown,
   FaBars,
@@ -28,9 +42,11 @@ const Dropdown = ({ label, items, isMobile, isOpen, toggleDropdown, icon }) => (
     <div
       className="flex items-center justify-between  font-semibold text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 py-2 px-3 rounded-md transition-colors duration-200"
       onClick={toggleDropdown}
-    > <div className="flex flex-row items-center gap-1 ">
-      {icon && <span className="mr-2">{icon}</span>}
-      {label}
+    >
+      {" "}
+      <div className="flex flex-row items-center gap-1 ">
+        {icon && <span className="mr-2">{icon}</span>}
+        {label}
       </div>
       {items && (
         <FaAngleDown
@@ -67,9 +83,10 @@ const Navbar = () => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [active, setActive] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const [fields,setFields]=useState([]);
+  const [fields, setFields] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTagId, setSelectedTagId] = useState("");
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   // const [isSticky,setIsSticky] = useState(false)
   const user = useSelector((state) => state.user);
@@ -102,28 +119,55 @@ const Navbar = () => {
     { label: "V clips", href: "/vClips", icon: <FaVideo /> },
     { label: "Use App", href: "/useApp", icon: <FaMobileAlt /> },
   ];
+  const menuItems = [
+    { name: "Select Location", icon: <FaLocationDot />, path: "/location" },
+    { name: "Language", icon: <LiaLanguageSolid />, path: "/language" },
+    {
+      name: "Select Categories",
+      icon: <IoDocumentLockOutline />,
+      path: "/selectcategories",
+    },
+    { name: "Posters", icon: <GrGallery />, path: "/posters" },
+    { name: "Post A News", icon: <RiFileEditLine />, path: "/postnews" },
+    { name: "Ads", icon: <SiGoogleads />, path: "/ads" },
+    { name: "Local News", icon: <LuNewspaper />, path: "/localnews" },
+    { name: "Categories", icon: <BiSolidCategoryAlt />, path: "/categories" },
+    { name: "Refferal", icon: <ImFilesEmpty />, path: "/referral" },
+    { name: "Bookmarks", icon: <FaRegBookmark />, path: "/bookmark" },
+    { name: "Magazines", icon: <GiBookPile />, path: "/magazine" },
+    { name: "Quizes", icon: <LuFileClock />, path: "/quizes" },
+    { name: "Contact Us", icon: <MdOutlineContactSupport />, path: "/contact" },
+  ];
 
   const fetchfields = async (e) => {
-    setSearchQuery(e.target.value)
-    
+    setSearchQuery(e.target.value);
+
     setLoading(true);
     try {
-      const response = await axios.post(
-        `${BASE_URL}/common/tags`,
-        {
-          key:searchQuery,
-          type:"new",
-          version: "new",
-        },
-        
-      );
+      const response = await axios.post(`${BASE_URL}/common/tags`, {
+        key: searchQuery,
+        type: "news",
+        version: "new",
+      });
 
       console.log(response.data.data);
       setFields(response.data.data || []);
     } catch (error) {
-      console.log("Error in fetching comments:", error);
+      console.log("Error in fetching :", error);
     }
     setLoading(false);
+  };
+  const setTag = async (id) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/common/getTagData`, {
+        tag_id: id,
+        version: "new",
+      });
+
+      console.log(response.data.data);
+    } catch (error) {
+      console.log("Error in fetching tag details :", error);
+    }
   };
 
   useEffect(() => {
@@ -185,7 +229,6 @@ const Navbar = () => {
                 placeholder="Search"
                 className="search-bar"
                 onFocus={() => setIsFocused(true)}
-                
               />
               <IoMdSearch className="text-xl top-[20%]  text-gray-600 group-hover:text-blue-500 dark:text-gray-400 absolute  right-3 duration-200" />
             </div>
@@ -303,39 +346,50 @@ const Navbar = () => {
                 </Link>
               </div>
             )}
-
-            
           </div>
         </div>
         {isFocused && (
-              <div>
-                <Model isOpen={isFocused} onClose={() => setIsFocused(false)} title="Search">
-                  <div className="flex flex-col gap-4">
-                    <div className="relative my-4">
-                      <input type="text" placeholder="Search" value={searchQuery}
-          onChange={fetchfields} className="w-full bg-blue-50 dark:bg-gray-900 px-4 py-2 outline-none border dark:border-gray-700 border-gray-400 rounded-lg"/>
-                      <IoMdSearch className="text-xl top-[20%]  text-gray-600  dark:text-gray-400 absolute  right-3 duration-200" />
-                    </div>
-                    <hr className="dark:text-gray-600"/>
-                    <div className="flex flex-col">
-                      <div className="text-xl text-blue-500">Trending</div>
-                      
-                      <div className="flex flex-wrap gap-4 mt-4 max-h-[30vh] overflow-y-scroll">
-                        {fields.map((data)=>(
-                          <div className="bg-gray-200 dark:bg-gray-900 cursor-pointer px-2 py-1 rounded-xl" onClick={()=>{setSearchQuery(data.name)}}>
-                            {data.name}
-                          </div>
-                        ))
-                        }
+          <div>
+            <Model
+              isOpen={isFocused}
+              onClose={() => setIsFocused(false)}
+              title="Search"
+            >
+              <div className="flex flex-col gap-4">
+                <div className="relative my-4">
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    value={searchQuery}
+                    onChange={fetchfields}
+                    className="w-full bg-blue-50 dark:bg-gray-900 px-4 py-2 outline-none border dark:border-gray-700 border-gray-400 rounded-lg"
+                  />
+                  <IoMdSearch className="text-xl top-[20%]  text-gray-600  dark:text-gray-400 absolute  right-3 duration-200" />
+                </div>
+                <hr className="dark:text-gray-600" />
+                <div className="flex flex-col">
+                  <div className="text-xl text-blue-500">Trending</div>
 
-
+                  <div className="flex flex-wrap gap-4 mt-4 max-h-[30vh] overflow-y-scroll">
+                    {fields.map((data) => (
+                      <div
+                        className="bg-gray-200 dark:bg-gray-900 cursor-pointer px-2 py-1 rounded-xl"
+                        onClick={() => {
+                          setSelectedTagId(data._id);
+                          if (selectedTagId) {
+                            setTag(selectedTagId);
+                          }
+                        }}
+                      >
+                        {data.name}
                       </div>
-
-                    </div>
+                    ))}
                   </div>
-                </Model>
+                </div>
               </div>
-            )}
+            </Model>
+          </div>
+        )}
 
         {isMobileMenuOpen && (
           <>
@@ -356,23 +410,26 @@ const Navbar = () => {
                 <FaTimes size={24} />
               </button>
               <div className="flex justify-end mt-12">
-                <Mode/>
+                <Mode />
               </div>
               <div>
-              <div className="relative mt-6">
-                      <input type="text" placeholder="Search" onFocus={() => setIsFocused(true)}
-           className="w-full bg-blue-50 dark:bg-gray-900 px-4 py-2 outline-none border dark:border-gray-700 border-gray-400 rounded-lg"/>
-                      <IoMdSearch className="text-xl top-[20%]  text-gray-600  dark:text-gray-400 absolute  right-3 duration-200" />
-                    </div>
+                <div className="relative mt-6">
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    onFocus={() => setIsFocused(true)}
+                    className="w-full bg-blue-50 dark:bg-gray-900 px-4 py-2 outline-none border dark:border-gray-700 border-gray-400 rounded-lg"
+                  />
+                  <IoMdSearch className="text-xl top-[20%]  text-gray-600  dark:text-gray-400 absolute  right-3 duration-200" />
+                </div>
               </div>
 
-
               <nav className="flex flex-col justify-start gap-2 mt-6">
-                {navItems.map((item, index) => (
+                {menuItems.map((item, index) => (
                   <React.Fragment key={index}>
                     {item.items ? (
                       <Dropdown
-                        label={item.label}
+                        label={item.name}
                         items={item.items}
                         icon={item.icon}
                         isMobile={true}
@@ -381,12 +438,12 @@ const Navbar = () => {
                       />
                     ) : (
                       <Link
-                        to={item.href}
+                        to={item.path}
                         className="flex items-center gap-2 py-2 px-3 font-semibold text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors duration-200"
                         onClick={toggleMobileMenu}
                       >
                         {item.icon}
-                        {item.label}
+                        {item.name}
                       </Link>
                     )}
                   </React.Fragment>
