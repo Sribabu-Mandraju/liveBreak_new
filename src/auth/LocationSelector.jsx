@@ -16,6 +16,7 @@ function LocationSelector() {
   const [results, setResults] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("loading");
 
   // Fetch Favorite Locations
   useEffect(() => {
@@ -72,9 +73,19 @@ function LocationSelector() {
     dispatch(selectLocation({ village_id, token }));
   };
 
+  if (status === "failed") {
+    return (
+      <div className="container mx-auto px-4 py-8 text-center">
+        <div className="text-red-600 dark:text-red-400">
+          Failed to load location data. Please try again.
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-6">
-      <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-xl">
+      <div className="w-full p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-xl">
         <h2 className="text-xl font-bold text-center text-[#1189F6]">
           Enter your location
         </h2>

@@ -1,0 +1,3 @@
+GET https://api.meebuddy.com/app/v4/common/languagelist
+Content-Type: application/json
+
