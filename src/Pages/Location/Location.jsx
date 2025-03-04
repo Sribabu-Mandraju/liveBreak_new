@@ -5,12 +5,9 @@ import LocationContent from '../../auth/LocationSelector'
 const Profile = () => {
   return (
     <>
-      <div className="">
-        <Navbar />
-      </div>
-      <Layout>
+      
         <LocationContent  />
-      </Layout>
+      
     </>
   );
 };

@@ -7,6 +7,7 @@ import SearchResults from "./location/SearchResults";
 import DefaultOptions from "./location/DefaultOptions";
 import FavoriteLocations from "./location/FavoriteLocations";
 
+
 function LocationSelector() {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const dispatch = useDispatch();
@@ -70,10 +71,11 @@ function LocationSelector() {
   // Select a location and save globally
   const handleSelectLocation = async (village_id) => {
     dispatch(selectLocation({ village_id, token }));
+    
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-6">
+    <div className="">
       <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-xl">
         <h2 className="text-xl font-bold text-center text-[#1189F6]">
           Enter your location

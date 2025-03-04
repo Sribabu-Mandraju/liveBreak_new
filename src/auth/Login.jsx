@@ -9,9 +9,12 @@ import { fetchUser } from "../store/userSlice";
 import { Link} from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { IoMdSkipForward } from "react-icons/io";
+import Model from "../components/shadcnui/Model";
+import LocationSelector from "./LocationSelector";
 function Signin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [skip,setSkip]=useState(false);
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const [formData, setFormData] = useState({
     phone: "",
@@ -152,7 +155,21 @@ function Signin() {
           </Link>
         </p>
         <div className="flex justify-end px-4">
-         <Link to='/location'><div className="flex flex-row items-center gap-1 text-blue-500 dark:text-blue-400 hover:underline"> Skip <IoMdSkipForward/></div></Link>
+         <button onClick={()=>setSkip(true)} className="flex flex-row items-center gap-1 text-blue-500 dark:text-blue-400 hover:underline"> Skip <IoMdSkipForward/></button>
+         {
+          skip && (
+            <div>
+              <Model isOpen={skip}
+              onClose={() => setSkip(false)}
+              title="">
+                <LocationSelector/>
+
+
+              </Model>
+
+            </div>
+          )
+         }
 
         </div>
       </div>

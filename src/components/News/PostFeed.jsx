@@ -45,6 +45,7 @@ const SkeletonLoader = () => (
 const PostFeed = () => {
   const dispatch = useDispatch();
   const { posts, loading, hasMore } = useSelector((state) => state.feed);
+  
   const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.5 });
 
   // Ensure fresh data on mount

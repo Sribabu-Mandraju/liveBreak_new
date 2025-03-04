@@ -93,7 +93,7 @@ const Layout = ({ children }) => {
           <div className="border border-zinc-700 rounded-md h-full overflow-hidden">
             <div>
               {/* Desktop Side Menu */}
-              <div className="hidden md:flex h-[calc(100vh-70px)] w-64 px-4 py-6 flex-col justify-between transition-all duration-300">
+              <div className="hidden  md:flex h-[calc(100vh-70px)] w-64 px-4 py-6 flex-col  transition-all duration-300">
                 <div>
                   <ul>
                     {menuItems.map((item, index) => (
@@ -116,14 +116,14 @@ const Layout = ({ children }) => {
                       </li>
                     ))}
                   </ul>
-                  <button className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 rounded-full flex items-center justify-center gap-2">
+                  <button className="mt-4 w-full bg-blue-500  hover:bg-blue-600 text-white font-bold py-2 rounded-full flex items-center justify-center gap-4">
                     <BsFillPenFill />
                     Post
                   </button>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3 mt-5">
+                <div className="flex items-center gap-16 justify-between w-auto">
+                  <div className="flex items-center gap-4 mt-5">
                     <img
                       src="https://meebuddy.com/assets/img/meebuddy/slider/2.png"
                       alt="User"

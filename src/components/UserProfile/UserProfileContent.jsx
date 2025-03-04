@@ -2,47 +2,45 @@ import { useState, useEffect } from "react";
 import { FaCheckCircle, FaEdit } from "react-icons/fa";
 import { FaCircleCheck } from "react-icons/fa6";
 import { IoArrowBackCircle } from "react-icons/io5";
-import AddNewsForm from "./AddNewsForm";
-import Home from './Home'
-import Posted from "./Posted";
+import axios from "axios";
+
 import { useSelector } from "react-redux";
 
-const ProfileContent = () => {
-
-  const user = useSelector((state) => state.user);
-  console.log(user)
-  const [profile, setProfile] = useState({
-    name: "Sribabu Mandraju",
-    email: "sribabumandraju@gmail.com",
-    phone:'',
-    joined: "February 2025",
-    following: 1,
-    followers: 0,
-    posts: 0,
-    avatar: "https://via.placeholder.com/150",
-  });
-
-  useEffect(() => {
-    if (user) {
-      setProfile((prevProfile) => ({
-        ...prevProfile,
-        name: user?.user?.data?.name || prevProfile.name,
-        email: user?.user?.data?.email || prevProfile.email,
-        phone: user?.user?.data?.mobile_num || prevProfile.phone,
-        joined: user.joined || prevProfile.joined,
-        following: user.following || prevProfile.following,
-        followers: user.followers || prevProfile.followers,
-        posts: user.posts || prevProfile.posts,
-        avatar: user.avatar || prevProfile.avatar,
-      }));
-    }
-  }, [user]);
-
+const UserProfileContent = ({ data }) => {
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState({});
   const [activeTab, setActiveTab] = useState("Home");
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+
  
+
+  useEffect(() => {
+    const fetchUser = async () => {
+        if (!data) return;
+      setLoading(true);
+      try {
+        const response = await axios.post(`${BASE_URL}/common/getReporterData`, {
+          news_user_id: data,
+          version: "new",
+        });
+        setUser(response.data?.data || {});
+      } catch (error) {
+        console.error("Error in fetching user:", error);
+      }
+      setLoading(false);
+    };
+
+    fetchUser();
+  }, [data, BASE_URL]);
+
  
+
+  const userDetails = user?.details || {};
+  const userStats = user?.stats || {};
+
+  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,10 +52,12 @@ const ProfileContent = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Avatar size with smooth transition
-  const avatarSize = Math.max(68, 100 - scrollY * 0.5);
-  const translateY = isScrolled ? 0 : Math.min(0, scrollY - 80);
-  const translateX = isScrolled ? 0 : Math.min(0, scrollY - 100);
+   // Avatar size with smooth transition
+   const avatarSize = Math.max(68, 100 - scrollY * 0.5);
+   const translateY = isScrolled ? 0 : Math.min(0, scrollY - 80);
+   const translateX = isScrolled ? 0 : Math.min(0, scrollY - 100);
+
+  
 
   return (
     <div className="relative w-full md:max-w-7xl mx-auto container min-h-screen flex gap-4">
@@ -73,21 +73,25 @@ const ProfileContent = () => {
             }`}
           >
             <h1 className="text-lg sm:text-lg font-semibold">
-  <span className="sm:hidden">{profile.email.slice(0, 12)}...</span>
-  <span className="hidden sm:inline">{profile.email}</span>
-</h1>
-            <h1 className="text-sm text-gray-500">Posts {profile.posts}</h1>
+              <span className="sm:hidden">
+              {userDetails?.user?.name.slice(0,12) || "Unknown User"}...
+              </span>
+              <span className="hidden sm:inline">{userDetails?.user?.name || "Unknown User"}</span>
+            </h1>
+            <h1 className="text-sm text-gray-500">
+            {userDetails?.reporter_type || "Unknown Type"}
+            </h1>
           </div>
         </div>
 
         {/* Cover and Avatar */}
         <div className="relative bg-gray-100 dark:bg-gray-800">
           <img
-            src="https://images.meebuddy.com/news-images/thumbnail/d45bc194-cbdf-4044-853d-9e1a8e058441.webp"
+            src={"/default-avatar.png"}
             className="h-40 sm:h-56 w-full"
           />
           <img
-            src={profile.avatar}
+            src={userDetails?.user?.profile_icon || "/default-avatar.png"}
             alt="Avatar"
             style={{
               width: avatarSize,
@@ -104,29 +108,27 @@ const ProfileContent = () => {
         </div>
 
         {/* Profile Info */}
-        <div className="p-4 sm:p-8 mt-20">
+        <div className="p-4 sm:p-8 mt-10">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-xl font-semibold truncate">
-                  {profile.email}
-                </h1>
-                <button className="flex  gap-1 items-center px-3 sm:px-4 py-1  border-2 border-gray-600 text-[11px] sm:text-sm font-medium text-black bg-white rounded-full">
-                  <FaCircleCheck className="text-blue-600 text-lg" />
-                  <span>Get Verified</span>
-                </button>
+            <div className="flex flex-col gap-1  w-full">
+              <div className="flex flex-row  w-full items-center gap-2">
+                <div className="text-xl   sm:text-xl font-semibold ">
+                {userDetails?.user?.name || "Unknown User"}
+                </div>
+               
               </div>
-              <p className="text-gray-500">{profile.phone}</p>
-              <p className="mt-2 text-gray-500">📅 Joined {profile.joined}</p>
-              <p className="mt-2 flex flex-row gap-4">
-                <span>{profile.following} Following</span> 
-                <span>{profile.followers} Followers</span>
-              </p>
+              <div className="flex flex-row justify-between items-center">
+               
+              <p className="text-gray-500"> {userStats?.posted || 0} Posts</p>
+              <p className="mt-2 text-gray-500">{userStats?.verified || 0}  verified </p>
+              <p className="mt-2 text-gray-500">{userStats?.rejected || 0}  rejected </p>
+              
+              <div>
+            
+              </div>
+              </div>
             </div>
-            <button className="mt-4 sm:mt-0 flex w-fit  items-center gap-1 px-4 py-1 md:py-2 border-2 border-gray-600 text-sm font-medium text-black bg-white rounded-full">
-              <FaEdit />
-              <span>Edit Profile</span>
-            </button>
+            
           </div>
 
           {/* Tabs Section */}
@@ -152,9 +154,9 @@ const ProfileContent = () => {
 
           {/* Tab Content */}
           <div className="mt-6 h-auto">
-            {activeTab === "Home" && <Home/>}
-            {activeTab === "Add News" && <AddNewsForm />}
-            {activeTab === "Posted News" && <Posted/>}
+            {activeTab === "Home" && <div>Articles</div>}
+            {activeTab === "Add News" && <div>Articles</div>}
+            {activeTab === "Posted News" && <div>Articles</div>}
             {activeTab === "Top 10" && <div>Articles</div>}
           </div>
         </div>
@@ -163,4 +165,4 @@ const ProfileContent = () => {
   );
 };
 
-export default ProfileContent;
+export default UserProfileContent;

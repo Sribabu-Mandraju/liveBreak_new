@@ -7,6 +7,7 @@ import { ClipLoader } from "react-spinners"; // Import Spinner
 import Home from "./Pages/main/Home";
 import Signup from "./auth/Register";
 import Profile from "./Pages/Profile/Profile";
+import UserProfile from "./Pages/UserProfile/UserProfile";
 import MagazinePage from "./Pages/Magazine/MagazinePage";
 import Signin from "./auth/Login";
 import OTPVerification from "./auth/OtpVerficationPage";
@@ -58,9 +59,10 @@ const App = () => {
           <Route path="/signin" element={<Signin />} />
           <Route path="/OTPVerification" element={<OTPVerification />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/user/:id" element={<UserProfile />} />
           <Route path="/magazine" element={<MagazinePage />} />
           <Route path="/*" element={<NotFound />} />
-          <Route path="/model" element={<Model/>} />
+          
           
         </Routes>
       </BrowserRouter>
