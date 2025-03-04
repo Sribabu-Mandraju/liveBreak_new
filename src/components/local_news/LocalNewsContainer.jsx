@@ -67,19 +67,6 @@ const LocalNewsContainer = () => {
 
   return (
     <div className="container mx-auto px-4">
-      {/* Location Info Display */}
-      <div className="mb-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-        <h1 className="text-2xl font-bold mb-2">Local News</h1>
-        <div className="text-sm text-gray-600 dark:text-gray-400">
-          <p>State: {locationData.state}</p>
-          {locationData.district && <p>District: {locationData.district}</p>}
-          {locationData.mandal && <p>Mandal: {locationData.mandal}</p>}
-          {locationData.village?.name && (
-            <p>Village: {locationData.village.name}</p>
-          )}
-        </div>
-      </div>
-
       {/* Local News Feed */}
       <LocalNewsFeed locationData={formattedLocationData} />
     </div>

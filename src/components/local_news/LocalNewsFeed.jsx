@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useInView } from "react-intersection-observer";
 import NewsCard from "../News/NewsCard";
@@ -52,19 +52,27 @@ const LocalNewsFeed = ({ locationData }) => {
     (state) => state.localNews
   );
   const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.5 });
+  const prevLocationRef = useRef();
 
-  // Set location info and fetch fresh data on mount or when locationData changes
+  // Set location info and fetch fresh data only when location changes
   useEffect(() => {
     if (locationData) {
-      dispatch(clearLocalNews()); // Clear previous posts
-      dispatch(setLocationInfo(locationData)); // Set new location info
-      dispatch(fetchLocalNews(locationData)); // Fetch fresh posts with location payload
+      const locationChanged =
+        JSON.stringify(prevLocationRef.current) !==
+        JSON.stringify(locationData);
+
+      if (locationChanged) {
+        dispatch(clearLocalNews()); // Clear only when location changes
+        dispatch(setLocationInfo(locationData));
+        dispatch(fetchLocalNews(locationData));
+        prevLocationRef.current = locationData;
+      }
     }
   }, [dispatch, locationData]);
 
   // Fetch more posts when user scrolls down
   useEffect(() => {
-    if (inView && hasMore) {
+    if (inView && hasMore && !loading) {
       dispatch(
         fetchLocalNews({
           ...locationInfo,
@@ -72,7 +80,7 @@ const LocalNewsFeed = ({ locationData }) => {
         })
       );
     }
-  }, [inView, hasMore, dispatch, locationInfo]);
+  }, [inView, hasMore, dispatch, locationInfo, loading]);
 
   if (!locationData) {
     return (
@@ -82,20 +90,22 @@ const LocalNewsFeed = ({ locationData }) => {
     );
   }
 
-  if (loading) {
+  if (loading && posts.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-8 text-center">
-        <div className="text-gray-600 dark:text-gray-300">
-          Loading location data...
-        </div>
-      </div>
+      <>
+        <SkeletonLoader />
+        <SkeletonLoader />
+        <SkeletonLoader />
+        <SkeletonLoader />
+        <SkeletonLoader />
+      </>
     );
   }
 
   return (
     <div className="flex flex-col items-center w-full">
       {/* Location Info Display */}
-      <div className="w-full bg-white dark:bg-gray-800 p-4 mb-4 rounded-lg shadow">
+      {/* <div className="w-full bg-white dark:bg-gray-800 p-4 mb-4 rounded-lg shadow">
         <h2 className="text-xl font-semibold">
           Local News - {locationInfo.location_name}
         </h2>
@@ -107,7 +117,7 @@ const LocalNewsFeed = ({ locationData }) => {
             <p>Village: {locationData.village.name}</p>
           )}
         </div>
-      </div>
+      </div> */}
 
       {/* News Posts */}
       {posts.length > 0 ? (
