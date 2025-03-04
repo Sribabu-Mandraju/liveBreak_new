@@ -5,12 +5,11 @@ import axios from "axios";
 import { setToken } from "../store/authSlice";
 import { useDispatch } from "react-redux";
 
-
 function OTPVerification() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const BASE_URL = import.meta.env.VITE_BASE_URL;
-// s
+  // s
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [searchParams] = useSearchParams();
 

@@ -1,8 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useInView } from "react-intersection-observer";
-import NewsCard from "./NewsCard";
-import { fetchPosts, clearFeed } from "../../store/feedSlice";
+import NewsCard from "../News/NewsCard";
+import {
+  fetchLocalNews,
+  clearLocalNews,
+  setLocationInfo,
+} from "../../store/localNewsSlice";
 
 const SkeletonLoader = () => (
   <div className="bg-white dark:bg-gray-900 mt-3 rounded-lg shadow-lg p-4 w-[93%] md:w-full mx-auto border dark:border-gray-700 animate-pulse">
@@ -42,33 +46,88 @@ const SkeletonLoader = () => (
   </div>
 );
 
-const PostFeed = () => {
+const LocalNewsFeed = ({ locationData }) => {
   const dispatch = useDispatch();
-  const { posts, loading, hasMore } = useSelector((state) => state.feed);
-  
+  const { posts, loading, hasMore, locationInfo } = useSelector(
+    (state) => state.localNews
+  );
   const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.5 });
+  const prevLocationRef = useRef();
 
-  // Ensure fresh data on mount
+  // Set location info and fetch fresh data only when location changes
   useEffect(() => {
-    dispatch(clearFeed()); // Clear previous posts
-    dispatch(fetchPosts({})); // Fetch fresh posts with default payload
-  }, [dispatch]);
+    if (locationData) {
+      const locationChanged =
+        JSON.stringify(prevLocationRef.current) !==
+        JSON.stringify(locationData);
+
+      if (locationChanged) {
+        dispatch(clearLocalNews()); // Clear only when location changes
+        dispatch(setLocationInfo(locationData));
+        dispatch(fetchLocalNews(locationData));
+        prevLocationRef.current = locationData;
+      }
+    }
+  }, [dispatch, locationData]);
 
   // Fetch more posts when user scrolls down
   useEffect(() => {
-    if (inView && hasMore) {
-      dispatch(fetchPosts({}));
+    if (inView && hasMore && !loading) {
+      dispatch(
+        fetchLocalNews({
+          ...locationInfo,
+          // last_id is handled automatically by the slice
+        })
+      );
     }
-  }, [inView, hasMore, dispatch]);
+  }, [inView, hasMore, dispatch, locationInfo, loading]);
+
+  if (!locationData) {
+    return (
+      <div className="text-gray-600 dark:text-gray-300">
+        Please select a location to view news.
+      </div>
+    );
+  }
+
+  if (loading && posts.length === 0) {
+    return (
+      <>
+        <SkeletonLoader />
+        <SkeletonLoader />
+        <SkeletonLoader />
+        <SkeletonLoader />
+        <SkeletonLoader />
+      </>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center w-full">
+      {/* Location Info Display */}
+      {/* <div className="w-full bg-white dark:bg-gray-800 p-4 mb-4 rounded-lg shadow">
+        <h2 className="text-xl font-semibold">
+          Local News - {locationInfo.location_name}
+        </h2>
+        <div className="text-sm text-gray-600 dark:text-gray-400">
+          <p>State: {locationData.state}</p>
+          {locationData.district && <p>District: {locationData.district}</p>}
+          {locationData.mandal && <p>Mandal: {locationData.mandal}</p>}
+          {locationData.village?.name && (
+            <p>Village: {locationData.village.name}</p>
+          )}
+        </div>
+      </div> */}
+
+      {/* News Posts */}
       {posts.length > 0 ? (
         posts.map((post, index) => (
           <NewsCard key={post._id || index} data={post} />
         ))
       ) : (
-        <p className="text-gray-600 dark:text-gray-300">No posts available.</p>
+        <p className="text-gray-600 dark:text-gray-300">
+          No local news available for this location.
+        </p>
       )}
 
       {/* Infinite Scroll Trigger */}
@@ -86,4 +145,4 @@ const PostFeed = () => {
   );
 };
 
-export default PostFeed;
+export default LocalNewsFeed;

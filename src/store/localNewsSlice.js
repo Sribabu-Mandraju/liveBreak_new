@@ -3,22 +3,34 @@ import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-// Fetch posts asynchronously
-export const fetchPosts = createAsyncThunk(
-  "feed/fetchPosts",
+// Fetch local news posts asynchronously
+export const fetchLocalNews = createAsyncThunk(
+  "localNews/fetchLocalNews",
   async (payload = {}, { getState, rejectWithValue }) => {
-    const { lastId, hasMore } = getState().feed;
-    if (!hasMore) return rejectWithValue("No more posts available.");
+    const { lastId, hasMore } = getState().localNews;
+    const token = getState().auth.token; // Get token from auth state
+    if (!token) return rejectWithValue("No token available");
+    if (!hasMore) return rejectWithValue("No more local news available.");
 
     try {
-      const response = await axios.post(`${BASE_URL}/common/feed`, {
-        post_id: payload.post_id || "",
-        last_id: payload.last_id || lastId,
-        type: payload.type || "",
-        bookmarks: payload.bookmarks || false,
-        tag_id: payload.tag_id || "",
-        version: "new",
-      });
+      const response = await axios.post(
+        `${BASE_URL}/news/local/feed`,
+        {
+          village: payload.village || "",
+          mandal: payload.mandal || "",
+          district: payload.district || "",
+          state: payload.state || "",
+          last_id: payload.last_id || lastId,
+          location_name: payload.location_name || "",
+          location_type: payload.location_type || "district",
+          version: "new",
+        },
+        {
+          headers: {
+            "X-News-Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdzX3VzZXJfZGF0YSI6eyJpZCI6IjY3YzZjZmUzYmUwZTdkZjYzNGY5YzZjZCJ9LCJpYXQiOjE3NDEwODU4NTAsImV4cCI6MTc3MjYyMTg1MH0.Z7EzuZ42NEs12THDDUmiFpUBMxkcPW2gboJSs2EPcb4",
+          },
+        }
+      );
 
       const newPosts = response.data.data || [];
       const lastPost =
@@ -26,14 +38,16 @@ export const fetchPosts = createAsyncThunk(
 
       return { newPosts, lastPost };
     } catch (error) {
-      return rejectWithValue(error.response?.data || "Failed to fetch posts");
+      return rejectWithValue(
+        error.response?.data || "Failed to fetch local news"
+      );
     }
   }
 );
 
-// Add new async thunk for handling likes
-export const updatePostLike = createAsyncThunk(
-  "feed/updatePostLike",
+// Add new async thunk for handling likes in local news
+export const updateLocalNewsLike = createAsyncThunk(
+  "localNews/updateLocalNewsLike",
   async ({ post_id }, { rejectWithValue, getState }) => {
     try {
       const token = getState().auth.token;
@@ -54,7 +68,6 @@ export const updatePostLike = createAsyncThunk(
         }
       );
 
-      // Check if response has the expected structure
       if (!response.data || !response.data.data || !response.data.data.post) {
         return rejectWithValue("Invalid response format from server");
       }
@@ -78,40 +91,53 @@ export const updatePostLike = createAsyncThunk(
   }
 );
 
-const feedSlice = createSlice({
-  name: "feed",
+const localNewsSlice = createSlice({
+  name: "localNews",
   initialState: {
     posts: [],
     lastId: "",
     loading: false,
     hasMore: true,
+    locationInfo: {
+      village: "",
+      mandal: "",
+      district: "",
+      state: "",
+      location_name: "",
+      location_type: "district",
+    },
   },
   reducers: {
-    clearFeed: (state) => {
+    clearLocalNews: (state) => {
       state.posts = [];
       state.lastId = "";
       state.hasMore = true;
     },
+    setLocationInfo: (state, action) => {
+      state.locationInfo = {
+        ...state.locationInfo,
+        ...action.payload,
+      };
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchPosts.pending, (state) => {
+      .addCase(fetchLocalNews.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchPosts.fulfilled, (state, action) => {
+      .addCase(fetchLocalNews.fulfilled, (state, action) => {
         const { newPosts, lastPost } = action.payload;
-
         state.posts = [...state.posts, ...newPosts];
         state.lastId = lastPost;
         state.hasMore = newPosts.length > 0;
         state.loading = false;
       })
-      .addCase(fetchPosts.rejected, (state, action) => {
-        console.error("Error fetching posts:", action.payload);
+      .addCase(fetchLocalNews.rejected, (state, action) => {
+        console.error("Error fetching local news:", action.payload);
         state.loading = false;
         state.hasMore = false;
       })
-      .addCase(updatePostLike.fulfilled, (state, action) => {
+      .addCase(updateLocalNewsLike.fulfilled, (state, action) => {
         const {
           post_id,
           likes,
@@ -127,11 +153,11 @@ const feedSlice = createSlice({
           post.disliked_users = disliked_users;
         }
       })
-      .addCase(updatePostLike.rejected, (state, action) => {
+      .addCase(updateLocalNewsLike.rejected, (state, action) => {
         console.error("Error updating like:", action.payload);
       });
   },
 });
 
-export const { clearFeed } = feedSlice.actions;
-export default feedSlice.reducer;
+export const { clearLocalNews, setLocationInfo } = localNewsSlice.actions;
+export default localNewsSlice.reducer;

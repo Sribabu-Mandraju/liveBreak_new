@@ -6,6 +6,7 @@ import userSlice from "./userSlice";
 import feedSlice from "./feedSlice";
 import locationSlice from "./locationSlice";
 import communitySlice from "./communitySlice";
+import localNewsSlice from "./localNewsSlice";
 
 const preloadedState = loadState();
 
@@ -16,6 +17,7 @@ const store = configureStore({
     feed: feedSlice,
     location: locationSlice,
     community: communitySlice,
+    localNews: localNewsSlice,
   },
   preloadedState,
 });
@@ -27,6 +29,7 @@ store.subscribe(() => {
     feed: store.getState().feed,
     location: store.getState().location,
     community: store.getState().community,
+    localNews: store.getState().localNews,
   });
 });
 

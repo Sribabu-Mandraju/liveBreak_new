@@ -15,7 +15,9 @@ import Group from "./Pages/Groups/Group";
 import NotFound from "./Pages/404/NotFound";
 import Location from "./Pages/Location/Location";
 import Model from './components/shadcnui/Model'
-
+import NewsDetails from "./components/news_details/NewsDetails";
+import LocalNews from "./Pages/local_news/LocalNews";
+import LocationAndTime from "./components/News/newsCard_components/LocationAndTime";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -53,6 +55,8 @@ const App = () => {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/details" element={<NewsDetails />} />
+          <Route path="/local-news" element={<LocalNews />} />
           <Route path="/group" element={<Group />} />
           <Route path="/location" element={<Location />} />
           <Route path="/signup" element={<Signup />} />

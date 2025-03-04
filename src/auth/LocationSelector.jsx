@@ -17,6 +17,7 @@ function LocationSelector() {
   const [results, setResults] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("loading");
 
   // Fetch Favorite Locations
   useEffect(() => {
@@ -73,6 +74,16 @@ function LocationSelector() {
     dispatch(selectLocation({ village_id, token }));
     
   };
+
+  if (status === "failed") {
+    return (
+      <div className="container mx-auto px-4 py-8 text-center">
+        <div className="text-red-600 dark:text-red-400">
+          Failed to load location data. Please try again.
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="">

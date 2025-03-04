@@ -10,12 +10,6 @@ const NewsCard = ({ data }) => {
       <Link to={`/user/${data.posted_by._id}`}><ReporterInfo posted_by={data.posted_by} /></Link>
       <NewsDetails news={data.news} />
       <MediaContent news={data.news} />
-      <LocationAndTime
-        states={data.states}
-        district={data.district}
-        mandal={data.mandal}
-        createdAt={data.createdAt}
-      />
       <InteractionButtons
         likes={data.likes}
         dislikes={data.dislikes}
