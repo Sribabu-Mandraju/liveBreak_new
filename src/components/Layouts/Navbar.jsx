@@ -3,6 +3,20 @@ import { Link, useLocation } from "react-router-dom";
 import { IoMdSearch } from "react-icons/io";
 import Model from "../shadcnui/Model";
 import axios from "axios";
+import { FaLocationDot } from "react-icons/fa6";
+
+import { LiaLanguageSolid } from "react-icons/lia";
+import { IoDocumentLockOutline } from "react-icons/io5";
+import { GrGallery } from "react-icons/gr";
+import { RiFileEditLine } from "react-icons/ri";
+import { SiGoogleads } from "react-icons/si";
+import { LuNewspaper } from "react-icons/lu";
+import { BiSolidCategoryAlt } from "react-icons/bi";
+import { ImFilesEmpty } from "react-icons/im";
+import { FaRegBookmark } from "react-icons/fa6";
+import { GiBookPile } from "react-icons/gi";
+import { LuFileClock } from "react-icons/lu";
+import { MdOutlineContactSupport } from "react-icons/md";
 import {
   FaAngleDown,
   FaBars,
@@ -72,6 +86,7 @@ const Navbar = () => {
   const [fields, setFields] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTagId, setSelectedTagId] = useState("");
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   // const [isSticky,setIsSticky] = useState(false)
   const user = useSelector((state) => state.user);
@@ -104,6 +119,25 @@ const Navbar = () => {
     { label: "V clips", href: "/vClips", icon: <FaVideo /> },
     { label: "Use App", href: "/useApp", icon: <FaMobileAlt /> },
   ];
+  const menuItems = [
+    { name: "Select Location", icon: <FaLocationDot />, path: "/location" },
+    { name: "Language", icon: <LiaLanguageSolid />, path: "/language" },
+    {
+      name: "Select Categories",
+      icon: <IoDocumentLockOutline />,
+      path: "/selectcategories",
+    },
+    { name: "Posters", icon: <GrGallery />, path: "/posters" },
+    { name: "Post A News", icon: <RiFileEditLine />, path: "/postnews" },
+    { name: "Ads", icon: <SiGoogleads />, path: "/ads" },
+    { name: "Local News", icon: <LuNewspaper />, path: "/localnews" },
+    { name: "Categories", icon: <BiSolidCategoryAlt />, path: "/categories" },
+    { name: "Refferal", icon: <ImFilesEmpty />, path: "/referral" },
+    { name: "Bookmarks", icon: <FaRegBookmark />, path: "/bookmark" },
+    { name: "Magazines", icon: <GiBookPile />, path: "/magazine" },
+    { name: "Quizes", icon: <LuFileClock />, path: "/quizes" },
+    { name: "Contact Us", icon: <MdOutlineContactSupport />, path: "/contact" },
+  ];
 
   const fetchfields = async (e) => {
     setSearchQuery(e.target.value);
@@ -112,16 +146,28 @@ const Navbar = () => {
     try {
       const response = await axios.post(`${BASE_URL}/common/tags`, {
         key: searchQuery,
-        type: "new",
+        type: "news",
         version: "new",
       });
 
       console.log(response.data.data);
       setFields(response.data.data || []);
     } catch (error) {
-      console.log("Error in fetching comments:", error);
+      console.log("Error in fetching :", error);
     }
     setLoading(false);
+  };
+  const setTag = async (id) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/common/getTagData`, {
+        tag_id: id,
+        version: "new",
+      });
+
+      console.log(response.data.data);
+    } catch (error) {
+      console.log("Error in fetching tag details :", error);
+    }
   };
 
   useEffect(() => {
@@ -329,7 +375,10 @@ const Navbar = () => {
                       <div
                         className="bg-gray-200 dark:bg-gray-900 cursor-pointer px-2 py-1 rounded-xl"
                         onClick={() => {
-                          setSearchQuery(data.name);
+                          setSelectedTagId(data._id);
+                          if (selectedTagId) {
+                            setTag(selectedTagId);
+                          }
                         }}
                       >
                         {data.name}
@@ -376,11 +425,11 @@ const Navbar = () => {
               </div>
 
               <nav className="flex flex-col justify-start gap-2 mt-6">
-                {navItems.map((item, index) => (
+                {menuItems.map((item, index) => (
                   <React.Fragment key={index}>
                     {item.items ? (
                       <Dropdown
-                        label={item.label}
+                        label={item.name}
                         items={item.items}
                         icon={item.icon}
                         isMobile={true}
@@ -389,12 +438,12 @@ const Navbar = () => {
                       />
                     ) : (
                       <Link
-                        to={item.href}
+                        to={item.path}
                         className="flex items-center gap-2 py-2 px-3 font-semibold text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors duration-200"
                         onClick={toggleMobileMenu}
                       >
                         {item.icon}
-                        {item.label}
+                        {item.name}
                       </Link>
                     )}
                   </React.Fragment>
