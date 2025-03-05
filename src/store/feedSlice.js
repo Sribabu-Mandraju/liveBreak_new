@@ -49,7 +49,8 @@ export const updatePostLike = createAsyncThunk(
         },
         {
           headers: {
-            "X-News-Token": token,
+            "X-News-Token":
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdzX3VzZXJfZGF0YSI6eyJpZCI6IjYyMzZiZWQ5NzcwNDlmMDM1MGQ5OWZmMyJ9LCJpYXQiOjE3NDExNDk1NTIsImV4cCI6MTc3MjY4NTU1Mn0.6zvHQznRR-VriD3Gd8iGxLkeLE1weqvM0Pl0t7ykaZE",
           },
         }
       );
@@ -73,6 +74,54 @@ export const updatePostLike = createAsyncThunk(
       );
       return rejectWithValue(
         error.response?.data?.message || "Failed to update like"
+      );
+    }
+  }
+);
+
+// Add new async thunk for handling dislikes
+export const updatePostDislike = createAsyncThunk(
+  "feed/updatePostDislike",
+  async ({ post_id }, { rejectWithValue, getState }) => {
+    try {
+      const token = getState().auth.token;
+      if (!token) {
+        return rejectWithValue("No authentication token found");
+      }
+
+      const response = await axios.post(
+        `${BASE_URL}/news/post/dislike`,
+        {
+          post_id,
+          version: "new",
+        },
+        {
+          headers: {
+            "X-News-Token":
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdzX3VzZXJfZGF0YSI6eyJpZCI6IjYyMzZiZWQ5NzcwNDlmMDM1MGQ5OWZmMyJ9LCJpYXQiOjE3NDExNDk1NTIsImV4cCI6MTc3MjY4NTU1Mn0.6zvHQznRR-VriD3Gd8iGxLkeLE1weqvM0Pl0t7ykaZE",
+          },
+        }
+      );
+
+      // Check if response has the expected structure
+      if (!response.data || !response.data.data || !response.data.data.post) {
+        return rejectWithValue("Invalid response format from server");
+      }
+
+      return {
+        post_id,
+        likes: response.data.data.post.likes,
+        liked_users: response.data.data.post.liked_users,
+        dislikes: response.data.data.post.dislikes,
+        disliked_users: response.data.data.post.disliked_users,
+      };
+    } catch (error) {
+      console.error(
+        "Dislike update error:",
+        error.response?.data || error.message
+      );
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to update dislike"
       );
     }
   }
@@ -129,6 +178,25 @@ const feedSlice = createSlice({
       })
       .addCase(updatePostLike.rejected, (state, action) => {
         console.error("Error updating like:", action.payload);
+      })
+      .addCase(updatePostDislike.fulfilled, (state, action) => {
+        const {
+          post_id,
+          likes,
+          liked_users,
+          dislikes,
+          disliked_users,
+        } = action.payload;
+        const post = state.posts.find((post) => post._id === post_id);
+        if (post) {
+          post.likes = likes;
+          post.liked_users = liked_users;
+          post.dislikes = dislikes;
+          post.disliked_users = disliked_users;
+        }
+      })
+      .addCase(updatePostDislike.rejected, (state, action) => {
+        console.error("Error updating dislike:", action.payload);
       });
   },
 });

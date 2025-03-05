@@ -27,7 +27,8 @@ export const fetchLocalNews = createAsyncThunk(
         },
         {
           headers: {
-            "X-News-Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdzX3VzZXJfZGF0YSI6eyJpZCI6IjY3YzZjZmUzYmUwZTdkZjYzNGY5YzZjZCJ9LCJpYXQiOjE3NDEwODU4NTAsImV4cCI6MTc3MjYyMTg1MH0.Z7EzuZ42NEs12THDDUmiFpUBMxkcPW2gboJSs2EPcb4",
+            "X-News-Token":
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdzX3VzZXJfZGF0YSI6eyJpZCI6IjY3YzZjZmUzYmUwZTdkZjYzNGY5YzZjZCJ9LCJpYXQiOjE3NDEwODU4NTAsImV4cCI6MTc3MjYyMTg1MH0.Z7EzuZ42NEs12THDDUmiFpUBMxkcPW2gboJSs2EPcb4",
           },
         }
       );
@@ -63,7 +64,8 @@ export const updateLocalNewsLike = createAsyncThunk(
         },
         {
           headers: {
-            "X-News-Token": token,
+            "X-News-Token":
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdzX3VzZXJfZGF0YSI6eyJpZCI6IjYyMzZiZWQ5NzcwNDlmMDM1MGQ5OWZmMyJ9LCJpYXQiOjE3NDExNDk1NTIsImV4cCI6MTc3MjY4NTU1Mn0.6zvHQznRR-VriD3Gd8iGxLkeLE1weqvM0Pl0t7ykaZE",
           },
         }
       );
@@ -86,6 +88,53 @@ export const updateLocalNewsLike = createAsyncThunk(
       );
       return rejectWithValue(
         error.response?.data?.message || "Failed to update like"
+      );
+    }
+  }
+);
+
+// Add new async thunk for handling dislikes in local news
+export const updateLocalNewsDislike = createAsyncThunk(
+  "localNews/updateLocalNewsDislike",
+  async ({ post_id }, { rejectWithValue, getState }) => {
+    try {
+      const token = getState().auth.token;
+      if (!token) {
+        return rejectWithValue("No authentication token found");
+      }
+
+      const response = await axios.post(
+        `${BASE_URL}/news/post/dislike`,
+        {
+          post_id,
+          version: "new",
+        },
+        {
+          headers: {
+            "X-News-Token":
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdzX3VzZXJfZGF0YSI6eyJpZCI6IjYyMzZiZWQ5NzcwNDlmMDM1MGQ5OWZmMyJ9LCJpYXQiOjE3NDExNDk1NTIsImV4cCI6MTc3MjY4NTU1Mn0.6zvHQznRR-VriD3Gd8iGxLkeLE1weqvM0Pl0t7ykaZE",
+          },
+        }
+      );
+
+      if (!response.data || !response.data.data || !response.data.data.post) {
+        return rejectWithValue("Invalid response format from server");
+      }
+
+      return {
+        post_id,
+        likes: response.data.data.post.likes,
+        liked_users: response.data.data.post.liked_users,
+        dislikes: response.data.data.post.dislikes,
+        disliked_users: response.data.data.post.disliked_users,
+      };
+    } catch (error) {
+      console.error(
+        "Dislike update error:",
+        error.response?.data || error.message
+      );
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to update dislike"
       );
     }
   }
@@ -155,6 +204,25 @@ const localNewsSlice = createSlice({
       })
       .addCase(updateLocalNewsLike.rejected, (state, action) => {
         console.error("Error updating like:", action.payload);
+      })
+      .addCase(updateLocalNewsDislike.fulfilled, (state, action) => {
+        const {
+          post_id,
+          likes,
+          liked_users,
+          dislikes,
+          disliked_users,
+        } = action.payload;
+        const post = state.posts.find((post) => post._id === post_id);
+        if (post) {
+          post.likes = likes;
+          post.liked_users = liked_users;
+          post.dislikes = dislikes;
+          post.disliked_users = disliked_users;
+        }
+      })
+      .addCase(updateLocalNewsDislike.rejected, (state, action) => {
+        console.error("Error updating dislike:", action.payload);
       });
   },
 });
