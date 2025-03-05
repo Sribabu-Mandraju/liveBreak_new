@@ -1,8 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { updatePostLike } from "../../../store/feedSlice";
-import { updatePostDislike } from "../../../store/feedSlice";
+import {
+  updateLocalNewsDislike,
+  updateLocalNewsLike,
+} from "../../../store/localNewsSlice";
 import {
   FaRegThumbsUp,
   FaRegComment,
@@ -17,7 +19,7 @@ import toast from "react-hot-toast";
 import Drawer from "../../shadcnui/Drawer";
 import { IoShareSocialOutline } from "react-icons/io5";
 
-const InteractionButtons = ({
+const LocalNewsInteraction = ({
   likes = 0,
   dislikes = 0,
   views = 0,
@@ -87,7 +89,7 @@ const InteractionButtons = ({
 
     try {
       setLikeLoading(true);
-      const result = await dispatch(updatePostLike({ post_id })).unwrap();
+      const result = await dispatch(updateLocalNewsLike({ post_id })).unwrap();
       if (result.likes !== undefined) {
         toast.success(isLiked ? "Like removed" : "Post liked successfully!");
       }
@@ -107,7 +109,9 @@ const InteractionButtons = ({
 
     try {
       setLikeLoading(true);
-      const result = await dispatch(updatePostDislike({ post_id })).unwrap();
+      const result = await dispatch(
+        updateLocalNewsDislike({ post_id })
+      ).unwrap();
       if (result.dislikes !== undefined) {
         toast.success(
           isDisliked ? "Dislike removed" : "Post disliked successfully!"
@@ -326,4 +330,4 @@ const InteractionButtons = ({
   );
 };
 
-export default InteractionButtons;
+export default LocalNewsInteraction;

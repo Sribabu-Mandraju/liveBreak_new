@@ -7,6 +7,7 @@ import {
   clearLocalNews,
   setLocationInfo,
 } from "../../store/localNewsSlice";
+import LocalNewsCard from "./LocalNewsCard";
 
 const SkeletonLoader = () => (
   <div className="bg-white dark:bg-gray-900 mt-3 rounded-lg shadow-lg p-4 w-[93%] md:w-full mx-auto border dark:border-gray-700 animate-pulse">
@@ -104,25 +105,10 @@ const LocalNewsFeed = ({ locationData }) => {
 
   return (
     <div className="flex flex-col items-center w-full">
-      {/* Location Info Display */}
-      {/* <div className="w-full bg-white dark:bg-gray-800 p-4 mb-4 rounded-lg shadow">
-        <h2 className="text-xl font-semibold">
-          Local News - {locationInfo.location_name}
-        </h2>
-        <div className="text-sm text-gray-600 dark:text-gray-400">
-          <p>State: {locationData.state}</p>
-          {locationData.district && <p>District: {locationData.district}</p>}
-          {locationData.mandal && <p>Mandal: {locationData.mandal}</p>}
-          {locationData.village?.name && (
-            <p>Village: {locationData.village.name}</p>
-          )}
-        </div>
-      </div> */}
-
       {/* News Posts */}
       {posts.length > 0 ? (
         posts.map((post, index) => (
-          <NewsCard key={post._id || index} data={post} />
+          <LocalNewsCard key={post._id || index} data={post} />
         ))
       ) : (
         <p className="text-gray-600 dark:text-gray-300">
