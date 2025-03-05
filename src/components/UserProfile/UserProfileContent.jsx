@@ -3,28 +3,30 @@ import { FaCheckCircle, FaEdit } from "react-icons/fa";
 import { FaCircleCheck } from "react-icons/fa6";
 import { IoArrowBackCircle } from "react-icons/io5";
 import axios from "axios";
-
+import NewsCard from "../News/NewsCard";
 import { useSelector } from "react-redux";
-
+import PostCard from './Posts/PostCard'
 const UserProfileContent = ({ data }) => {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({});
+  const [userPosts, setUserPosts] = useState({});
   const [activeTab, setActiveTab] = useState("Home");
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollY, setScrollY] = useState(0);
 
- 
-
   useEffect(() => {
     const fetchUser = async () => {
-        if (!data) return;
+      if (!data) return;
       setLoading(true);
       try {
-        const response = await axios.post(`${BASE_URL}/common/getReporterData`, {
-          news_user_id: data,
-          version: "new",
-        });
+        const response = await axios.post(
+          `${BASE_URL}/common/getReporterData`,
+          {
+            news_user_id: data,
+            version: "new",
+          }
+        );
         setUser(response.data?.data || {});
       } catch (error) {
         console.error("Error in fetching user:", error);
@@ -35,12 +37,33 @@ const UserProfileContent = ({ data }) => {
     fetchUser();
   }, [data, BASE_URL]);
 
- 
+  useEffect(() => {
+    const fetchUserPosts = async () => {
+      if (!data) return;
+      setLoading(true);
+      try {
+        const response = await axios.post(`${BASE_URL}/common/feed `, {
+          post_id: "",
+          last_id: "",
+          type: "",
+          bookmarks: false,
+          tag_id: "",
+          posted_by: data,
+          isReporter: true,
+          version: "new",
+        });
+        setUserPosts(response.data?.data || {});
+      } catch (error) {
+        console.error("Error in fetching user posts:", error);
+      }
+      setLoading(false);
+    };
+
+    fetchUserPosts();
+  }, [data, BASE_URL]);
 
   const userDetails = user?.details || {};
   const userStats = user?.stats || {};
-
-  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,12 +75,10 @@ const UserProfileContent = ({ data }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-   // Avatar size with smooth transition
-   const avatarSize = Math.max(68, 100 - scrollY * 0.5);
-   const translateY = isScrolled ? 0 : Math.min(0, scrollY - 80);
-   const translateX = isScrolled ? 0 : Math.min(0, scrollY - 100);
-
-  
+  // Avatar size with smooth transition
+  const avatarSize = Math.max(68, 100 - scrollY * 0.5);
+  const translateY = isScrolled ? 0 : Math.min(0, scrollY - 80);
+  const translateX = isScrolled ? 0 : Math.min(0, scrollY - 100);
 
   return (
     <div className="relative w-full md:max-w-7xl mx-auto container min-h-screen flex gap-4">
@@ -74,22 +95,21 @@ const UserProfileContent = ({ data }) => {
           >
             <h1 className="text-lg sm:text-lg font-semibold">
               <span className="sm:hidden">
-              {userDetails?.user?.name.slice(0,12) || "Unknown User"}...
+                {userDetails?.user?.name.slice(0, 12) || "Unknown User"}...
               </span>
-              <span className="hidden sm:inline">{userDetails?.user?.name || "Unknown User"}</span>
+              <span className="hidden sm:inline">
+                {userDetails?.user?.name || "Unknown User"}
+              </span>
             </h1>
             <h1 className="text-sm text-gray-500">
-            {userDetails?.reporter_type || "Unknown Type"}
+              {userDetails?.reporter_type || "Unknown Type"}
             </h1>
           </div>
         </div>
 
         {/* Cover and Avatar */}
         <div className="relative bg-gray-100 dark:bg-gray-800">
-          <img
-            src={"/default-avatar.png"}
-            className="h-40 sm:h-56 w-full"
-          />
+          <img src={"/default-avatar.png"} className="h-40 sm:h-56 w-full" />
           <img
             src={userDetails?.user?.profile_icon || "/default-avatar.png"}
             alt="Avatar"
@@ -113,22 +133,21 @@ const UserProfileContent = ({ data }) => {
             <div className="flex flex-col gap-1  w-full">
               <div className="flex flex-row  w-full items-center gap-2">
                 <div className="text-xl   sm:text-xl font-semibold ">
-                {userDetails?.user?.name || "Unknown User"}
+                  {userDetails?.user?.name || "Unknown User"}
                 </div>
-               
               </div>
               <div className="flex flex-row justify-between items-center">
-               
-              <p className="text-gray-500"> {userStats?.posted || 0} Posts</p>
-              <p className="mt-2 text-gray-500">{userStats?.verified || 0}  verified </p>
-              <p className="mt-2 text-gray-500">{userStats?.rejected || 0}  rejected </p>
-              
-              <div>
-            
-              </div>
+                <p className="text-gray-500"> {userStats?.posted || 0} Posts</p>
+                <p className="mt-2 text-gray-500">
+                  {userStats?.verified || 0} verified{" "}
+                </p>
+                <p className="mt-2 text-gray-500">
+                  {userStats?.rejected || 0} rejected{" "}
+                </p>
+
+                <div></div>
               </div>
             </div>
-            
           </div>
 
           {/* Tabs Section */}
@@ -152,12 +171,16 @@ const UserProfileContent = ({ data }) => {
             ))}
           </div>
 
-          {/* Tab Content */}
-          <div className="mt-6 h-auto">
-            {activeTab === "Home" && <div>Articles</div>}
-            {activeTab === "Add News" && <div>Articles</div>}
-            {activeTab === "Posted News" && <div>Articles</div>}
-            {activeTab === "Top 10" && <div>Articles</div>}
+          <div className="flex flex-col gap-2 min-h-screen">
+            <div>
+              <div className="text-lg font-semibold   text-blue-800">Posts</div>
+              <div className="border-b border-2 border-blue-500 w-10 mt-1 mb-6"></div>
+            </div>
+            <div >
+              <PostCard data={data}/>
+
+              
+            </div>
           </div>
         </div>
       </div>

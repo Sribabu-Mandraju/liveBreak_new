@@ -21,7 +21,7 @@ const Model = ({ isOpen, onClose, title, children }) => {
           <MdClose/>
         </button>
         {title && <h2 className="text-2xl mb-4 font-semibold">{title}</h2>}
-        <div className="">{children}</div>
+        <div className="w-auto">{children}</div>
       </div>
     </div>
   );
