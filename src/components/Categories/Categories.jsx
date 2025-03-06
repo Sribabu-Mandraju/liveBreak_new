@@ -33,16 +33,16 @@ const Categories = () => {
 
   const CategoriesSkeleton =()=>(
     <div className="animate-pulse">
-      <div className="flex flex-wrap justify-center gap-6 px-6 py-4">
+      <div className="flex flex-wrap justify-between gap-6 px-6 py-4">
       {
          Array.from({ length: 10 }).map((_, index) => (
           
           <div
             key={index}
-            className="flex flex-col border justify-center items-center p-2 w-24 rounded-lg  bg-gray-200 animate-pulse"
+            className="flex flex-col  justify-center items-center p-2 w-24 rounded-lg dark:bg-gray-800 bg-gray-200 animate-pulse"
           >
-            <div className="w-12 h-12 bg-gray-300 rounded-full mb-2"></div>
-            <div className="w-16 h-4 bg-gray-300 rounded"></div>
+            <div className="w-12 h-12 dark:bg-gray-700 bg-gray-300 rounded-full mb-2"></div>
+            <div className="w-16 h-4 dark:bg-gray-700 bg-gray-300 rounded"></div>
           </div>
         ))
       }
@@ -73,7 +73,7 @@ const Categories = () => {
             loading ? 
             <CategoriesSkeleton/> :
             categories.map((data)=>(
-              <div className="flex flex-col border justify-center items-center p-2 rounded-lg w-24 duration-200 dark:hover:text-white dark:hover:bg-blue-500 border-gray-200 cursor-pointer bg-gray-100 hover:bg-gray-200">
+              <div className="flex flex-col border justify-center items-center p-2 rounded-lg w-24 duration-200 dark:hover:text-white dark:hover:bg-blue-500 border-gray-200 cursor-pointer dark:border-gray-800 dark:bg-gray-800 bg-gray-100 hover:bg-gray-200">
                 <div className="w-full text-center  flex justify-center items-center">
                   <img src={data.icon} className="w-12 h-12 " />
                 </div>
