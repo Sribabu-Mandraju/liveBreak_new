@@ -150,7 +150,7 @@ const Layout = ({ children }) => {
                     Post
                   </button>
                 </div>
-                { user && (
+                {/* { user && (
 
                 <div className="flex flex-row items-center mt-6  gap-12 justify-between w-full">
                   <div className="flex items-center gap-4 ">
@@ -177,7 +177,7 @@ const Layout = ({ children }) => {
                   </button>
                   </div>
                 </div>
-                )}
+                )} */}
               </div>
 
               {/* Mobile Bottom Menu */}
