@@ -6,7 +6,7 @@ import Navbar from "./Navbar";
 import axios from "axios";
 import Trending from "../Home/Trending";
 import { FaLocationDot } from "react-icons/fa6";
-
+import Model from "../shadcnui/Model";
 import { LiaLanguageSolid } from "react-icons/lia";
 import { IoDocumentLockOutline } from "react-icons/io5";
 import { GrGallery } from "react-icons/gr";
@@ -25,7 +25,7 @@ import { useTheme } from "../../providers/ThemeProvider";
 
 const menuItems = [
   { name: "Select Location", icon: <FaLocationDot />, path: "newscard" },
-  { name: "Language", icon: <LiaLanguageSolid />, path: "newscard2" },
+  { name: "Language", icon: <LiaLanguageSolid />, action: "openLanguageModal" },
   {
     name: "Select Categories",
     icon: <IoDocumentLockOutline />,
@@ -80,8 +80,37 @@ const Breadcrumb = () => {
 const Layout = ({ children }) => {
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
+  const navigate = useNavigate();
   const isActive = (path) => location.pathname.includes(path);
   const user = useSelector((state) => state.user);
+  const [isLanguageModalOpen, setLanguageModalOpen] = useState(false);
+  const [lang, setLang] = useState(null);
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const [loading, setLoading] = useState(false);
+
+
+  const handleMenuClick = (item) => {
+    console.log("what happen")
+    if (item.action === "openLanguageModal") {
+      setLanguageModalOpen(true);
+      fetchLang();
+    } else if (item.path) {
+      navigate(`/${item.path}`);
+    }
+  };
+
+
+  const fetchLang = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${BASE_URL}/common/languagelist`);
+      setLang(response.data?.data || null);
+    } catch (error) {
+      console.error("Error in fetching languages:", error);
+    }
+    setLoading(false);
+  };
+
   return (
     <div className="w-full max-w-7xl mx-auto flex-col justify-center items-center flex gap-4">
       <div>
@@ -93,14 +122,14 @@ const Layout = ({ children }) => {
           <div className="border border-zinc-700 rounded-md h-full overflow-hidden">
             <div>
               {/* Desktop Side Menu */}
-              <div className="hidden  md:flex h-[calc(100vh-70px)] w-64 px-4 py-6 flex-col  transition-all duration-300">
-                <div>
+              <div className="hidden  md:flex h-[calc(100vh-70px)] w-64  px-4 py-6 flex-col  transition-all duration-300">
+                <div className="">
                   <ul>
                     {menuItems.map((item, index) => (
-                      <li key={index} className="mb-1">
-                        <a
-                          href={item.path}
-                          className={`flex items-center gap-4 p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all
+                      <li key={index} className="mb-1 ">
+                        <button
+                          onClick={() => handleMenuClick(item)}
+                          className={`flex items-center gap-4 p-2 w-full rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all
                                 ${
                                   isActive(item.path)
                                     ? "bg-blue-100 dark:bg-blue-400 dark:text-white text-blue-600"
@@ -112,7 +141,7 @@ const Layout = ({ children }) => {
                           <span className="text-base font-medium">
                             {item.name}
                           </span>
-                        </a>
+                        </button>
                       </li>
                     ))}
                   </ul>
@@ -179,7 +208,35 @@ const Layout = ({ children }) => {
         </div>
       </div>
 
-      {/* Trending */}
+      {isLanguageModalOpen && (
+        <Model
+          isOpen={isLanguageModalOpen}
+          onClose={() => setLanguageModalOpen(false)}
+          title="Select Language"
+        >
+          <div className="flex flex-wrap gap-6 mt-8 ">
+            {
+              lang && (
+                lang.map((data,index)=>(
+                  <div className="flex justify-center items-center cursor-pointer duration-300 dark:hover:bg-gray-700 hover:bg-gray-200 px-8 py-1 border rounded-lg focus:border-blue-500">
+                    <div className="flex gap-2  flex-row">
+                      <div>
+                        <img src={data.icon} alt="lang_icon" className="w-[30px] " />
+                      </div>
+                      <div>
+                        {data.name}
+                      </div>
+
+                    </div>
+
+                  </div>
+                ))
+              )
+            }
+
+          </div>
+        </Model>
+      )}
     </div>
   );
 };

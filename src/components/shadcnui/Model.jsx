@@ -23,7 +23,7 @@ const Model = ({ isOpen, onClose, title, children }) => {
           </button>
         </div>
         {title && <h2 className="text-2xl mb-4 font-semibold">{title}</h2>}
-        <div className="">{children}</div>
+        <div className="w-auto">{children}</div>
       </div>
     </div>
   );

@@ -4,6 +4,8 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import Drawer from '../shadcnui/Drawer'
 import { useSelector } from "react-redux";
+import { SiWhatsapp } from "react-icons/si";
+import { FaRegShareFromSquare } from "react-icons/fa6";
 const Group = () => {
   const user = useSelector((state) => state.user);
   const [isCreate,setIsCreate]=useState(false);
@@ -17,13 +19,20 @@ const Group = () => {
               <Drawer open={isCreate}
               onOpenChange={setIsCreate}
               title="Contact us for creating communities.">
-                <div className="flex flex-col p-4">
+                <div className="flex flex-col gap-2 p-4">
                   
-                  <div className="flex flex-col gap-4  ">
-                    <div>
+                  <div className="flex flex-col gap-4 mt-6 ">
+                    <div className="flex flex-row justify-around">
+                    <div className="flex flex-row items-center gap-4">
+                      <SiWhatsapp className="text-green-600"/>
                       Whats app
                     </div>
                     <div>
+                      <FaRegShareFromSquare/>
+
+                    </div>
+                    </div>
+                    <div className="text-gray-400">
                     At the moment we are only allowing Political parties and Educational Institutes.
                     </div>
 
