@@ -77,7 +77,7 @@ const App = () => {
           <Route path="/categories" element={<CategorySettingsPage />} />
           <Route path="/selectCategories" element={<CategorySet />} />
           {/* <Route path="/categories" element={<Categories />} /> */}
-          <Route path="/quizzes" element={<Quizzes />} />
+          <Route path="/quizes" element={<Quizzes />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>

@@ -15,11 +15,13 @@ const Quiz = () => {
     const fetchQuizzes = async () => {
       setLoading(true);
       try {
-        const response = await axios.post(`${BASE_URL}/news/feed/post_type `, {
-          post_type: "Quiz",
-          version: "new",
-        },
-        {
+        const response = await axios.post(
+          `${BASE_URL}/news/feed/post_type `,
+          {
+            post_type: "Quiz",
+            version: "new",
+          },
+          {
             headers: {
               "X-News-Token": token,
             },
@@ -35,39 +37,53 @@ const Quiz = () => {
   }, [BASE_URL]);
 
   return (
-    <div className="relative w-full  md:max-w-7xl mx-auto container min-h-screen flex gap-4 dark:text-[#1189F6]">
-      <div className="flex flex-col items-center bg-white  dark:bg-gray-900 p-4 rounded-lg shadow-lg w-full max-w-4xl mx-auto sm:border dark:border-gray-700">
-        <div className=" w-full px-4 flex flex-row gap-8 py-2 items-center ">
-          <IoArrowBackCircle className="text-2xl text-blue-500" />
-
-          <div className="text-xl font-semibold">Quiz</div>
-        </div>
-
-        <div className="w-full flex flex-col gap-2 ">
+    <div className="relative w-full md:max-w-7xl mx-auto container min-h-screen p-2 sm:p-4 bg-gray-50 dark:bg-gray-800">
+      <div className="flex flex-col items-center bg-white dark:bg-gray-900 p-3 sm:p-6 rounded-xl shadow-xl w-full max-w-4xl mx-auto sm:border dark:border-gray-700">
+        <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800 dark:text-white">
+          Available Quizzes
+        </h1>
+        <div className="w-full flex flex-col gap-3 sm:gap-4">
           {quizzes.map((quiz, index) => (
             <div
               key={index}
-              className="flex items-center justify-between border-b p-2 px-4"
+              className="flex flex-col sm:flex-row items-start sm:items-center justify-between border dark:border-gray-700 rounded-lg p-3 sm:p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 w-full"
             >
-              <div className="flex items-center space-x-4">
-                <div className="flex flex-col">
-                    <div><img src="https://meenews.co/assets/imgs/timer-clock.gif" className="w-14 h-14" /></div>
-                    
-                <div className="bg-blue-500 text-white px-2  rounded">
-                  Quiz
+              <div className="flex items-start sm:items-center space-x-3 sm:space-x-6 w-full sm:w-auto">
+                <div className="flex flex-col items-center gap-2">
+                  <div className="bg-white dark:bg-gray-800 rounded-lg p-1 sm:p-2">
+                    <img
+                      src="https://meenews.co/assets/imgs/timer-clock.gif"
+                      className="w-12 h-12 sm:w-16 sm:h-16 object-cover"
+                      alt="Quiz Timer"
+                    />
+                  </div>
+                  <span className="bg-blue-500 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
+                    Quiz
+                  </span>
                 </div>
 
-                </div>
-                
-                <div>
-                  <p className="font-semibold">{quiz?.news?.title}</p>
-                  <p className="text-sm text-gray-500">
-                  {quiz?.news?.questions?.length || 0}  Questions
-                  </p>
-                  <p className="text-sm text-gray-500"> {new Date(quiz.createdAt).getFullYear()} {new Date(quiz.createdAt).toLocaleString('en-US', { month: 'long' })}</p>
+                <div className="space-y-1 sm:space-y-2 flex-1">
+                  <h2 className="font-semibold text-base sm:text-lg text-gray-800 dark:text-white line-clamp-2">
+                    {quiz?.news?.title}
+                  </h2>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                    <p className="flex items-center">
+                      <span className="mr-2">📝</span>
+                      {quiz?.news?.questions?.length || 0} Questions
+                    </p>
+                    <p className="flex items-center">
+                      <span className="mr-2">📅</span>
+                      {new Date(quiz.createdAt).toLocaleString("en-US", {
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </p>
+                  </div>
                 </div>
               </div>
-              <button className="text-green-500">RESULTS</button>
+              <button className="bg-green-500 hover:bg-green-600 text-white px-4 sm:px-6 py-1.5 sm:py-2 rounded-lg transition-colors duration-200 font-medium text-sm sm:text-base mt-3 sm:mt-0 w-full sm:w-auto">
+                RESULTS
+              </button>
             </div>
           ))}
         </div>
