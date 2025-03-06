@@ -6,6 +6,40 @@ import axios from "axios";
 import NewsCard from "../News/NewsCard";
 import { useSelector } from "react-redux";
 import PostCard from './Posts/PostCard'
+import { useInView } from "react-intersection-observer";
+
+const SkeletonLoader = () => (
+  <div className="bg-white dark:bg-gray-900 mt-3 rounded-lg shadow-lg p-4 w-full md:w-full mx-auto border dark:border-gray-700 animate-pulse">
+    
+             {/* Header Skeleton */}
+             <div className="flex items-start space-x-4">
+      <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full" />
+      <div>
+        <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded" />
+        <div className="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded mt-2" />
+      </div>
+    </div>
+
+          {/* Cover and Avatar Skeleton */}
+          <div className="relative bg-gray-100 dark:bg-gray-800">
+            <div className="h-40 sm:h-56 w-full bg-gray-300 dark:bg-gray-700"></div>
+            <div className="absolute -bottom-16 mx-6 w-32 h-32 border-4 border-black rounded-full bg-gray-300 dark:bg-gray-700"></div>
+          </div>
+
+          {/* Profile Info Skeleton */}
+          <div className="p-4 sm:p-8 mt-10">
+            <div className="flex justify-between items-center">
+              <div className="w-48 h-8 bg-gray-300 dark:bg-gray-700 rounded"></div>
+              <div className="w-60 h-6 bg-gray-300 dark:bg-gray-700 rounded"></div>
+            </div>
+            </div>
+            
+            
+  </div>
+);
+
+
+
 const UserProfileContent = ({ data }) => {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const [loading, setLoading] = useState(false);
@@ -14,53 +48,66 @@ const UserProfileContent = ({ data }) => {
   const [activeTab, setActiveTab] = useState("Home");
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.5 });
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchUserData = async () => {
       if (!data) return;
       setLoading(true);
       try {
-        const response = await axios.post(
-          `${BASE_URL}/common/getReporterData`,
-          {
+        const [userResponse, postResponse] = await Promise.all([
+          axios.post(`${BASE_URL}/common/getReporterData`, {
             news_user_id: data,
             version: "new",
-          }
-        );
-        setUser(response.data?.data || {});
+          }),
+          axios.post(`${BASE_URL}/common/feed`, {
+            post_id: "",
+            last_id: "",
+            type: "",
+            bookmarks: false,
+            tag_id: "",
+            posted_by: data,
+            isReporter: true,
+            version: "new",
+          }),
+        ]);
+        setUser(userResponse.data?.data || {});
+        setUserPosts(postResponse.data?.data || {});
       } catch (error) {
-        console.error("Error in fetching user:", error);
+        console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
+    
 
-    fetchUser();
+    fetchUserData();
   }, [data, BASE_URL]);
 
-  useEffect(() => {
-    const fetchUserPosts = async () => {
-      if (!data) return;
-      setLoading(true);
-      try {
-        const response = await axios.post(`${BASE_URL}/common/feed `, {
-          post_id: "",
-          last_id: "",
-          type: "",
-          bookmarks: false,
-          tag_id: "",
-          posted_by: data,
-          isReporter: true,
-          version: "new",
-        });
-        setUserPosts(response.data?.data || {});
-      } catch (error) {
-        console.error("Error in fetching user posts:", error);
-      }
-      setLoading(false);
-    };
+  // useEffect(() => {
+  //   const fetchUserPosts = async () => {
+  //     if (!data) return;
+  //     setLoading(true);
+  //     try {
+  //       const response = await axios.post(`${BASE_URL}/common/feed `, {
+  //         post_id: "",
+  //         last_id: "",
+  //         type: "",
+  //         bookmarks: false,
+  //         tag_id: "",
+  //         posted_by: data,
+  //         isReporter: true,
+  //         version: "new",
+  //       });
+  //       setUserPosts(response.data?.data || {});
+  //     } catch (error) {
+  //       console.error("Error in fetching user posts:", error);
+  //     }
+  //     setLoading(false);
+  //   };
 
-    fetchUserPosts();
-  }, [data, BASE_URL]);
+  //   fetchUserPosts();
+  // }, [data, BASE_URL]);
 
   const userDetails = user?.details || {};
   const userStats = user?.stats || {};
@@ -79,10 +126,23 @@ const UserProfileContent = ({ data }) => {
   const avatarSize = Math.max(68, 100 - scrollY * 0.5);
   const translateY = isScrolled ? 0 : Math.min(0, scrollY - 80);
   const translateX = isScrolled ? 0 : Math.min(0, scrollY - 100);
+  
 
   return (
     <div className="relative w-full md:max-w-7xl mx-auto container min-h-screen flex gap-4">
-      <div className="flex-1 bg-white dark:bg-gray-900 rounded-lg shadow-lg w-full max-w-4xl mx-auto sm:border dark:border-gray-700">
+      
+      
+      {loading ? (
+        <div ref={ref} className="w-full">
+          {loading && (
+            <div className="flex flex-col gap-4 w-full">
+              <SkeletonLoader />
+              <SkeletonLoader />
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="flex-1 bg-white dark:bg-gray-900 rounded-lg shadow-lg w-full max-w-4xl mx-auto sm:border dark:border-gray-700">
         {/* Header Section */}
         <div className="flex flex-row bg-white px-4 items-center sticky top-0 dark:bg-gray-900 z-20 transition-transform duration-500">
           <div className="text-blue-500 text-4xl">
@@ -95,14 +155,14 @@ const UserProfileContent = ({ data }) => {
           >
             <h1 className="text-lg sm:text-lg font-semibold">
               <span className="sm:hidden">
-                {userDetails?.user?.name.slice(0, 12) || "Unknown User"}...
+                {userDetails?.user?.name.slice(0, 12)}...
               </span>
               <span className="hidden sm:inline">
-                {userDetails?.user?.name || "Unknown User"}
+                {userDetails?.user?.name }
               </span>
             </h1>
             <h1 className="text-sm text-gray-500">
-              {userDetails?.reporter_type || "Unknown Type"}
+              {userDetails?.reporter_type }
             </h1>
           </div>
         </div>
@@ -133,7 +193,7 @@ const UserProfileContent = ({ data }) => {
             <div className="flex flex-col gap-1  w-full">
               <div className="flex flex-row  w-full items-center gap-2">
                 <div className="text-xl   sm:text-xl font-semibold ">
-                  {userDetails?.user?.name || "Unknown User"}
+                  {userDetails?.user?.name}
                 </div>
               </div>
               <div className="flex flex-row justify-between items-center">
@@ -184,6 +244,9 @@ const UserProfileContent = ({ data }) => {
           </div>
         </div>
       </div>
+      )
+
+    }
     </div>
   );
 };

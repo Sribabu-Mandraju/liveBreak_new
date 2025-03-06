@@ -355,7 +355,7 @@ const Navbar = () => {
               onClose={() => setIsFocused(false)}
               title="Search"
             >
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4 w-[96%] md:w-[600px]">
                 <div className="relative my-4">
                   <input
                     type="text"

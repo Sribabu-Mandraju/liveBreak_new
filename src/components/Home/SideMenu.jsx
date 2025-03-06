@@ -1,7 +1,18 @@
 import { useState, useEffect } from "react";
-import { FaHome, FaSearch, FaBell, FaEnvelope, FaUser, FaEllipsisH } from "react-icons/fa";
-import { IoPeopleSharp } from "react-icons/io5";
-import { MdVerified, MdOutlineRocketLaunch } from "react-icons/md";
+import { FaLocationDot } from "react-icons/fa6";
+import { LiaLanguageSolid } from "react-icons/lia";
+import { IoDocumentLockOutline } from "react-icons/io5";
+import { GrGallery } from "react-icons/gr";
+import { RiFileEditLine } from "react-icons/ri";
+import { SiGoogleads } from "react-icons/si";
+import { LuNewspaper } from "react-icons/lu";
+import { BiSolidCategoryAlt } from "react-icons/bi";
+import { ImFilesEmpty } from "react-icons/im";
+import { FaRegBookmark } from "react-icons/fa6";
+import { GiBookPile } from "react-icons/gi";
+import { LuFileClock } from "react-icons/lu";
+import { MdOutlineContactSupport } from "react-icons/md";
+
 import { BsFillPenFill } from "react-icons/bs";
 import { useTheme } from "../../providers/ThemeProvider";
 

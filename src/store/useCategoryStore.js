@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
-import useAuthStore from "./authStore";
+import useAuthStore from "./authSlice";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const API_URL = `${BASE_URL}/news/categories`;
