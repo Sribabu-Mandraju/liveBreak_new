@@ -14,10 +14,12 @@ import OTPVerification from "./auth/OtpVerficationPage";
 import Group from "./Pages/Groups/Group";
 import NotFound from "./Pages/404/NotFound";
 import Location from "./Pages/Location/Location";
-import Model from './components/shadcnui/Model'
+import Model from "./components/shadcnui/Model";
 import NewsDetails from "./components/news_details/NewsDetails";
 import LocalNews from "./Pages/local_news/LocalNews";
 import LocationAndTime from "./components/News/newsCard_components/LocationAndTime";
+import AdsPage from "./Pages/Ads/AdsPage";
+import ReferralPage from "./Pages/Referral/ReferralPage";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -58,6 +60,8 @@ const App = () => {
           <Route path="/details" element={<NewsDetails />} />
           <Route path="/local-news" element={<LocalNews />} />
           <Route path="/group" element={<Group />} />
+          <Route path="/ads" element={<AdsPage />} />
+          <Route path="/referral" element={<ReferralPage />} />
           <Route path="/location" element={<Location />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
@@ -66,8 +70,6 @@ const App = () => {
           <Route path="/user/:id" element={<UserProfile />} />
           <Route path="/magazine" element={<MagazinePage />} />
           <Route path="/*" element={<NotFound />} />
-          
-          
         </Routes>
       </BrowserRouter>
     </div>
