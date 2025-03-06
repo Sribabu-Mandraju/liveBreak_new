@@ -19,6 +19,7 @@ import NewsDetails from "./components/news_details/NewsDetails";
 import LocalNews from "./Pages/local_news/LocalNews";
 import LocationAndTime from "./components/News/newsCard_components/LocationAndTime";
 import CategorySet from "./Pages/CategorySettings/CategorySet";
+import Categories from "./Pages/Categories/Categories";
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -65,7 +66,8 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/user/:id" element={<UserProfile />} />
           <Route path="/magazine" element={<MagazinePage />} />
-          <Route path="/categories" element={<CategorySet />} />
+          <Route path="/selectCategories" element={<CategorySet />} />
+          <Route path="/categories" element={<Categories />} />
           <Route path="/*" element={<NotFound />} />
           
           
