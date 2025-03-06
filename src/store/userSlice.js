@@ -21,7 +21,7 @@ export const fetchUser = createAsyncThunk(
         },
         {
           headers: {
-            "X-Meebuddy-Token": token, // Pass token in header
+            "X-News-Token": token, // Pass token in header
           },
         }
       );
@@ -47,6 +47,10 @@ const userSlice = createSlice({
       state.error = null;
     },
   },
+
+  // "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2RhdGEiOnsiaWQiOiI1ZmZkZTk4MmZkYjEzNTM2YjdjZDMwYzkifSwiY2VudGVyX2RhdGEiOnsidmlsbGFnZV9pZCI6IjVmZmRlOTNhNTI4YmViMzUyYWZiYmU2OCIsImlkIjoiNWZmZGU5MmI2NTYzZmQzNGM0NjdlZTc0IiwiZGVsaXZlcnlfY29zdCI6MjB9LCJpYXQiOjE3NDExNjUwNjMsImV4cCI6MTc3MjcwMTA2M30.FgETDSSNbvk4Z1JrnBt9NW5uDrI1XzdpQu1VnUhUFR0"
+  // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2RhdGEiOnsiaWQiOiI1ZmZkZTk4MmZkYjEzNTM2YjdjZDMwYzkifSwiY2VudGVyX2RhdGEiOnsidmlsbGFnZV9pZCI6IjVmZmRlOTNhNTI4YmViMzUyYWZiYmU2OCIsImlkIjoiNWZmZGU5MmI2NTYzZmQzNGM0NjdlZTc0IiwiZGVsaXZlcnlfY29zdCI6MjB9LCJpYXQiOjE3NDExNjUwNjMsImV4cCI6MTc3MjcwMTA2M30.FgETDSSNbvk4Z1JrnBt9NW5uDrI1XzdpQu1VnUhUFR0
+
   extraReducers: (builder) => {
     builder
       .addCase(fetchUser.pending, (state) => {

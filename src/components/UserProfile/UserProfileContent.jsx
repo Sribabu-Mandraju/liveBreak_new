@@ -128,6 +128,49 @@ const UserProfileContent = ({ data }) => {
   const translateX = isScrolled ? 0 : Math.min(0, scrollY - 100);
   
 
+  // Skeleton loading component
+  const ProfileSkeleton = () => (
+    <div className="animate-pulse">
+      {/* Header Skeleton */}
+      <div className="flex flex-row bg-white px-4 items-center sticky top-0 dark:bg-gray-900 z-20">
+        <div className="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+        <div className="flex flex-col px-4 py-2">
+          <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded"></div>
+          <div className="h-3 w-24 bg-gray-200 dark:bg-gray-700 rounded mt-2"></div>
+        </div>
+      </div>
+
+      {/* Cover and Avatar Skeleton */}
+      <div className="relative">
+        <div className="h-56 w-full bg-gray-200 dark:bg-gray-700"></div>
+        <div className="absolute -bottom-16 mx-6 w-24 h-24 rounded-full bg-gray-200 dark:bg-gray-700 border-4 border-white dark:border-gray-900"></div>
+      </div>
+
+      {/* Profile Info Skeleton */}
+      <div className="p-8 mt-10">
+        <div className="flex flex-col gap-4">
+          <div className="h-6 w-48 bg-gray-200 dark:bg-gray-700 rounded"></div>
+          <div className="flex gap-4">
+            <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Update the return statement to show skeleton while loading
+  if (loading) {
+    return (
+      <div className="relative w-full md:max-w-7xl mx-auto container min-h-screen flex gap-4">
+        <div className="flex-1 bg-white dark:bg-gray-900 rounded-lg shadow-lg w-full max-w-4xl mx-auto sm:border dark:border-gray-700">
+          <ProfileSkeleton />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative w-full md:max-w-7xl mx-auto container min-h-screen flex gap-4">
       
@@ -236,10 +279,8 @@ const UserProfileContent = ({ data }) => {
               <div className="text-lg font-semibold   text-blue-800">Posts</div>
               <div className="border-b border-2 border-blue-500 w-10 mt-1 mb-6"></div>
             </div>
-            <div >
-              <PostCard data={data}/>
-
-              
+            <div>
+              <PostCard data={data} />
             </div>
           </div>
         </div>

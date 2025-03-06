@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import {MdClose} from "react-icons/md";
+import { MdClose } from "react-icons/md";
 const Model = ({ isOpen, onClose, title, children }) => {
   useEffect(() => {
     const handleEscape = (e) => {

@@ -6,9 +6,10 @@ import SearchInput from "./location/SearchInput";
 import SearchResults from "./location/SearchResults";
 import DefaultOptions from "./location/DefaultOptions";
 import FavoriteLocations from "./location/FavoriteLocations";
-
+import { useNavigate } from "react-router-dom";
 
 function LocationSelector() {
+  const navigate = useNavigate();
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth.token);
@@ -71,8 +72,8 @@ function LocationSelector() {
 
   // Select a location and save globally
   const handleSelectLocation = async (village_id) => {
-    dispatch(selectLocation({ village_id, token }));
-    
+    await dispatch(selectLocation({ village_id, token }));
+    navigate("/");
   };
 
   if (status === "failed") {
@@ -87,7 +88,7 @@ function LocationSelector() {
 
   return (
     <div className="">
-      <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-xl">
+      <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 rounded-2xl ">
         <h2 className="text-xl font-bold text-center text-[#1189F6]">
           Enter your location
         </h2>
