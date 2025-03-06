@@ -8,7 +8,7 @@ import Home from "./Pages/main/Home";
 import Signup from "./auth/Register";
 import Profile from "./Pages/Profile/Profile";
 import UserProfile from "./Pages/UserProfile/UserProfile";
-import MagazinePage from "./Pages/Magazine/MagazinePage";
+import MagazinePage from "./Pages/magazine/MagazinePage";
 import Signin from "./auth/Login";
 import OTPVerification from "./auth/OtpVerficationPage";
 import Group from "./Pages/Groups/Group";
@@ -20,6 +20,7 @@ import LocalNews from "./Pages/local_news/LocalNews";
 import LocationAndTime from "./components/News/newsCard_components/LocationAndTime";
 import AdsPage from "./Pages/Ads/AdsPage";
 import ReferralPage from "./Pages/Referral/ReferralPage";
+import CategorySettingsPage from "./Pages/CategorySettings/CategorySet";
 
 import CategorySet from "./Pages/CategorySettings/CategorySet";
 import Categories from "./Pages/Categories/Categories";
@@ -62,7 +63,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/details" element={<NewsDetails />} />
-          <Route path="/local-news" element={<LocalNews />} />
+          <Route path="/localnews" element={<LocalNews />} />
           <Route path="/group" element={<Group />} />
           <Route path="/ads" element={<AdsPage />} />
           <Route path="/referral" element={<ReferralPage />} />
@@ -73,8 +74,9 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/user/:id" element={<UserProfile />} />
           <Route path="/magazine" element={<MagazinePage />} />
+          <Route path="/categories" element={<CategorySettingsPage />} />
           <Route path="/selectCategories" element={<CategorySet />} />
-          <Route path="/categories" element={<Categories />} />
+          {/* <Route path="/categories" element={<Categories />} /> */}
           <Route path="/quizzes" element={<Quizzes />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/*" element={<NotFound />} />
