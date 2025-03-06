@@ -51,16 +51,16 @@ const Quiz = () => {
             >
               <div className="flex items-center space-x-4">
                 <div className="flex flex-col">
-                    <div><img src={quiz?.news?.category?.icon}  /></div>
+                    <div><img src="https://meenews.co/assets/imgs/timer-clock.gif" className="w-14 h-14" /></div>
                     
-                <div className="bg-blue-500 text-white px-2 py-1 rounded">
+                <div className="bg-blue-500 text-white px-2  rounded">
                   Quiz
                 </div>
 
                 </div>
                 
                 <div>
-                  <p className="font-semibold">{quiz.title}</p>
+                  <p className="font-semibold">{quiz?.news?.title}</p>
                   <p className="text-sm text-gray-500">
                   {quiz?.news?.questions?.length || 0}  Questions
                   </p>
