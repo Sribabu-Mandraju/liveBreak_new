@@ -24,6 +24,8 @@ import CategorySettingsPage from "./Pages/CategorySettings/CategorySet";
 
 import CategorySet from "./Pages/CategorySettings/CategorySet";
 import Categories from "./Pages/Categories/Categories";
+import Quizzes from './Pages/Quizzes/Quizzes';
+import Contact from './Pages/Contact/Contact'
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -74,6 +76,9 @@ const App = () => {
           <Route path="/magazine" element={<MagazinePage />} />
           <Route path="/categories" element={<CategorySettingsPage />} />
           <Route path="/selectCategories" element={<CategorySet />} />
+          {/* <Route path="/categories" element={<Categories />} /> */}
+          <Route path="/quizzes" element={<Quizzes />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

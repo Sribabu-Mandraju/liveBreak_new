@@ -39,7 +39,7 @@ const menuItems = [
   { name: "Refferal", icon: <ImFilesEmpty />, path: "referral" },
   { name: "Bookmarks", icon: <FaRegBookmark />, path: "bookmark" },
   { name: "Magazines", icon: <GiBookPile />, path: "magazine" },
-  { name: "Quizes", icon: <LuFileClock />, path: "quizes" },
+  { name: "Quizes", icon: <LuFileClock />, path: "quizzes" },
   { name: "Contact Us", icon: <MdOutlineContactSupport />, path: "contact" },
 ];
 
