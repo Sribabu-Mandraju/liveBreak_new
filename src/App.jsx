@@ -21,6 +21,7 @@ import LocationAndTime from "./components/News/newsCard_components/LocationAndTi
 import AdsPage from "./Pages/Ads/AdsPage";
 import ReferralPage from "./Pages/Referral/ReferralPage";
 
+import CategorySet from "./Pages/CategorySettings/CategorySet";
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -69,6 +70,7 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/user/:id" element={<UserProfile />} />
           <Route path="/magazine" element={<MagazinePage />} />
+          <Route path="/categories" element={<CategorySet />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
