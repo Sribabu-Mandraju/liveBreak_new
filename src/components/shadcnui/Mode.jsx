@@ -26,13 +26,13 @@ const Mode = () => {
       };
     return(
   <form>
-    <div className="flex items-center">
-    <div className="mx-8 text-lg dark:text-gray-400">{theme=="light"?"Dark":"Light"}</div>
+    <div className="flex items-center w-full justify-between">
+    <div className="mx-8 text-lg text-gray-500 dark:text-gray-400">{theme=="light"?"Dark Theme":"Light Theme"}</div>
       <SwitchRoot
-        className="relative h-[25px] w-[42px] cursor-default rounded-full bg-blackA6 shadow-[0_2px_10px] shadow-blackA4 outline-none focus:shadow-[0_0_0_2px] focus:shadow-black data-[state=checked]:bg-black"
+        className="relative border-black bg-black dark:bg-white h-[25px] w-[42px] cursor-default rounded-full bg-blackA6  outline-none focus:shadow-[0_0_0_2px] focus:shadow-black data-[state=checked]:bg-black"
         id="airplane-mode"
       > 
-        <SwitchThumb onClick={toggleTheme} className="block size-[21px] translate-x-0.5 rounded-full bg-white shadow-[0_2px_2px] shadow-blackA4 transition-transform duration-100 will-change-transform data-[state=checked]:translate-x-[19px]" />
+        <SwitchThumb onClick={toggleTheme} className="block dark:bg-zinc-500 size-[21px] translate-x-0.5 rounded-full bg-white shadow-[0_2px_2px] shadow-blackA4 transition-transform duration-100 will-change-transform data-[state=checked]:translate-x-[19px]" />
       </SwitchRoot>
     </div>
   </form>)

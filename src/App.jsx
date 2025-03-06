@@ -23,6 +23,7 @@ import ReferralPage from "./Pages/Referral/ReferralPage";
 import CategorySettingsPage from "./Pages/CategorySettings/CategorySet";
 
 import CategorySet from "./Pages/CategorySettings/CategorySet";
+import Categories from "./Pages/Categories/Categories";
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -72,6 +73,7 @@ const App = () => {
           <Route path="/user/:id" element={<UserProfile />} />
           <Route path="/magazine" element={<MagazinePage />} />
           <Route path="/categories" element={<CategorySettingsPage />} />
+          <Route path="/selectCategories" element={<CategorySet />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

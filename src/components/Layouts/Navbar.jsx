@@ -409,7 +409,7 @@ const Navbar = () => {
               >
                 <FaTimes size={24} />
               </button>
-              <div className="flex justify-end mt-12">
+              <div className="flex w-full mt-12">
                 <Mode />
               </div>
               <div>
