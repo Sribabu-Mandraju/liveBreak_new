@@ -118,19 +118,11 @@ const Layout = ({ children }) => {
       </div>
       <div className="flex  justify-center w-screen lg:px-20 flex-row gap-4">
         {/* Sidebar - Left (Sticky) */}
-<<<<<<< HEAD
         <div className="hidden md:block  w-1/4 h-[calc(100vh-30px)] sticky top-[10px]">
           <div className="border border-zinc-700 rounded-md h-full overflow-hidden">
             <div>
               {/* Desktop Side Menu */}
               <div className="hidden  md:flex h-[calc(100vh-70px)] w-64  px-4 py-6 flex-col overflow-y-scroll  transition-all duration-300">
-=======
-        <div className="hidden md:block w-1/4 h-[calc(100vh-30px)] overflow-y-auto sticky top-[10px]">
-          <div className="border border-zinc-700 rounded-md h-full overflow-hidden">
-            <div>
-              {/* Desktop Side Menu */}
-              <div className="hidden  md:flex h-[calc(100vh-70px)] w-64 overflow-y-auto   px-4 py-6 flex-col  transition-all duration-300">
->>>>>>> 22e3ffbf98a6d2e4665fa4c218d38e9073179712
                 <div className="">
                   <ul>
                     {menuItems.map((item, index) => (
@@ -160,7 +152,6 @@ const Layout = ({ children }) => {
                 </div>
                 { user && (
 
-<<<<<<< HEAD
                 <div className="flex flex-row items-center mt-6  gap-12 justify-between w-full">
                   <div className="flex items-center gap-4 ">
                     <img
@@ -187,9 +178,6 @@ const Layout = ({ children }) => {
                   </div>
                 </div>
                 )}
-=======
-               
->>>>>>> 22e3ffbf98a6d2e4665fa4c218d38e9073179712
               </div>
 
               {/* Mobile Bottom Menu */}
