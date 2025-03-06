@@ -1,12 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { setToken } from "./authSlice";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // Async thunk for selecting location
 export const selectLocation = createAsyncThunk(
   "location/selectLocation",
-  async ({ village_id, token }, { rejectWithValue }) => {
+  async ({ village_id, token }, { rejectWithValue, dispatch }) => {
     try {
       const response = await axios.post(
         `${BASE_URL}/common/location/select`,
@@ -21,7 +22,13 @@ export const selectLocation = createAsyncThunk(
           },
         }
       );
-      return response.data;
+
+      // Save the new token from the response
+      if (response.data.token) {
+        dispatch(setToken(response.data.token));
+      }
+
+      return response.data.data; // Return only the location data
     } catch (error) {
       return rejectWithValue(error.response?.data || "Something went wrong");
     }

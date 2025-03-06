@@ -83,7 +83,7 @@ const Layout = ({ children }) => {
   const isActive = (path) => location.pathname.includes(path);
   const user = useSelector((state) => state.user);
   return (
-    <div className="w-screen flex-col justify-center items-center flex gap-4">
+    <div className="w-full max-w-7xl mx-auto flex-col justify-center items-center flex gap-4">
       <div>
         <BottomMenu />
       </div>
@@ -134,7 +134,7 @@ const Layout = ({ children }) => {
                         {user?.user?.data?.email}
                       </p>
                       <p className="text-xs text-gray-600 dark:text-gray-400">
-                      {user?.user?.data?.mobile_num}
+                        {user?.user?.data?.mobile_num}
                       </p>
                     </div>
                   </div>
