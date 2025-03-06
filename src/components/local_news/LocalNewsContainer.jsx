@@ -50,7 +50,9 @@ const LocalNewsContainer = () => {
             Please select your location to view local news
           </p>
         </div>
-        <LocationSelector />
+        <div className="w-full flex items-center justify-center">
+          <LocationSelector />
+        </div>
       </div>
     );
   }

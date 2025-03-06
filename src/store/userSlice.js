@@ -21,14 +21,16 @@ export const fetchUser = createAsyncThunk(
         },
         {
           headers: {
-            "X-News-Token": token, // Pass token in header
+            "X-Meebuddy-Token": token, // Pass token in header
           },
         }
       );
 
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || "Failed to fetch user data");
+      return rejectWithValue(
+        error.response?.data || "Failed to fetch user data"
+      );
     }
   }
 );
