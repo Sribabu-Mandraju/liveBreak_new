@@ -7,16 +7,15 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 export const fetchPosts = createAsyncThunk(
   "feed/fetchPosts",
   async (payload = {}, { getState, rejectWithValue }) => {
-    const { lastId, hasMore } = getState().feed;
-    if (!hasMore) return rejectWithValue("No more posts available.");
-
     try {
       const response = await axios.post(`${BASE_URL}/common/feed`, {
         post_id: payload.post_id || "",
-        last_id: payload.last_id || lastId,
+        last_id: payload.last_id || "",
         type: payload.type || "",
         bookmarks: payload.bookmarks || false,
         tag_id: payload.tag_id || "",
+        posted_by: payload.posted_by || "",
+        isReporter: payload.isReporter || false,
         version: "new",
       });
 
