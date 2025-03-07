@@ -17,6 +17,7 @@ import { FaRegBookmark } from "react-icons/fa6";
 import { GiBookPile } from "react-icons/gi";
 import { LuFileClock } from "react-icons/lu";
 import { MdOutlineContactSupport } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 import {
   FaAngleDown,
   FaBars,
@@ -34,9 +35,11 @@ import {
   FaSignOutAlt,
 } from "react-icons/fa";
 import { MdDarkMode, MdLightMode } from "react-icons/md";
+import { useDispatch } from "react-redux";
 import logo from "../../assets/logo.png";
 import { useSelector } from "react-redux";
 import Mode from "../shadcnui/Mode";
+import { clearToken } from "../../store/authSlice";
 const Dropdown = ({ label, items, isMobile, isOpen, toggleDropdown, icon }) => (
   <div className="relative cursor-pointer group">
     <div
@@ -88,6 +91,8 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTagId, setSelectedTagId] = useState("");
   const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   // const [isSticky,setIsSticky] = useState(false)
   const user = useSelector((state) => state.user);
   console.log(user);
@@ -200,6 +205,11 @@ const Navbar = () => {
     setTheme(theme === "light" ? "dark" : "light");
   };
 
+  const handleLogOut = () => {
+    dispatch(clearToken());
+    navigate("/signin");
+  };
+
   return (
     <div
       className={`flex w-screen justify-center z-10 fixed top-[-2px]  md:static  items-center duration-300 `}
@@ -275,7 +285,7 @@ const Navbar = () => {
             {user?.user ? (
               <div className="relative group">
                 <div className="flex justify-center cursor-pointer text-white rounded-full w-8 h-8 items-center bg-blue-500 dark:bg-gray-700 dark:text-blue-600">
-                  {user?.user?.data?.email.charAt(0).toUpperCase()}
+                  {user?.user?.data?.email?.charAt(0).toUpperCase()}
                 </div>
                 <div className="hidden group-hover:flex absolute pt-2 right-[-40px] z-50 p-4 top-full">
                   <div className="bg-white dark:bg-gray-800 w-[300px] p-5 shadow-xl rounded-xl border border-gray-300 dark:border-gray-700 flex flex-col gap-5">
@@ -286,7 +296,7 @@ const Navbar = () => {
                       </div>
                       <div className="flex flex-col">
                         <span className="text-[16px] font-semibold break-all">
-                          {user?.user?.data?.email.length > 15
+                          {user?.user?.data?.email?.length > 15
                             ? `${user?.user?.data?.email.slice(0, 12)}...`
                             : `${user?.user?.data?.email}`}
                         </span>
@@ -297,7 +307,7 @@ const Navbar = () => {
                     </div>
 
                     {/* View Profile Button */}
-                    <button className="w-full py-2 rounded-lg border border-blue-600 hover:bg-blue-600 text-blue-600 hover:text-white transition-all font-medium">
+                    <button className="w-full py-2 rounded-lg border border-blue-600 hover:bg-blue-600 text-blue-600 hover:text-white transition-all font-medium" onClick={() => navigate("/profile")}>
                       View Profile
                     </button>
 
@@ -327,7 +337,7 @@ const Navbar = () => {
                       </div>
                       <hr />
 
-                      <div className="flex items-center gap-3 px-3 py-2 mt-1 cursor-pointer hover:bg-red-100 dark:hover:bg-red-500 text-red-600 dark:text-red-400 dark:hover:text-white transition-all rounded-lg">
+                      <div className="flex items-center gap-3 px-3 py-2 mt-1 cursor-pointer hover:bg-red-100 dark:hover:bg-red-500 text-red-600 dark:text-red-400 dark:hover:text-white transition-all rounded-lg" onClick={handleLogOut}>
                         <FaSignOutAlt />
                         Logout
                       </div>

@@ -88,9 +88,8 @@ const Layout = ({ children }) => {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const [loading, setLoading] = useState(false);
 
-
   const handleMenuClick = (item) => {
-    console.log("what happen")
+    console.log("what happen");
     if (item.action === "openLanguageModal") {
       setLanguageModalOpen(true);
       fetchLang();
@@ -98,7 +97,6 @@ const Layout = ({ children }) => {
       navigate(`/${item.path}`);
     }
   };
-
 
   const fetchLang = async () => {
     setLoading(true);
@@ -122,7 +120,7 @@ const Layout = ({ children }) => {
           <div className="border border-zinc-700 rounded-md h-full overflow-hidden">
             <div>
               {/* Desktop Side Menu */}
-              <div className="hidden  md:flex h-[calc(100vh-70px)] w-64  px-4 py-6 flex-col overflow-y-scroll  transition-all duration-300">
+              <div className="hidden w-full  md:flex h-[calc(100vh-70px)]  px-4 py-6 flex-col overflow-y-scroll  transition-all duration-300">
                 <div className="">
                   <ul>
                     {menuItems.map((item, index) => (
@@ -179,8 +177,6 @@ const Layout = ({ children }) => {
                 </div>
                 )} */}
               </div>
-
-              
             </div>
           </div>
         </div>
@@ -203,25 +199,21 @@ const Layout = ({ children }) => {
           title="Select Language"
         >
           <div className="flex flex-wrap gap-6 mt-8 w-[700px] ">
-            {
-              lang && (
-                lang.map((data,index)=>(
-                  <div className="flex justify-center items-center cursor-pointer duration-300 dark:hover:bg-gray-700 hover:bg-gray-200 md:px-12 px-4 py-1 border rounded-lg focus:border-blue-500">
-                    <div className="flex gap-2  flex-row">
-                      <div>
-                        <img src={data.icon} alt="lang_icon" className="w-[30px] " />
-                      </div>
-                      <div>
-                        {data.name}
-                      </div>
-
+            {lang &&
+              lang.map((data, index) => (
+                <div className="flex justify-center items-center cursor-pointer duration-300 dark:hover:bg-gray-700 hover:bg-gray-200 md:px-12 px-4 py-1 border rounded-lg focus:border-blue-500">
+                  <div className="flex gap-2  flex-row">
+                    <div>
+                      <img
+                        src={data.icon}
+                        alt="lang_icon"
+                        className="w-[30px] "
+                      />
                     </div>
-
+                    <div>{data.name}</div>
                   </div>
-                ))
-              )
-            }
-
+                </div>
+              ))}
           </div>
         </Model>
       )}
