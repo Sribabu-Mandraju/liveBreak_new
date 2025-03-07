@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 export default function Referral() {
+  const [referralData, setReferralData] = useState({
+    referral_code: "",
+    referrals: [],
+    totalReferrals: 0
+  });
+  const [loading, setLoading] = useState(true);
+
   const bonusStructure = [
     { installations: 50, amount: "₹150" },
     { installations: 100, amount: "₹300" },
@@ -11,6 +18,44 @@ export default function Referral() {
     { installations: 5000, amount: "₹12,000" },
     { installations: 10000, amount: "₹30,000" },
   ];
+
+  useEffect(() => {
+    const fetchReferralData = async () => {
+      try {
+        const response = await fetch("https://api.meebuddy.com/app/v4/user/myreferrals", {
+          method: "POST",
+          headers: {
+            "x-meebuddy-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2RhdGEiOnsiaWQiOiI1ZmZkZTk4MmZkYjEzNTM2YjdjZDMwYzkifSwiY2VudGVyX2RhdGEiOnsidmlsbGFnZV9pZCI6IjVmZmRlOTM5NTI4YmViMzUyYWZiYmQ5MCIsImlkIjoiNWZmZGU5MmI2NTYzZmQzNGM0NjdlZGU0IiwiZGVsaXZlcnlfY29zdCI6MTB9LCJpYXQiOjE3NDEzNTQxNjYsImV4cCI6MTc3Mjg5MDE2Nn0.iJMwCBRjNl_wh5hNuyCj8xGC6aQdSDGEG8sL--AkXTw",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ version: "new" }),
+        });
+
+        const data = await response.json();
+        if (data.code === 200) {
+          setReferralData({
+            referral_code: data.data.referral_code,
+            referrals: data.data.Referrals,
+            totalReferrals: data.data.Referrals.length
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching referral data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReferralData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <p className="text-gray-600 dark:text-gray-300">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-2 sm:p-4 md:p-6">
@@ -28,7 +73,7 @@ export default function Referral() {
                 Your Referral Code
               </span>
               <span className="font-mono text-[#1189F6] dark:text-[#1189F6] font-semibold text-lg">
-                MB6CNSQ
+                {referralData.referral_code}
               </span>
             </div>
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-0">
@@ -36,7 +81,7 @@ export default function Referral() {
                 Total Joined from your Referral
               </span>
               <span className="font-semibold text-gray-800 dark:text-gray-200 text-lg">
-                1
+                {referralData.totalReferrals}
               </span>
             </div>
             <button className="w-full bg-[#1189F6] bg-opacity-90 hover:bg-opacity-100 text-white font-medium py-2.5 px-4 rounded-lg transition duration-150 ease-in-out text-sm sm:text-base">
@@ -51,22 +96,27 @@ export default function Referral() {
             Your Referral List
           </h2>
           <div className="overflow-x-auto">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 py-3 px-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <div className="flex items-center gap-2 sm:gap-4 w-full sm:w-auto">
-                <span className="text-gray-600 dark:text-gray-300 min-w-[20px]">
-                  1.
+            {referralData.referrals.map((referral, index) => (
+              <div
+                key={index}
+                className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 py-3 px-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
+              >
+                <div className="flex items-center gap-2 sm:gap-4 w-full sm:w-auto">
+                  <span className="text-gray-600 dark:text-gray-300 min-w-[20px]">
+                    {index + 1}.
+                  </span>
+                  <span className="font-mono text-sm text-gray-600 dark:text-gray-300">
+                    {referral.mobile_num}
+                  </span>
+                </div>
+                <span className="text-gray-800 dark:text-gray-200 pl-7 sm:pl-0">
+                  {referral.name}
                 </span>
-                <span className="font-mono text-sm text-gray-600 dark:text-gray-300">
-                  800211213
+                <span className="ml-7 sm:ml-auto bg-[#1189F6] bg-opacity-10 dark:bg-opacity-20 text-[#1189F6] dark:text-[#1189F6] text-xs px-2 py-1 rounded-full">
+                  {referral.first_order === 0 ? "IN PROGRESS" : "VALID"}
                 </span>
               </div>
-              <span className="text-gray-800 dark:text-gray-200 pl-7 sm:pl-0">
-                Gurram Rajasekhar
-              </span>
-              <span className="ml-7 sm:ml-auto bg-[#1189F6] bg-opacity-10 dark:bg-opacity-20 text-[#1189F6] dark:text-[#1189F6] text-xs px-2 py-1 rounded-full">
-                IN PROGRESS
-              </span>
-            </div>
+            ))}
           </div>
         </div>
 
