@@ -37,9 +37,9 @@ const menuItems = [
   { name: "Local News", icon: <LuNewspaper />, path: "localnews" },
   { name: "Categories", icon: <BiSolidCategoryAlt />, path: "categories" },
   { name: "Refferal", icon: <ImFilesEmpty />, path: "referral" },
-  { name: "Bookmarks", icon: <FaRegBookmark />, path: "bookmark" },
+  { name: "Bookmarks", icon: <FaRegBookmark />, path: "bookmarks" },
   { name: "Magazines", icon: <GiBookPile />, path: "magazine" },
-  { name: "Quizes", icon: <LuFileClock />, path: "quizzes" },
+  { name: "Quizes", icon: <LuFileClock />, path: "quizes" },
   { name: "Contact Us", icon: <MdOutlineContactSupport />, path: "contact" },
 ];
 

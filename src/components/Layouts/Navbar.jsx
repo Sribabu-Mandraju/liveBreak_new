@@ -116,7 +116,7 @@ const Navbar = () => {
     },
     { label: "Local", href: "/location", icon: <FaMapMarkerAlt /> },
     { label: "Groups", href: "/group", icon: <FaUsers /> },
-    { label: "V clips", href: "/vClips", icon: <FaVideo /> },
+    { label: "V clips", href: "/vclips", icon: <FaVideo /> },
     { label: "Use App", href: "/useApp", icon: <FaMobileAlt /> },
   ];
   const menuItems = [
@@ -125,7 +125,7 @@ const Navbar = () => {
     {
       name: "Select Categories",
       icon: <IoDocumentLockOutline />,
-      path: "/selectcategories",
+      path: "/selectCategories",
     },
     { name: "Posters", icon: <GrGallery />, path: "/posters" },
     { name: "Post A News", icon: <RiFileEditLine />, path: "/postnews" },
@@ -133,7 +133,7 @@ const Navbar = () => {
     { name: "Local News", icon: <LuNewspaper />, path: "/localnews" },
     { name: "Categories", icon: <BiSolidCategoryAlt />, path: "/categories" },
     { name: "Refferal", icon: <ImFilesEmpty />, path: "/referral" },
-    { name: "Bookmarks", icon: <FaRegBookmark />, path: "/bookmark" },
+    { name: "Bookmarks", icon: <FaRegBookmark />, path: "/bookmarks" },
     { name: "Magazines", icon: <GiBookPile />, path: "/magazine" },
     { name: "Quizes", icon: <LuFileClock />, path: "/quizes" },
     { name: "Contact Us", icon: <MdOutlineContactSupport />, path: "/contact" },

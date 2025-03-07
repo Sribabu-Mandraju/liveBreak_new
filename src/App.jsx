@@ -25,7 +25,14 @@ import CategorySettingsPage from "./Pages/CategorySettings/CategorySet";
 import CategorySet from "./Pages/CategorySettings/CategorySet";
 import Categories from "./Pages/Categories/Categories";
 import Quizzes from './Pages/Quizzes/Quizzes';
-import Contact from './Pages/Contact/Contact'
+import Contact from './Pages/Contact/Contact';
+import TestResult from './Pages/Quizzes/TestResults/TestResult';
+import Posters from './Pages/Posters/Posters'
+import PostNews from "./Pages/PostNews/PostNews";
+import BookMarks from './Pages/BookMarks/BookMarks'
+import FeedPage from './Pages/Feed/FeedPage'
+import VclipsPage from './Pages/Vclips/VclipsPage'
+import { Book } from "lucide-react";
 const ScrollToTop = () => {
   const { pathname } = useLocation();
 
@@ -79,6 +86,12 @@ const App = () => {
           {/* <Route path="/categories" element={<Categories />} /> */}
           <Route path="/quizes" element={<Quizzes />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/posters" element={<Posters />} />
+          <Route path="/bookmarks" element={<BookMarks />} />
+          <Route path="/postnews" element={<PostNews />} />
+          <Route path="/feed" element={<FeedPage />} />
+          <Route path="/vclips" element={<VclipsPage />} />
+          <Route path="/testresult/:id" element={<TestResult />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

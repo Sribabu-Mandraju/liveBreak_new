@@ -2,39 +2,62 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { IoArrowBackCircle } from "react-icons/io5";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
 const Quiz = () => {
   const [loading, setLoading] = useState(false);
+  const [quizzes, setQuizzes] = useState([]);
+
   const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const navigate = useNavigate();
   // const token = useSelector((state) => state.auth.token);
   const token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdzX3VzZXJfZGF0YSI6eyJpZCI6IjYyMzZiZWQ5NzcwNDlmMDM1MGQ5OWZmMyJ9LCJpYXQiOjE3NDExNDk1NTIsImV4cCI6MTc3MjY4NTU1Mn0.6zvHQznRR-VriD3Gd8iGxLkeLE1weqvM0Pl0t7ykaZE";
-  const [quizzes, setQuizzes] = useState([]);
+  
 
-  useEffect(() => {
-    const fetchQuizzes = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.post(
-          `${BASE_URL}/news/feed/post_type `,
-          {
-            post_type: "Quiz",
-            version: "new",
-          },
-          {
-            headers: {
-              "X-News-Token": token,
-            },
-          }
-        );
-        setQuizzes(response.data?.data || []);
-      } catch (error) {
-        console.error("Error in fetching quizzes:", error);
-      }
-      setLoading(false);
+    useEffect(() => {
+      const fetchQuizzes = async () => {
+        setLoading(true);
+        try {
+          const response = await axios.post(
+            `${BASE_URL}/news/feed/post_type`,
+            { post_type: "Quiz", version: "new" },
+            { headers: { "X-News-Token": token } }
+          );
+          setQuizzes(response.data?.data || []);
+        } catch (error) {
+          console.error("Error in fetching quizzes:", error);
+        }
+        setLoading(false);
+      };
+      fetchQuizzes();
+    }, [BASE_URL]);
+  
+    const handleResult = async (id) => {
+      navigate(`/testresult/${id}`);
     };
-    fetchQuizzes();
-  }, [BASE_URL]);
+
+    const SkeletonLoader = () => (
+      <div className="animate-pulse w-full flex flex-col gap-3 sm:gap-4">
+        {Array(6).fill(0).map((_, index) => (
+          <div
+            key={index}
+            className="flex flex-col sm:flex-row items-start sm:items-center justify-between border dark:border-gray-700 rounded-lg p-3 sm:p-4 bg-gray-200 dark:bg-gray-700"
+          >
+            <div className="flex items-start sm:items-center space-x-3 sm:space-x-6 w-full sm:w-auto">
+              <div className="w-16 h-16 bg-gray-300 dark:bg-gray-600 rounded-lg" />
+  
+              <div className="space-y-2 flex-1">
+                <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-3/4" />
+                <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-1/2" />
+              </div>
+            </div>
+            <div className="w-24 h-8 bg-gray-300 dark:bg-gray-600 rounded-lg mt-3 sm:mt-0" />
+          </div>
+        ))}
+      </div>
+    );
 
   return (
     <div className="relative w-full md:max-w-7xl mx-auto container min-h-screen p-2 sm:p-4 bg-gray-50 dark:bg-gray-800">
@@ -42,10 +65,13 @@ const Quiz = () => {
         <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800 dark:text-white">
           Available Quizzes
         </h1>
-        <div className="w-full flex flex-col gap-3 sm:gap-4">
+        {loading ? (
+          <SkeletonLoader />
+        ) : (
+          <div className="w-full flex flex-col gap-3 sm:gap-4">
           {quizzes.map((quiz, index) => (
             <div
-              key={index}
+              key={index} onClick={() => handleResult(quiz._id)}
               className="flex flex-col sm:flex-row items-start sm:items-center justify-between border dark:border-gray-700 rounded-lg p-3 sm:p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 w-full"
             >
               <div className="flex items-start sm:items-center space-x-3 sm:space-x-6 w-full sm:w-auto">
@@ -87,9 +113,14 @@ const Quiz = () => {
             </div>
           ))}
         </div>
+        )}
+        
       </div>
     </div>
   );
 };
 
 export default Quiz;
+
+
+
