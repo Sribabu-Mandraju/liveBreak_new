@@ -10,7 +10,7 @@ const useCategoryStore = create((set) => ({
   loading: true,
   error: null,
   fetchCategories: async () => {
-    const token = useAuthStore.getState().token;
+    const token = getState().auth.newsToken;
     try {
       const response = await axios.get(API_URL, {
         headers: { "X-News-Token": token },

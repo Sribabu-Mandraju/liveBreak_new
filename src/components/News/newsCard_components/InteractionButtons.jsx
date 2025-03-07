@@ -153,7 +153,7 @@ const InteractionButtons = ({
             className="flex items-center space-x-1 cursor-pointer hover:text-blue-500 transition duration-200 text-xs sm:text-sm"
             onClick={handleLike}
           >
-            <FaRegThumbsUp className="text-base text-blue-600 sm:text-lg" />
+            <FaRegThumbsUp className="text-base text-blue-600 sm:text-lg cursor-pointer" />
           </button>
           <div className="text-blue-600">{likes}</div>
 
@@ -162,7 +162,7 @@ const InteractionButtons = ({
             className="flex text-red-600 items-center space-x-1 cursor-pointer hover:text-red-500 transition duration-200 text-xs sm:text-sm"
           >
             <FaRegThumbsDown
-              className={`text-base sm:text-lg ${
+              className={`text-base cursor-pointer sm:text-lg ${
                 isDisliked ? "text-red-600" : ""
               }`}
             />

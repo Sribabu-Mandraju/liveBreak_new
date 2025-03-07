@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useInView } from "react-intersection-observer";
 import NewsCard from "./NewsCard";
@@ -45,21 +45,27 @@ const SkeletonLoader = () => (
 const PostFeed = () => {
   const dispatch = useDispatch();
   const { posts, loading, hasMore } = useSelector((state) => state.feed);
+  const [page, setPage] = useState(1);
 
-  const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.5 });
+  const { ref, inView } = useInView({
+    threshold: 0,
+    rootMargin: "100px", // Load before reaching bottom
+  });
 
-  // Ensure fresh data on mount
+  // Initial load
   useEffect(() => {
-    dispatch(clearFeed()); // Clear previous posts
-    dispatch(fetchPosts({})); // Fetch fresh posts with default payload
+    dispatch(clearFeed());
+    dispatch(fetchPosts({ page: 1 }));
   }, [dispatch]);
 
-  // Fetch more posts when user scrolls down
+  // Handle infinite scroll
   useEffect(() => {
-    if (inView && hasMore) {
-      dispatch(fetchPosts({}));
+    if (inView && hasMore && !loading) {
+      const nextPage = page + 1;
+      dispatch(fetchPosts({ page: nextPage }));
+      setPage(nextPage);
     }
-  }, [inView, hasMore, dispatch]);
+  }, [inView, hasMore, loading, dispatch, page]);
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -73,15 +79,23 @@ const PostFeed = () => {
       )}
 
       {/* Infinite Scroll Trigger */}
-      {hasMore && (
-        <div ref={ref} className="w-full">
-          {loading && (
-            <div className="flex flex-col gap-4 w-full">
-              <SkeletonLoader />
-              <SkeletonLoader />
-            </div>
-          )}
-        </div>
+      <div ref={ref} className="w-full">
+        {loading && (
+          <div className="flex flex-col gap-4 w-full">
+            <SkeletonLoader />
+            <SkeletonLoader />
+          </div>
+        )}
+      </div>
+
+      {!hasMore && posts.length > 0 && (
+        <p className="text-gray-600 dark:text-gray-300 py-4">
+          No more posts to load.
+        </p>
+      )}
+
+      {!loading && posts.length === 0 && (
+        <p className="text-gray-600 dark:text-gray-300">No posts available.</p>
       )}
     </div>
   );

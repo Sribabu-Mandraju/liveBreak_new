@@ -6,16 +6,16 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 // Fetch posts asynchronously
 export const fetchPosts = createAsyncThunk(
   "feed/fetchPosts",
-  async (payload = {}, { getState, rejectWithValue }) => {
+  async ({ page = 1 }, { getState }) => {
     try {
       const response = await axios.post(`${BASE_URL}/common/feed`, {
-        post_id: payload.post_id || "",
-        last_id: payload.last_id || "",
-        type: payload.type || "",
-        bookmarks: payload.bookmarks || false,
-        tag_id: payload.tag_id || "",
-        posted_by: payload.posted_by || "",
-        isReporter: payload.isReporter || false,
+        post_id: "",
+        last_id: "",
+        type: "",
+        bookmarks: false,
+        tag_id: "",
+        posted_by: "",
+        isReporter: false,
         version: "new",
       });
 
@@ -23,9 +23,14 @@ export const fetchPosts = createAsyncThunk(
       const lastPost =
         newPosts.length > 0 ? newPosts[newPosts.length - 1]._id : "";
 
-      return { newPosts, lastPost };
+      return { posts: newPosts, lastPost, hasMore: newPosts.length > 0 };
     } catch (error) {
-      return rejectWithValue(error.response?.data || "Failed to fetch posts");
+      return {
+        posts: [],
+        lastPost: "",
+        hasMore: false,
+        error: error.response?.data || "Failed to fetch posts",
+      };
     }
   }
 );
@@ -83,7 +88,7 @@ export const updatePostDislike = createAsyncThunk(
   "feed/updatePostDislike",
   async ({ post_id }, { rejectWithValue, getState }) => {
     try {
-      const token = getState().auth.token;
+      const token = getState().auth.newsToken;
       if (!token) {
         return rejectWithValue("No authentication token found");
       }
@@ -96,8 +101,7 @@ export const updatePostDislike = createAsyncThunk(
         },
         {
           headers: {
-            "X-News-Token":
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdzX3VzZXJfZGF0YSI6eyJpZCI6IjYyMzZiZWQ5NzcwNDlmMDM1MGQ5OWZmMyJ9LCJpYXQiOjE3NDExNDk1NTIsImV4cCI6MTc3MjY4NTU1Mn0.6zvHQznRR-VriD3Gd8iGxLkeLE1weqvM0Pl0t7ykaZE",
+            "X-News-Token": token,
           },
         }
       );
@@ -130,15 +134,16 @@ const feedSlice = createSlice({
   name: "feed",
   initialState: {
     posts: [],
-    lastId: "",
     loading: false,
     hasMore: true,
+    error: null,
+    page: 1,
   },
   reducers: {
     clearFeed: (state) => {
       state.posts = [];
-      state.lastId = "";
       state.hasMore = true;
+      state.page = 1;
     },
   },
   extraReducers: (builder) => {
@@ -147,17 +152,13 @@ const feedSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchPosts.fulfilled, (state, action) => {
-        const { newPosts, lastPost } = action.payload;
-
-        state.posts = [...state.posts, ...newPosts];
-        state.lastId = lastPost;
-        state.hasMore = newPosts.length > 0;
+        state.posts = [...state.posts, ...action.payload.posts];
+        state.hasMore = action.payload.hasMore;
         state.loading = false;
       })
       .addCase(fetchPosts.rejected, (state, action) => {
-        console.error("Error fetching posts:", action.payload);
         state.loading = false;
-        state.hasMore = false;
+        state.error = action.error.message;
       })
       .addCase(updatePostLike.fulfilled, (state, action) => {
         const {

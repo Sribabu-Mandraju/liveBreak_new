@@ -39,7 +39,7 @@ import { useDispatch } from "react-redux";
 import logo from "../../assets/logo.png";
 import { useSelector } from "react-redux";
 import Mode from "../shadcnui/Mode";
-import { clearToken } from "../../store/authSlice";
+import { clearTokens } from "../../store/authSlice";
 const Dropdown = ({ label, items, isMobile, isOpen, toggleDropdown, icon }) => (
   <div className="relative cursor-pointer group">
     <div
@@ -206,7 +206,7 @@ const Navbar = () => {
   };
 
   const handleLogOut = () => {
-    dispatch(clearToken());
+    dispatch(clearTokens());
     navigate("/signin");
   };
 
@@ -307,7 +307,10 @@ const Navbar = () => {
                     </div>
 
                     {/* View Profile Button */}
-                    <button className="w-full py-2 rounded-lg border border-blue-600 hover:bg-blue-600 text-blue-600 hover:text-white transition-all font-medium">
+                    <button
+                      className="w-full py-2 rounded-lg border border-blue-600 hover:bg-blue-600 text-blue-600 hover:text-white transition-all font-medium"
+                      onClick={() => navigate("/profile")}
+                    >
                       View Profile
                     </button>
 
