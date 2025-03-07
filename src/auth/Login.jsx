@@ -4,7 +4,7 @@ import "react-phone-input-2/lib/style.css";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { setToken } from "../store/authSlice";
+import { setToken, setNewsToken } from "../store/authSlice";
 import { fetchUser } from "../store/userSlice";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -52,25 +52,47 @@ function Signin() {
     };
 
     try {
-      const response = await axios.post(`${BASE_URL}/common/login`, payload, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const loginResponse = await axios.post(
+        `${BASE_URL}/common/login`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      if (response.data && response.data.token) {
-        // Set token in Redux
-        dispatch(setToken(response.data.token));
+      if (loginResponse.data && loginResponse.data.token) {
+        dispatch(setToken(loginResponse.data.token));
+        console.log(loginResponse.data.token);
+        // Modified news authorization request
+        try {
+          const newsResponse = await axios.post(
+            `${BASE_URL}/user/authorize/news_user`,
+            loginResponse.data.token,
+            {
+              headers: {
+                "X-Meebuddy-Token": `${loginResponse.data.token}`,
+              },
+            }
+          );
 
-        // Fetch user data
+          if (newsResponse.data && newsResponse.data.token) {
+            console.log(newsResponse.data.token);
+            dispatch(setNewsToken(newsResponse.data.token));
+          }
+        } catch (newsError) {
+          console.error("News Authorization Error:", newsError);
+          toast.error("Failed to authorize news access");
+        }
+
         await dispatch(fetchUser());
-
         toast.success("Login successful!");
-
-        // Force a full page navigation to root
-        window.location.href = "/";
+        navigate("/");
       } else {
-        toast.error(response.data.message || "Login failed. Please try again.");
+        toast.error(
+          loginResponse.data.message || "Login failed. Please try again."
+        );
       }
     } catch (error) {
       console.error("Login Error:", error);

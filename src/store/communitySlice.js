@@ -8,7 +8,7 @@ export const fetchSuggestedCommunities = createAsyncThunk(
   "community/fetchSuggestedCommunities",
   async (_, { getState, rejectWithValue }) => {
     try {
-      const token = getState().auth.token;
+      const token = getState().auth.newsToken;
 
       if (!token) {
         console.error("Token not found in auth state");

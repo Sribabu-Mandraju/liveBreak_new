@@ -83,7 +83,7 @@ export const updatePostDislike = createAsyncThunk(
   "feed/updatePostDislike",
   async ({ post_id }, { rejectWithValue, getState }) => {
     try {
-      const token = getState().auth.token;
+      const token = getState().auth.newsToken;
       if (!token) {
         return rejectWithValue("No authentication token found");
       }
@@ -96,8 +96,7 @@ export const updatePostDislike = createAsyncThunk(
         },
         {
           headers: {
-            "X-News-Token":
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuZXdzX3VzZXJfZGF0YSI6eyJpZCI6IjYyMzZiZWQ5NzcwNDlmMDM1MGQ5OWZmMyJ9LCJpYXQiOjE3NDExNDk1NTIsImV4cCI6MTc3MjY4NTU1Mn0.6zvHQznRR-VriD3Gd8iGxLkeLE1weqvM0Pl0t7ykaZE",
+            "X-News-Token": token,
           },
         }
       );
