@@ -182,12 +182,12 @@ const Navbar = () => {
       localStorage.setItem("theme", theme);
     };
 
-    const handleScroll = () => {
-      setIsSticky(window.scrollY > 80);
-    };
+    // const handleScroll = () => {
+    //   setIsSticky(window.scrollY > 80);
+    // };
 
     handleTheme();
-    window.addEventListener("scroll", handleScroll);
+    // window.addEventListener("scroll", handleScroll);
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [theme]);
@@ -337,7 +337,10 @@ const Navbar = () => {
                       </div>
                       <hr />
 
-                      <div className="flex items-center gap-3 px-3 py-2 mt-1 cursor-pointer hover:bg-red-100 dark:hover:bg-red-500 text-red-600 dark:text-red-400 dark:hover:text-white transition-all rounded-lg" onClick={handleLogOut}>
+                      <div
+                        className="flex items-center gap-3 px-3 py-2 mt-1 cursor-pointer hover:bg-red-100 dark:hover:bg-red-500 text-red-600 dark:text-red-400 dark:hover:text-white transition-all rounded-lg"
+                        onClick={handleLogOut}
+                      >
                         <FaSignOutAlt />
                         Logout
                       </div>

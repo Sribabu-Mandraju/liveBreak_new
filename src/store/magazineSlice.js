@@ -8,12 +8,21 @@ export const fetchMagazines = createAsyncThunk(
   async (payload = {}, { getState, rejectWithValue }) => {
     try {
       const response = await axios.post(`${BASE_URL}/common/feed`, {
-        last_id: "",
-        post_type: "Magazine",
+        post_id: payload.post_id || "",
+        last_id: payload.last_id || "",
+        type: "Magazine",
+        bookmarks: payload.bookmarks || false,
+        tag_id: payload.tag_id || "",
+        posted_by: payload.posted_by || "",
+        isReporter: payload.isReporter || false,
         version: "new",
       });
 
-      return response.data.data;
+      const newPosts = response.data.data || [];
+      const lastPost =
+        newPosts.length > 0 ? newPosts[newPosts.length - 1]._id : "";
+
+      return { newPosts, lastPost };
     } catch (error) {
       return rejectWithValue(
         error.response?.data || "Failed to fetch magazines"
@@ -26,31 +35,40 @@ const magazineSlice = createSlice({
   name: "magazines",
   initialState: {
     data: [],
-    loading: "idle",
+    loading: false,
     error: null,
+    lastId: "",
+    hasMore: true,
   },
-
-  reducers: {},
+  reducers: {
+    clearFeed: (state) => {
+      state.data = [];
+      state.lastId = "";
+      state.hasMore = true;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchMagazines.pending, (state) => {
-        state.loading = "loading";
-        state.data = [];
-        state.error = null;
+        state.loading = true;
       })
       .addCase(fetchMagazines.fulfilled, (state, action) => {
-        state.data = action.payload;
-        state.loading = "loaded";
+        const { newPosts, lastPost } = action.payload;
+
+        state.data = [...state.data, ...newPosts];
+        state.lastId = lastPost;
+        state.hasMore = newPosts.length > 0;
+        state.loading = false;
         state.error = null;
       })
       .addCase(fetchMagazines.rejected, (state, action) => {
         console.error("Error fetching posts:", action.payload);
-        state.data = [];
         state.error = action.payload;
-        state.loading = "loaded";
+        state.loading = false;
+        state.hasMore = false;
       });
   },
 });
 
-export const {} = magazineSlice.actions;
+export const { clearFeed } = magazineSlice.actions;
 export default magazineSlice.reducer;

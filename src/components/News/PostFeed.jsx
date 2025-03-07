@@ -45,7 +45,7 @@ const SkeletonLoader = () => (
 const PostFeed = () => {
   const dispatch = useDispatch();
   const { posts, loading, hasMore } = useSelector((state) => state.feed);
-  
+
   const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.5 });
 
   // Ensure fresh data on mount
@@ -63,11 +63,12 @@ const PostFeed = () => {
 
   return (
     <div className="flex flex-col items-center w-full">
-      {posts.length > 0 ? (
+      {posts.length > 0 &&
         posts.map((post, index) => (
           <NewsCard key={post._id || index} data={post} />
-        ))
-      ) : (
+        ))}
+
+      {!loading && posts.length > 0 && (
         <p className="text-gray-600 dark:text-gray-300">No posts available.</p>
       )}
 

@@ -2,45 +2,50 @@ import { MdArrowRight, MdError } from "react-icons/md";
 import { formatCreatedAtMonth } from "../../utils/formatCreatedAt";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchMagazines } from "../../store/magazineSlice";
+import { clearFeed, fetchMagazines } from "../../store/magazineSlice";
+import { useInView } from "react-intersection-observer";
 
 const Magazine = () => {
-  const articles = useSelector((state) => state.magazines.data);
-  const magazinesStatus = useSelector((state) => state.magazines.loading);
-  const magazinesError = useSelector((state) => state.magazines.error);
-
   const dispatch = useDispatch();
+  const {
+    data: articles,
+    loading,
+    error,
+    hasMore,
+  } = useSelector((state) => state.magazines);
+
+  const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.5 });
 
   useEffect(() => {
-    if (magazinesStatus === "idle") {
-      dispatch(fetchMagazines());
+    // dispatch(clearFeed());
+    dispatch(fetchMagazines({}));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (inView && hasMore) {
+      dispatch(fetchMagazines({}));
     }
-  }, [magazinesStatus, dispatch]);
+  }, [inView, hasMore, dispatch]);
 
   const handleReload = () => {
-    dispatch(fetchMagazines());
+    dispatch(fetchMagazines({}));
+  };
+
+  const Skeleton = () => {
+    return (
+      <div className="flex items-center gap-4 p-3 rounded-lg bg-gray-100 dark:bg-gray-900 animate-pulse">
+        <div className="w-12 h-12 bg-gray-300 dark:bg-gray-700 rounded-lg"></div>
+        <div className="flex-1">
+          <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
+          <div className="h-3 bg-gray-300 dark:bg-gray-700 rounded w-1/2"></div>
+        </div>
+      </div>
+    );
   };
 
   return (
     <div className="min-h-screen p-4 bg-white text-gray-900 dark:bg-black dark:text-white">
-      {magazinesStatus === "loading" && (
-        <div className="space-y-4">
-          {[...Array(5)].map((_, index) => (
-            <div
-              key={index}
-              className="flex items-center gap-4 p-3 rounded-lg bg-gray-100 dark:bg-gray-900 animate-pulse"
-            >
-              <div className="w-12 h-12 bg-gray-300 dark:bg-gray-700 rounded-lg"></div>
-              <div className="flex-1">
-                <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
-                <div className="h-3 bg-gray-300 dark:bg-gray-700 rounded w-1/2"></div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {magazinesError && (
+      {error && (
         <div className="flex flex-col items-center justify-center h-64">
           <MdError className="text-red-500 text-6xl mb-4" />
           <p className="text-lg font-semibold">Something went wrong</p>
@@ -53,7 +58,7 @@ const Magazine = () => {
         </div>
       )}
 
-      {!magazinesError && magazinesStatus === "loaded" && (
+      {articles && articles.length > 0 && (
         <div className="space-y-2">
           {articles.map((article) => (
             <div
@@ -73,6 +78,24 @@ const Magazine = () => {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {!loading && articles.length === 0 && (
+        <p className="text-gray-600 dark:text-gray-300">No posts available.</p>
+      )}
+
+      {hasMore && (
+        <div ref={ref} className="w-full">
+          {loading && (
+            <div className="flex flex-col gap-4 w-full">
+              <div className="space-y-4">
+                {[...Array(10)].map((_, index) => (
+                  <Skeleton key={index} />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
