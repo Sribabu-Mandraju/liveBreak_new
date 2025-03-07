@@ -6,9 +6,10 @@ import AddNewsForm from "./AddNewsForm";
 import Home from './Home'
 import Posted from "./Posted";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const ProfileContent = () => {
-
+  const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   console.log(user)
   const [profile, setProfile] = useState({
@@ -26,7 +27,7 @@ const ProfileContent = () => {
     if (user) {
       setProfile((prevProfile) => ({
         ...prevProfile,
-        name: user?.user?.data?.name || prevProfile.name,
+        name: user?.user?.data?.name || prevProfile.name, 
         email: user?.user?.data?.email || prevProfile.email,
         phone: user?.user?.data?.mobile_num || prevProfile.phone,
         joined: user.joined || prevProfile.joined,
@@ -64,7 +65,7 @@ const ProfileContent = () => {
       <div className="flex-1 bg-white dark:bg-gray-900 rounded-lg shadow-lg w-full max-w-4xl mx-auto sm:border dark:border-gray-700">
         {/* Header Section */}
         <div className="flex flex-row bg-white px-4 items-center sticky top-0 dark:bg-gray-900 z-20 transition-transform duration-500">
-          <div className="text-blue-500 text-4xl">
+          <div className="text-blue-500 text-4xl" onClick={() => navigate(-1)}>
             <IoArrowBackCircle />
           </div>
           <div

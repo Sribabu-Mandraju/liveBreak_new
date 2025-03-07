@@ -307,7 +307,7 @@ const Navbar = () => {
                     </div>
 
                     {/* View Profile Button */}
-                    <button className="w-full py-2 rounded-lg border border-blue-600 hover:bg-blue-600 text-blue-600 hover:text-white transition-all font-medium">
+                    <button className="w-full py-2 rounded-lg border border-blue-600 hover:bg-blue-600 text-blue-600 hover:text-white transition-all font-medium" onClick={() => navigate("/profile")}>
                       View Profile
                     </button>
 
