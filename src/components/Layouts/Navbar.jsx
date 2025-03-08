@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { IoMdSearch } from "react-icons/io";
 import Model from "../shadcnui/Model";
 import axios from "axios";
@@ -202,9 +202,9 @@ const Navbar = () => {
       localStorage.setItem("theme", theme);
     };
 
-    // const handleScroll = () => {
-    //   setIsSticky(window.scrollY > 80);
-    // };
+    const handleScroll = () => {
+      setIsSticky(window.scrollY > 80);
+    };
 
     handleTheme();
     // window.addEventListener("scroll", handleScroll);
