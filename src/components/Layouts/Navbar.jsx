@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { IoMdSearch } from "react-icons/io";
 import Model from "../shadcnui/Model";
 import axios from "axios";
@@ -90,6 +90,11 @@ const Navbar = () => {
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   // const [isSticky,setIsSticky] = useState(false)
   const user = useSelector((state) => state.user);
+
+  const [isLanguageModalOpen, setLanguageModalOpen] = useState(false);
+  const [lang, setLang] = useState(null);
+  const navigate = useNavigate();
+
   console.log(user);
   const location = useLocation();
 
@@ -103,6 +108,17 @@ const Navbar = () => {
     if (activeItem) setActive(activeItem.label);
   }, [location]);
 
+  const fetchLang = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${BASE_URL}/common/languagelist`);
+      setLang(response.data?.data || null);
+    } catch (error) {
+      console.error("Error in fetching languages:", error);
+    }
+    setLoading(false);
+  };
+
   const navItems = [
     { label: "Home", href: "/", icon: <FaHome /> },
     { label: "Feed", href: "/feed", icon: <FaRss /> },
@@ -110,8 +126,8 @@ const Navbar = () => {
       label: "Mee News",
       icon: <FaNewspaper />,
       items: [
-        { label: "Men", href: "/men" },
-        { label: "Women", href: "/women" },
+        { label: "Trending", href: "/trendingnews" },
+        { label: "Sports", href: "/sports" },
       ],
     },
     { label: "Local", href: "/location", icon: <FaMapMarkerAlt /> },
@@ -121,7 +137,11 @@ const Navbar = () => {
   ];
   const menuItems = [
     { name: "Select Location", icon: <FaLocationDot />, path: "/location" },
-    { name: "Language", icon: <LiaLanguageSolid />, path: "/language" },
+    {
+      name: "Language",
+      icon: <LiaLanguageSolid />,
+      action: "openLanguageModal",
+    },
     {
       name: "Select Categories",
       icon: <IoDocumentLockOutline />,
@@ -194,6 +214,18 @@ const Navbar = () => {
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
     setOpenDropdown(null);
+  };
+
+  const handleMenuClick = (item) => {
+    console.log("what happen");
+    if (item.action === "openLanguageModal") {
+      setLanguageModalOpen(true);
+      fetchLang();
+    } else if (item.path) {
+      setIsMobileMenuOpen(!isMobileMenuOpen);
+      setOpenDropdown(null);
+      navigate(`${item.path}`);
+    }
   };
 
   const toggleTheme = () => {
@@ -437,20 +469,45 @@ const Navbar = () => {
                         isOpen={openDropdown === index}
                       />
                     ) : (
-                      <Link
-                        to={item.path}
+                      <button
+                        onClick={() => handleMenuClick(item)}
                         className="flex items-center gap-2 py-2 px-3 font-semibold text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors duration-200"
-                        onClick={toggleMobileMenu}
                       >
                         {item.icon}
                         {item.name}
-                      </Link>
+                      </button>
                     )}
                   </React.Fragment>
                 ))}
               </nav>
             </div>
           </>
+        )}
+
+        {isLanguageModalOpen && (
+          <Model
+            isOpen={isLanguageModalOpen}
+            onClose={() => setLanguageModalOpen(false)}
+            title="Select Language"
+          >
+            <div className="flex flex-wrap gap-6 mt-8 w-[300px] ">
+              {lang &&
+                lang.map((data, index) => (
+                  <div className="flex justify-center items-center cursor-pointer duration-300 dark:hover:bg-gray-700 hover:bg-gray-200 md:px-12 px-4 py-1 border rounded-lg focus:border-blue-500">
+                    <div className="flex gap-2  flex-row">
+                      <div>
+                        <img
+                          src={data.icon}
+                          alt="lang_icon"
+                          className="w-[30px] "
+                        />
+                      </div>
+                      <div>{data.name}</div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </Model>
         )}
       </header>
     </div>
