@@ -4,9 +4,9 @@ import "react-phone-input-2/lib/style.css";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { setToken } from "../store/authSlice";
+import { setToken, setNewsToken } from "../store/authSlice";
 import { fetchUser } from "../store/userSlice";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { IoMdSkipForward } from "react-icons/io";
 import Model from "../components/shadcnui/Model";
@@ -14,7 +14,7 @@ import LocationSelector from "./LocationSelector";
 function Signin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [skip,setSkip]=useState(false);
+  const [skip, setSkip] = useState(false);
   const BASE_URL = import.meta.env.VITE_BASE_URL;
   const [formData, setFormData] = useState({
     phone: "",
@@ -34,16 +34,15 @@ function Signin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setLoading(true);
 
     const payload = {
       country_code: "",
       device_uuid: null,
-      email: formData.email, // Hardcoded email for now
+      email: formData.email,
       fcm_meenews_token: "",
       hash_code: "",
-      mobile_num: formData.phone.slice(-10), // Extract last 10 digits
+      mobile_num: formData.phone.slice(-10),
       onesignal_id: "",
       password: formData.password,
       referral_code: "",
@@ -53,7 +52,7 @@ function Signin() {
     };
 
     try {
-      const response = await axios.post(
+      const loginResponse = await axios.post(
         `${BASE_URL}/common/login`,
         payload,
         {
@@ -62,21 +61,38 @@ function Signin() {
           },
         }
       );
-      const token = response.data.token;
-      if (token) {
-        console.log("Setting token:", token);
-        dispatch(setToken(token));
-      } else {
-        console.log("No token received");
-      }
 
-      if (response.data && response.status == 201) {
-        await dispatch(fetchUser())
+      if (loginResponse.data && loginResponse.data.token) {
+        dispatch(setToken(loginResponse.data.token));
+        console.log(loginResponse.data.token);
+        // Modified news authorization request
+        try {
+          const newsResponse = await axios.post(
+            `${BASE_URL}/user/authorize/news_user`,
+            loginResponse.data.token,
+            {
+              headers: {
+                "X-Meebuddy-Token": `${loginResponse.data.token}`,
+              },
+            }
+          );
+
+          if (newsResponse.data && newsResponse.data.token) {
+            console.log(newsResponse.data.token);
+            dispatch(setNewsToken(newsResponse.data.token));
+          }
+        } catch (newsError) {
+          console.error("News Authorization Error:", newsError);
+          toast.error("Failed to authorize news access");
+        }
+
+        await dispatch(fetchUser());
         toast.success("Login successful!");
-        console.log("Response:", response.data);
         navigate("/");
       } else {
-        toast.error(response.data.message || "Login failed. Please try again.");
+        toast.error(
+          loginResponse.data.message || "Login failed. Please try again."
+        );
       }
     } catch (error) {
       console.error("Login Error:", error);
@@ -148,29 +164,27 @@ function Signin() {
         <p className="text-sm text-center text-gray-500 dark:text-gray-400 mt-6">
           Don't have an account?{" "}
           <Link
-            to='/signup'
+            to="/signup"
             className="text-blue-500 dark:text-blue-400 hover:underline"
           >
             Sign Up
           </Link>
         </p>
         <div className="flex justify-end px-4">
-         <button onClick={()=>setSkip(true)} className="flex flex-row items-center gap-1 text-blue-500 dark:text-blue-400 hover:underline"> Skip <IoMdSkipForward/></button>
-         {
-          skip && (
+          <button
+            onClick={() => setSkip(true)}
+            className="flex flex-row items-center gap-1 text-blue-500 dark:text-blue-400 hover:underline"
+          >
+            {" "}
+            Skip <IoMdSkipForward />
+          </button>
+          {skip && (
             <div>
-              <Model isOpen={skip}
-              onClose={() => setSkip(false)}
-              title="">
-                <LocationSelector/>
-
-
+              <Model isOpen={skip} onClose={() => setSkip(false)} title="">
+                <LocationSelector />
               </Model>
-
             </div>
-          )
-         }
-
+          )}
         </div>
       </div>
     </div>

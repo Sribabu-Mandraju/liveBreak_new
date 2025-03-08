@@ -8,6 +8,8 @@ import locationSlice from "./locationSlice";
 import communitySlice from "./communitySlice";
 import localNewsSlice from "./localNewsSlice";
 import categorySlice from "./categorySlice";
+import magazineSlice from "./magazineSlice";
+import quizSlice from "./QuizzesSlice";
 
 const preloadedState = loadState();
 
@@ -20,6 +22,8 @@ const store = configureStore({
     community: communitySlice,
     localNews: localNewsSlice,
     categories: categorySlice,
+    magazines: magazineSlice,
+    quiz: quizSlice,
   },
   preloadedState,
 });
@@ -33,6 +37,8 @@ store.subscribe(() => {
     community: store.getState().community,
     localNews: store.getState().localNews,
     categories: store.getState().categories,
+    magazines: store.getState().magazines,
+    quiz: store.getState().quiz,
   });
 });
 
